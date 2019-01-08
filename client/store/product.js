@@ -119,9 +119,9 @@ export default function(state = initialState, action) {
     case DELETE_PRODUCT:
       return {
         ...state,
-        allProducts: state.allProducts.filter(product => {
-          product.id !== +action.product.id
-        }),
+        allProducts: state.allProducts.filter(
+          product => product.id !== +action.product.id
+        ),
         currentProduct: {}
       }
     default:

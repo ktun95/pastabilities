@@ -27,6 +27,40 @@ describe.only('thunk creators', () => {
     currentProduct: {}
   }
 
+  const oneProduct = {
+    id: 1,
+    name: 'Ravioli',
+    description: 'The best in the city!',
+    quantity: 10,
+    photo: '/imageUrl',
+    type: 'Semolina',
+    shape: 'shaped',
+    price: 995
+  }
+
+  const twoProducts = [
+    {
+      id: 2,
+      name: 'Linguini',
+      description: 'The best in the city!',
+      quantity: 7,
+      photo: '/imageUrl',
+      type: 'Gluten-free',
+      shape: 'long',
+      price: 995
+    },
+    {
+      id: 3,
+      name: 'Cavatelli',
+      description: 'The best in the city!',
+      quantity: 5,
+      photo: '/imageUrl',
+      type: 'Whole Wheat',
+      shape: 'long',
+      price: 1995
+    }
+  ]
+
   beforeEach(() => {
     mockAxios = new MockAdapter(axios)
     store = mockStore(initialState)
@@ -39,16 +73,7 @@ describe.only('thunk creators', () => {
 
   describe('fetchProduct', () => {
     it('dispatches the GET PRODUCT action', async () => {
-      const fakeProduct = {
-        id: 1,
-        name: 'Ravioli',
-        description: 'The best in the city!',
-        quantity: 10,
-        photo: '/imageUrl',
-        type: 'Semolina',
-        shape: 'shaped',
-        price: 995
-      }
+      const fakeProduct = oneProduct
       mockAxios
         .onGet(`api/product/${fakeProduct.id}`)
         .replyOnce(200, fakeProduct)
@@ -60,28 +85,7 @@ describe.only('thunk creators', () => {
   })
   describe('fetchProducts', () => {
     it('dispatches the GET PRODUCTS action', async () => {
-      const fakeProducts = [
-        {
-          id: 1,
-          name: 'Ravioli',
-          description: 'The best in the city!',
-          quantity: 10,
-          photo: '/imageUrl',
-          type: 'Semolina',
-          shape: 'shaped',
-          price: 995
-        },
-        {
-          id: 2,
-          name: 'Cavatelli',
-          description: 'The best in the city!',
-          quantity: 5,
-          photo: '/imageUrl',
-          type: 'Whole Wheat',
-          shape: 'long',
-          price: 1995
-        }
-      ]
+      const fakeProducts = twoProducts
       mockAxios.onGet(`api/products`).replyOnce(200, fakeProducts)
       await store.dispatch(fetchProducts())
       const actions = store.getActions()
@@ -91,35 +95,14 @@ describe.only('thunk creators', () => {
   })
 
   //
-  describe('postProduct', () => {
-    it('dispatches the ADD PRODUCT action', async () => {
-      const fakeProducts = [
-        {
-          id: 1,
-          name: 'Ravioli',
-          description: 'The best in the city!',
-          quantity: 10,
-          photo: '/imageUrl',
-          type: 'Semolina',
-          shape: 'shaped',
-          price: 995
-        },
-        {
-          id: 2,
-          name: 'Cavatelli',
-          description: 'The best in the city!',
-          quantity: 5,
-          photo: '/imageUrl',
-          type: 'Whole Wheat',
-          shape: 'long',
-          price: 1995
-        }
-      ]
-      mockAxios.onPost(`api/products`).replyOnce(200, fakeProducts)
-      await store.dispatch(fetchProducts())
-      const actions = store.getActions()
-      expect(actions[0].type).to.be.equal('GET_PRODUCTS')
-      expect(actions[0].products).to.be.deep.equal(fakeProducts)
-    })
-  })
+  // describe('postProduct', () => {
+  //   it('dispatches the ADD PRODUCT action', async () => {
+  //     const fakeProduct = oneProduct
+  //     mockAxios.onPost(`api/products`).replyOnce(200, fakeProducts)
+  //     await store.dispatch(fetchProducts())
+  //     const actions = store.getActions()
+  //     expect(actions[0].type).to.be.equal('GET_PRODUCTS')
+  //     expect(actions[0].products).to.be.deep.equal(fakeProducts)
+  //   })
+  // })
 })
