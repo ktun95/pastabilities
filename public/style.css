@@ -19,3 +19,21 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+.title-area {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.listbox {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  border: 1px solid black;
+}
+
+.product-name {
+  font-weight: bold;
+}
