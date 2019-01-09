@@ -76,7 +76,7 @@ describe.only('Cart Action creators', () => {
       expect(actions[0].type).to.be.equal('REMOVE_FROM_CART')
       expect(actions[0].product).to.be.deep.equal(productToRemove)
       console.log(store.getState())
-      expect(store.getState().cartProducts).to.be.deep.equal(twoProducts[1])
+      expect(store.getState()).to.be.deep.equal(twoProducts[1])
     })
   })
 })

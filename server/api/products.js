@@ -13,32 +13,41 @@ router.get('/', async (req, res, next) => {
     next(err)
   }
 })
-
-//get products with single filter
-
-router.get('/:category', async (req, res, next) => {
-  const shapeOrType = req.params.category
-
-  const queryByShapeOrType = shapeOrType => {
-    const shapes = ['long', 'ribbon', 'tubular', 'stuffed', 'shaped']
-    const types = ['semolina', 'gluten-free', 'whole-wheat']
-    console.log(shapeOrType)
-    console.log(shapes.indexOf(shapeOrType))
-    if (shapes.indexOf(shapeOrType) > -1)
-      return Product.findAll({where: {shape: shapeOrType}})
-    else if (types.indexOf(shapeOrType) > -1)
-      return Product.findAll({where: {type: shapeOrType}})
-    else return 'invalid category'
-  }
-
+//get single product by id
+router.get('/:id', async (req, res, next) => {
   try {
-    const products = queryByShapeOrType(shapeOrType)
-    console.log('Found products?', products)
-    res.json(products)
+    const productId = req.params.id
+    const singleProduct = await Product.findById(productId)
+    res.json(singleProduct)
   } catch (err) {
     next(err)
   }
 })
+
+//get products with single filter
+// router.get('/:category', async (req, res, next) => {
+//   const shapeOrType = req.params.category
+
+//   const queryByShapeOrType = shapeOrType => {
+//     const shapes = ['long', 'ribbon', 'tubular', 'stuffed', 'shaped']
+//     const types = ['semolina', 'gluten-free', 'whole-wheat']
+//     console.log(shapeOrType)
+//     console.log(shapes.indexOf(shapeOrType))
+//     if (shapes.indexOf(shapeOrType) > -1)
+//       return Product.findAll({where: {shape: shapeOrType}})
+//     else if (types.indexOf(shapeOrType) > -1)
+//       return Product.findAll({where: {type: shapeOrType}})
+//     else return 'invalid category'
+//   }
+
+//   try {
+//     const products = queryByShapeOrType(shapeOrType)
+//     console.log('Found products?', products)
+//     res.json(products)
+//   } catch (err) {
+//     next(err)
+//   }
+// })
 
 //get products based on search terms
 // router.get('/search/:terms', (req, res, next) => {
@@ -52,16 +61,14 @@ router.get('/:category', async (req, res, next) => {
 //   }
 // })
 
-//get single product by id
-router.get('/:id', async (req, res, next) => {
-  try {
-    const productId = req.params.id
-    const singleProduct = await Product.findById(productId)
-    res.json(singleProduct)
-  } catch (err) {
-    next(err)
+//authenticate
+const isAdmin = (req, res, next) => {
+  if (!req.user || !req.user.isAdmin) {
+    return res.sendStatus(403)
+  } else {
+    next()
   }
-})
+}
 
 //create new product in database
 router.post('/', async (req, res, next) => {
