@@ -11,7 +11,7 @@ describe('Product routes', () => {
     return db.sync({force: true})
   })
 
-  describe('/api/products/', () => {
+  describe('GET /api/products/', () => {
     beforeEach(() => {
       const threeProducts = [
         {
@@ -49,7 +49,7 @@ describe('Product routes', () => {
       return Product.bulkCreate(threeProducts)
     })
 
-    it('GET /api/products', async () => {
+    it('/api/products', async () => {
       const res = await request(app)
         .get('/api/products')
         .expect(200)
@@ -59,5 +59,7 @@ describe('Product routes', () => {
       expect(res.body[1].name).to.be.equal('Linguini')
       expect(res.body[2].name).to.be.equal('Cavatelli')
     }) //localhost:
-  }) // end describe('/api/users')
-}) // end describe('User routes')
+  }) // end describe('/api/products')
+
+  describe('GET /api/products/:id', () => {})
+}) // end describe('product routes')
