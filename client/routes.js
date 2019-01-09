@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
-import PropTypes from 'prop-types'
 import {Login, Signup, UserHome, AllProducts} from './components'
+import PropTypes from 'prop-types'
 import {me} from './store'
+import MainFeatures from './components/mainFeatures'
 
 /**
  * COMPONENT
@@ -28,6 +29,7 @@ class Routes extends Component {
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
+        <Route path="/" component={MainFeatures} />
         <Route component={AllProducts} />
       </Switch>
     )
