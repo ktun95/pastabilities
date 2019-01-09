@@ -62,8 +62,17 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
+//authenticate
+const isAdmin = (req, res, next) => {
+  if (!req.user || !req.user.isAdmin) {
+    return res.sendStatus(403)
+  } else {
+    next()
+  }
+}
+
 //create new product in database
-router.post('/', async (req, res, next) => {
+router.post('/', isAdmin, async (req, res, next) => {
   const {name, description, price, quantity, image, type, shape} = req.body
 
   try {
@@ -84,7 +93,7 @@ router.post('/', async (req, res, next) => {
 
 //update existing product in database
 //passes req.body directly into Product.update; probably a security risk, fix later? also anyone can update the database, thats not good
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', isAdmin, async (req, res, next) => {
   try {
     const productId = req.params.id
     Product.update(req.body, {where: {id: productId}})
