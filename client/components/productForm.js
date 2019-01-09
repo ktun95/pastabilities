@@ -21,7 +21,8 @@ const styles = theme => ({
     margin: theme.spacing.unit * 3
   },
   group: {
-    margin: `${theme.spacing.unit}px 0`
+    margin: `${theme.spacing.unit}px 0`,
+    'flex-direction': 'row'
   },
   container: {
     display: 'flex',
@@ -43,7 +44,7 @@ export function ProductForm(props) {
   const {classes} = props
   return (
     <form>
-      <label htmlFor="name">
+      {/* <label htmlFor="name">
         Pasta Name:
         <span className="warning" hidden={props.state.name !== ''}>
           Field is required
@@ -54,7 +55,19 @@ export function ProductForm(props) {
         name="name"
         value={props.state.name}
         onChange={props.updateHandler}
+      /> */}
+      <TextField
+        id="standard-name"
+        label="Name"
+        name="name"
+        className={classes.textField}
+        value={props.state.name}
+        onChange={props.updateHandler}
+        margin="normal"
       />
+      <span className="warning" hidden={props.state.name !== ''}>
+        Name is required
+      </span>
       <br />
       <FormControl component="fieldset" className={classes.formControl}>
         <FormLabel component="legend">
