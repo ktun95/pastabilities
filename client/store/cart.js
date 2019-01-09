@@ -7,8 +7,8 @@ const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
 /**
  * ACTION CREATORS
  */
-const addToCart = product => ({type: ADD_TO_CART, product})
-const removeFromCart = product => ({type: REMOVE_FROM_CART, product})
+export const addToCart = product => ({type: ADD_TO_CART, product})
+export const removeFromCart = product => ({type: REMOVE_FROM_CART, product})
 
 /**
  * INITIAL STATE
@@ -24,10 +24,13 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case ADD_TO_CART:
-      return {cartProducts: [...state, action.product]}
+      return {cartProducts: [...state.cartProducts, action.product]}
     case REMOVE_FROM_CART:
-      ;[action.product, ...remainingItems] = state.cartProducts
-      return {cartProducts: [remainingItems]}
+      return {
+        cartProducts: [...state.cartProducts].filter(
+          product => product.id !== action.product.id
+        )
+      }
     default:
       return state
   }
