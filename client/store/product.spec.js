@@ -21,7 +21,7 @@ const mockStore = configureMockStore(middlewares)
 import {createStore} from 'redux'
 import {reducer} from './index'
 
-describe.only('thunk creators', () => {
+describe('thunk creators', () => {
   let store
   let mockAxios
 
