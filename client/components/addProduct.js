@@ -1,9 +1,9 @@
 import React from 'react'
-import ProductForm from './product-form'
-import {putProduct, fetchProduct} from '../store'
+import ProductForm from './productForm'
+import {postProduct} from '../store'
 import {connect} from 'react-redux'
 
-class EditProduct extends React.Component {
+class AddProduct extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -19,15 +19,6 @@ class EditProduct extends React.Component {
     this.updateHandler = this.updateHandler.bind(this)
     this.submitHandler = this.submitHandler.bind(this)
     this.goAddPage = this.goAddPage.bind(this)
-  }
-  async componentDidMount() {
-    const {match, allProducts} = this.props
-    const productId = Number(match.params.productId)
-    const thisProduct = allProducts.find(item => item.id === productId)
-    await this.setState(thisProduct)
-    // this.props.fetchProduct(productId)
-    // const {selectedProduct} = this.props
-    // this.setState(selectedProduct)
   }
   updateHandler(event) {
     this.setState({error: {}})
@@ -45,7 +36,7 @@ class EditProduct extends React.Component {
         throw new Error(`The product's quantity must be a number.`)
       }
       this.props.postProduct(this.state)
-      this.props.history.push('/products/admin')
+      this.props.history.push('/products')
     } catch (err) {
       this.setState({
         error: err
@@ -63,7 +54,7 @@ class EditProduct extends React.Component {
           value="/products/admin"
           onClick={this.goAddPage}
         >
-          GO BACK
+          CANCEL
         </button>
         <div id="new-item">
           <h1>ADD A PASTA</h1>
@@ -79,15 +70,8 @@ class EditProduct extends React.Component {
   }
 }
 
-const mapState = ({product}) => {
-  return {
-    allProducts: product.allProducts,
-    selectedProduct: product.selectedProduct
-  }
-}
 const mapDispatch = dispatch => ({
-  putProduct: product => dispatch(putProduct(product)),
-  fetchProduct: product => dispatch(fetchProduct(product))
+  postProduct: product => dispatch(postProduct(product))
 })
 
-export default connect(mapState, mapDispatch)(EditProduct)
+export default connect(null, mapDispatch)(AddProduct)

@@ -16,13 +16,17 @@ const styles = () => ({
     width: '100%',
     height: 'auto'
   },
+  container: {
+    paddingTop: 10
+  },
   card: {
     height: '100%',
     display: 'flex',
     flexDirection: 'column'
   },
   cardMedia: {
-    paddingTop: '56%'
+    paddingTop: '20%',
+    width: '100%'
   },
   cardContent: {
     flexGrow: 1
@@ -43,8 +47,8 @@ const MainFeatures = props => {
           alt="pasta"
         />
       </div>
-      <Grid container spacing={40}>
-        <Grid item sm={12} md={6} lg={4}>
+      <Grid container spacing={40} className={classes.container}>
+        <Grid item sm={6} md={4} lg={4}>
           <Card className={classes.card}>
             <CardMedia
               className={classes.cardMedia}
@@ -69,7 +73,7 @@ const MainFeatures = props => {
             </CardActions>
           </Card>
         </Grid>
-        <Grid item sm={12} md={6} lg={4}>
+        <Grid item sm={6} md={4}>
           <Card className={classes.card}>
             <CardMedia
               className={classes.cardMedia}
@@ -92,7 +96,7 @@ const MainFeatures = props => {
             </CardActions>
           </Card>
         </Grid>
-        <Grid item sm={12} md={6} lg={4}>
+        <Grid item sm={6} md={4}>
           <Card className={classes.card}>
             <CardMedia
               className={classes.cardMedia}

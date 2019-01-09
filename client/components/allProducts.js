@@ -2,87 +2,50 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {fetchProducts} from '../store'
+import Grid from '@material-ui/core/Grid'
+import Paper from '@material-ui/core/Paper'
+import Card from '@material-ui/core/Card'
+import CardActions from '@material-ui/core/CardActions'
+import CardContent from '@material-ui/core/CardContent'
+import CardMedia from '@material-ui/core/CardMedia'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import {withStyles} from '@material-ui/core/styles'
 
-export class AllProducts extends React.Component {
-  constructor() {
-    super()
+const styles = () => ({
+  title: {
+    paddingTop: 10
   }
+})
+export class AllProducts extends React.Component {
   componentDidMount() {
     this.props.fetchProducts()
   }
+
   render() {
-    const {products} = this.props
-    // THIS IS OUR DUMMY TEST DATA!
-    // const products = [
-    //   {
-    //     id: 1,
-    //     name: 'Ravioli',
-    //     description: 'The best in the city!',
-    //     quantity: 10,
-    //     photo: '/imageUrl',
-    //     type: 'Semolina',
-    //     shape: 'shaped',
-    //     price: 995
-    //   },
-    //   {
-    //     id: 2,
-    //     name: 'Linguini',
-    //     description: 'The best in the city!',
-    //     quantity: 7,
-    //     photo: '/imageUrl',
-    //     type: 'Gluten-free',
-    //     shape: 'long',
-    //     price: 995
-    //   },
-    //   {
-    //     id: 3,
-    //     name: 'Cavatelli',
-    //     description: 'The best in the city!',
-    //     quantity: 5,
-    //     photo: '/imageUrl',
-    //     type: 'Whole Wheat',
-    //     shape: 'long',
-    //     price: 1995
-    //   }
-    // ]
+    const {classes, products} = this.props
+    console.log(classes)
     const noProducts = !products || products.length === 0
+
     return (
-      <div className="product-list">
-        {noProducts ? (
-          <div className="title-area">There are no matching pastas.</div>
-        ) : (
-          <div>
-            <div className="title-area">Pastas</div>
-            <div className="listbox">
-              {products.map(product => {
-                return (
-                  <div key={product.id} className="listbox item">
-                    <div className="listbox img">
-                      <img src={product.image} />
-                    </div>
-                    <div className="listbox product-name">
-                      <Link to={`/products/${product.id}`}>{product.name}</Link>
-                    </div>
-                    <div className="listbox description">
-                      {product.description}
-                    </div>
-                    <div className="listbox price">${product.price / 100}</div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        )}
-      </div>
+      <React.Fragment>
+        <div className={classes.title}>
+          <Paper>
+            <Typography variant="h1" align="center">
+              Pastas
+            </Typography>
+            <Grid />
+          </Paper>
+        </div>
+      </React.Fragment>
     )
   }
 }
 
 const mapState = ({product}) => {
-  console.log(product)
   return {
     products: product.allProducts
   }
 }
 const mapDispatch = {fetchProducts}
-export default connect(mapState, mapDispatch)(AllProducts)
+export default connect(mapState, mapDispatch)(withStyles(styles)(AllProducts))

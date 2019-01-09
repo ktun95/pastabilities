@@ -10,16 +10,23 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import ShoppingCart from '@material-ui/icons/ShoppingCart'
 
-const Navbar = ({handleClick, isLoggedIn}) => (
+const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
   <React.Fragment>
     <AppBar position="static" color="primary">
       <Toolbar>
         <Typography variant="h6" color="inherit" noWrap style={{flex: 1}}>
           Pastabilities
         </Typography>
-        <Link to="/">
-          <Button>Home</Button>
-        </Link>
+        {isAdmin ? (
+          <Link to="/products/admin">
+            <Button>Home</Button>
+          </Link>
+        ) : (
+          <Link to="/">
+            <Button>Home</Button>
+          </Link>
+        )}
+
         <Link to="/products">
           <Button>Catalog</Button>
         </Link>
