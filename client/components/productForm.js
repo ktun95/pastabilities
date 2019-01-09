@@ -4,10 +4,26 @@ import classNames from 'classnames'
 import {withStyles} from '@material-ui/core/styles'
 import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
+import Radio from '@material-ui/core/Radio'
+import RadioGroup from '@material-ui/core/RadioGroup'
+import FormHelperText from '@material-ui/core/FormHelperText'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import FormControl from '@material-ui/core/FormControl'
+import FormLabel from '@material-ui/core/FormLabel'
 
 //I have just started incorporating the Material.UI code. Holding until after code review
 
 const styles = theme => ({
+  root: {
+    display: 'flex'
+  },
+  formControl: {
+    margin: theme.spacing.unit * 3
+  },
+  group: {
+    margin: `${theme.spacing.unit}px 0`,
+    'flex-direction': 'row'
+  },
   container: {
     display: 'flex',
     flexWrap: 'wrap'
@@ -28,7 +44,7 @@ export function ProductForm(props) {
   const {classes} = props
   return (
     <form>
-      <label htmlFor="name">
+      {/* <label htmlFor="name">
         Pasta Name:
         <span className="warning" hidden={props.state.name !== ''}>
           Field is required
@@ -39,46 +55,82 @@ export function ProductForm(props) {
         name="name"
         value={props.state.name}
         onChange={props.updateHandler}
+      /> */}
+      <TextField
+        id="standard-name"
+        label="Name"
+        name="name"
+        className={classes.textField}
+        value={props.state.name}
+        onChange={props.updateHandler}
+        margin="normal"
       />
+      <span className="warning" hidden={props.state.name !== ''}>
+        Name is required
+      </span>
       <br />
-      <label htmlFor="type">
-        Pasta Type:
-        <span className="warning" hidden={props.state.type !== ''}>
-          Field is required
-        </span>
-      </label>
+      <FormControl component="fieldset" className={classes.formControl}>
+        <FormLabel component="legend">
+          Pasta Type{' '}
+          <span className="warning" hidden={props.state.type !== ''}>
+            Pasta type is required
+          </span>
+        </FormLabel>
 
-      <select
-        name="type"
-        value={props.state.type}
-        onChange={props.updateHandler}
-      >
-        <option value="">—— please select ——</option>
-        <option value="semolina">semolina</option>
-        <option value="whole-wheat">whole-wheat</option>
-        <option value="gluten-free">gluten-free</option>
-      </select>
-      <br />
+        <RadioGroup
+          aria-label="Type"
+          name="type"
+          className={classes.group}
+          value={props.state.type}
+          onChange={props.updateHandler}
+        >
+          <FormControlLabel
+            value="semolina"
+            control={<Radio />}
+            label="Semolina"
+          />
+          <FormControlLabel
+            value="whole-wheat"
+            control={<Radio />}
+            label="Whole Wheat"
+          />
+          <FormControlLabel
+            value="gluten-free"
+            control={<Radio />}
+            label="Gluten-free"
+          />
+        </RadioGroup>
+      </FormControl>
+      <FormControl component="fieldset" className={classes.formControl}>
+        <FormLabel component="legend">
+          Pasta Shape{' '}
+          <span className="warning" hidden={props.state.shape !== ''}>
+            Pasta shape is required
+          </span>
+        </FormLabel>
 
-      <label htmlFor="shape">
-        Pasta Shape:
-        <span className="warning" hidden={props.state.type !== ''}>
-          Field is required
-        </span>
-      </label>
-      <select
-        name="shape"
-        value={props.state.shape}
-        onChange={props.updateHandler}
-      >
-        <option value="">—— please select ——</option>
-        <option value="long">long</option>
-        <option value="ribbon">ribbon</option>
-        <option value="tubular">tubular</option>
-        <option value="shaped">shaped</option>
-        <option value="stuffed">stuffed</option>
-      </select>
-      <br />
+        <RadioGroup
+          aria-label="Shape"
+          name="shape"
+          className={classes.group}
+          value={props.state.shape}
+          onChange={props.updateHandler}
+        >
+          <FormControlLabel value="long" control={<Radio />} label="long" />
+          <FormControlLabel value="ribbon" control={<Radio />} label="ribbon" />
+          <FormControlLabel
+            value="tubular"
+            control={<Radio />}
+            label="tubular"
+          />
+          <FormControlLabel value="shaped" control={<Radio />} label="shaped" />
+          <FormControlLabel
+            value="stuffed"
+            control={<Radio />}
+            label="stuffed"
+          />
+        </RadioGroup>
+      </FormControl>
 
       <label htmlFor="description">
         Description:
