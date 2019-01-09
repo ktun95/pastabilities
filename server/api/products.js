@@ -64,10 +64,10 @@ router.get('/:id', async (req, res, next) => {
 
 //create new product in database
 router.post('/', async (req, res, next) => {
-  const {name, description, price, quantity, image, type, shape} = req.body.data
+  const {name, description, price, quantity, image, type, shape} = req.body
 
   try {
-    newProduct = await Product.create({
+    const newProduct = await Product.create({
       name,
       description,
       price,

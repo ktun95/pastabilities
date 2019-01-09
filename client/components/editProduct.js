@@ -46,7 +46,7 @@ class EditProduct extends React.Component {
       if (!Number.isInteger(+this.state.quantity) || +this.state.quantity < 0) {
         throw new Error(`The product's quantity must be a number.`)
       }
-      this.props.postProduct(this.state)
+      this.props.putProduct(this.state)
       this.props.history.push(`/products/${Number(match.params.productId)}`)
     } catch (err) {
       this.setState({
