@@ -1,14 +1,14 @@
 import React from 'react'
 import {withStyles} from '@material-ui/core/styles'
+import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
-import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 
-const styles = theme => ({
+const styles = () => ({
   main: {
     marginTop: 10
   },
@@ -16,24 +16,23 @@ const styles = theme => ({
     width: '100%',
     height: 'auto'
   },
-  appBar: {
-    position: 'relative'
+  container: {
+    paddingTop: 10
   },
-
   card: {
     height: '100%',
     display: 'flex',
     flexDirection: 'column'
   },
   cardMedia: {
-    paddingTop: '56.25%'
+    paddingTop: '20%',
+    width: '100%'
   },
   cardContent: {
     flexGrow: 1
   },
   footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing.unit * 6
+    padding: 50
   }
 })
 
@@ -48,8 +47,8 @@ const MainFeatures = props => {
           alt="pasta"
         />
       </div>
-      <Grid container spacing={40}>
-        <Grid item sm={12} md={6} lg={4}>
+      <Grid container spacing={40} className={classes.container}>
+        <Grid item sm={6} md={4} lg={4}>
           <Card className={classes.card}>
             <CardMedia
               className={classes.cardMedia}
@@ -74,7 +73,7 @@ const MainFeatures = props => {
             </CardActions>
           </Card>
         </Grid>
-        <Grid item sm={12} md={6} lg={4}>
+        <Grid item sm={6} md={4}>
           <Card className={classes.card}>
             <CardMedia
               className={classes.cardMedia}
@@ -97,7 +96,7 @@ const MainFeatures = props => {
             </CardActions>
           </Card>
         </Grid>
-        <Grid item sm={12} md={6} lg={4}>
+        <Grid item sm={6} md={4}>
           <Card className={classes.card}>
             <CardMedia
               className={classes.cardMedia}
