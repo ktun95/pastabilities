@@ -7,7 +7,7 @@ const pastaProduct = [
   {
     name: 'Pasta al Tartufo',
     description: 'Yummy Pasta',
-    price: 10,
+    price: 1000,
     quantity: 100,
     image:
       'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/p/a/pasta_al_tartufo.jpg',
@@ -17,7 +17,7 @@ const pastaProduct = [
   {
     name: 'Pasta Duc',
     description: 'Yummy Pasta',
-    price: 15,
+    price: 1500,
     quantity: 100,
     image:
       'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/s/p/spaghetti_pomodoro_gift_box_update_1.jpg',
@@ -27,7 +27,7 @@ const pastaProduct = [
   {
     name: 'Pasta Chris',
     description: 'Yummy Pasta',
-    price: 20,
+    price: 2000,
     quantity: 100,
     image:
       'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/b/u/bucatini_al_tonno_eataly_update6.jpg',
@@ -37,7 +37,7 @@ const pastaProduct = [
   {
     name: 'Pasta Grey',
     description: 'Yummy Pasta',
-    price: 25,
+    price: 2500,
     quantity: 100,
     image:
       'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/1/1/1128201.jpg',
@@ -47,7 +47,7 @@ const pastaProduct = [
   {
     name: 'Pasta Kevin',
     description: 'Yummy Pasta',
-    price: 25,
+    price: 2500,
     quantity: 100,
     image:
       'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/a/f/afeltra-carta-paglia-calamaro-500g-182405-1.jpg',
@@ -58,7 +58,7 @@ const pastaProduct = [
   {
     name: 'Pasta Sam',
     description: 'Yummy Pasta',
-    price: 30,
+    price: 3000,
     quantity: 100,
     image:
       'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
@@ -71,7 +71,6 @@ const dummyUsers = [
   {
     email: 'samfortuna@gmail.com',
     password: 'secret',
-    salt: 'abc',
     firstName: 'Sam',
     lastName: 'Fortuna',
     isAdmin: true
@@ -79,7 +78,6 @@ const dummyUsers = [
   {
     email: 'ductran@gmail.com',
     password: 'secret1',
-    salt: 'abc',
     firstName: 'Duc',
     lastName: 'Tran',
     isAdmin: false
@@ -87,7 +85,6 @@ const dummyUsers = [
   {
     email: 'chriselipas@gmail.com',
     password: 'secret2',
-    salt: 'abc',
     firstName: 'Chris',
     lastName: 'Elipas',
     isAdmin: true
@@ -95,7 +92,6 @@ const dummyUsers = [
   {
     email: 'gregapoyando@gmail.com',
     password: 'secret3',
-    salt: 'abc',
     firstName: 'Grey',
     lastName: 'Apoyando',
     isAdmin: false
@@ -103,7 +99,6 @@ const dummyUsers = [
   {
     email: 'kevintun@gmail.com',
     password: 'secret4',
-    salt: 'abc',
     firstName: 'Kevin',
     lastName: 'Tun',
     isAdmin: true
@@ -140,9 +135,10 @@ const dummyReviews = [
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
+
   const [product, user, review] = await Promise.all([
     Product.bulkCreate(pastaProduct, {returning: true}),
-    User.bulkCreate(dummyUsers, {returning: true}),
+    User.bulkCreate(dummyUsers, {individualHooks: true, returning: true}),
     Review.bulkCreate(dummyReviews, {returning: true})
   ])
   const [pasta1, pasta2, pasta3, pasta4, pasta5, pasta6] = product
