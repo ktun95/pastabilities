@@ -12,6 +12,7 @@ import {
   EditProduct
 } from './components'
 import {me} from './store'
+import MainFeatures from './components/mainFeatures'
 
 /**
  * COMPONENT
@@ -29,6 +30,7 @@ class Routes extends Component {
         {/* Routes placed here are available to all visitors */}
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
+        <Route path="/products" component={AllProducts} />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
@@ -39,7 +41,7 @@ class Routes extends Component {
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
-        <Route component={AllProducts} />
+        <Route path="/" component={MainFeatures} />
       </Switch>
     )
   }
