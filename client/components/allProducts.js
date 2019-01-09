@@ -1,88 +1,131 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {fetchProducts} from '../store'
+import {fetchProducts, fetchProduct} from '../store'
+import Grid from '@material-ui/core/Grid'
+import Paper from '@material-ui/core/Paper'
+import Card from '@material-ui/core/Card'
+import CardActions from '@material-ui/core/CardActions'
+import CardContent from '@material-ui/core/CardContent'
+import CardMedia from '@material-ui/core/CardMedia'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import {withStyles} from '@material-ui/core/styles'
 
-export class AllProducts extends React.Component {
-  constructor() {
-    super()
+const styles = () => ({
+  div: {
+    paddingTop: 10,
+    paddingBottom: 10
+  },
+  cardImg: {
+    height: '100%'
+  },
+  gridItem: {
+    width: 150
+  },
+  card: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  cardMedia: {
+    paddingTop: '56.25%'
+  },
+  cardContent: {
+    flexGrow: 1
   }
+})
+export class AllProducts extends React.Component {
   componentDidMount() {
+    console.log(this.props)
     this.props.fetchProducts()
   }
+
   render() {
-    const {products} = this.props
-    // THIS IS OUR DUMMY TEST DATA!
-    // const products = [
-    //   {
-    //     id: 1,
-    //     name: 'Ravioli',
-    //     description: 'The best in the city!',
-    //     quantity: 10,
-    //     photo: '/imageUrl',
-    //     type: 'Semolina',
-    //     shape: 'shaped',
-    //     price: 995
-    //   },
-    //   {
-    //     id: 2,
-    //     name: 'Linguini',
-    //     description: 'The best in the city!',
-    //     quantity: 7,
-    //     photo: '/imageUrl',
-    //     type: 'Gluten-free',
-    //     shape: 'long',
-    //     price: 995
-    //   },
-    //   {
-    //     id: 3,
-    //     name: 'Cavatelli',
-    //     description: 'The best in the city!',
-    //     quantity: 5,
-    //     photo: '/imageUrl',
-    //     type: 'Whole Wheat',
-    //     shape: 'long',
-    //     price: 1995
-    //   }
-    // ]
+    const {classes, products, fetchProduct} = this.props
+    console.log(classes)
     const noProducts = !products || products.length === 0
+
     return (
-      <div className="product-list">
-        {noProducts ? (
-          <div className="title-area">There are no matching pastas.</div>
-        ) : (
-          <div>
-            <div className="title-area">Pastas</div>
-            <div className="listbox">
-              {products.map(product => {
-                return (
-                  <div key={product.id} className="listbox item">
-                    <div className="listbox img">
-                      <img src={product.image} />
-                    </div>
-                    <div className="listbox product-name">
-                      <Link to={`/products/${product.id}`}>{product.name}</Link>
-                    </div>
-                    <div className="listbox description">
-                      {product.description}
-                    </div>
-                    <div className="listbox price">${product.price / 100}</div>
-                  </div>
-                )
-              })}
+      <React.Fragment>
+        <div className={classes.div}>
+          <Paper>
+            <Typography variant="h1" align="center">
+              Pastas
+            </Typography>
+          </Paper>
+
+          {noProducts ? (
+            <div className={classes.div}>
+              <Paper>
+                <Typography variant="h1">
+                  We ran out of Pasta! Please come back soon!
+                </Typography>
+              </Paper>
             </div>
-          </div>
-        )}
-      </div>
+          ) : (
+            <div className={classes.div}>
+              <Grid container spacing={40}>
+                {products.map(product => (
+                  <Grid item key={product.id} sm={6} md={4} lg={3}>
+                    <Card className={classes.card}>
+                      <Link to={`/products/${product.id}`}>
+                        <CardMedia
+                          className={classes.cardMedia}
+                          image={product.image}
+                        />
+                      </Link>
+                      <CardContent className={classes.cardContent}>
+                        <Typography gutterBottom variant="h5" component="h2">
+                          {product.name}
+                        </Typography>
+                        <Typography>{product.description}</Typography>
+                      </CardContent>
+                      <CardActions>
+                        <Link
+                          to={`/products/${product.id}`}
+                          onClick={() => {
+                            fetchProduct(product.id)
+                          }}
+                        >
+                          <Button size="small" color="primary">
+                            Details
+                          </Button>
+                        </Link>
+                        <Button size="small" color="primary">
+                          Add to cart
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            </div>
+          )}
+        </div>
+      </React.Fragment>
     )
   }
 }
 
 const mapState = ({product}) => {
-  console.log(product)
   return {
     products: product.allProducts
   }
 }
-const mapDispatch = {fetchProducts}
-export default connect(mapState, mapDispatch)(AllProducts)
+//const mapDispatch = {fetchProducts}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchProducts: () => {
+      dispatch(fetchProducts())
+    },
+    fetchProduct: id => {
+      dispatch(fetchProduct(id))
+    }
+  }
+}
+
+export default connect(mapState, mapDispatchToProps)(
+  withStyles(styles)(AllProducts)
+)
