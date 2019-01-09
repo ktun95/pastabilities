@@ -1,9 +1,9 @@
 import React from 'react'
-import ProductForm from './product-form'
-import {postProduct} from '../store'
+import ProductForm from './productForm'
+import {putProduct, fetchProduct} from '../store'
 import {connect} from 'react-redux'
 
-class AddProduct extends React.Component {
+class EditProduct extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -20,11 +20,22 @@ class AddProduct extends React.Component {
     this.submitHandler = this.submitHandler.bind(this)
     this.goAddPage = this.goAddPage.bind(this)
   }
+  async componentDidMount() {
+    const {match, allProducts} = this.props
+    const productId = Number(match.params.productId)
+    const thisProduct = allProducts.find(item => item.id === productId)
+    await this.setState(thisProduct)
+    // this.props.fetchProduct(productId)
+    // const {selectedProduct} = this.props
+    // this.setState(selectedProduct)
+  }
   updateHandler(event) {
     this.setState({error: {}})
     this.setState({[event.target.name]: event.target.value})
   }
   submitHandler(event) {
+    const {match} = this.props
+
     try {
       event.preventDefault()
       if (!Number.isInteger(+this.state.price) || +this.state.price <= 0) {
@@ -36,7 +47,7 @@ class AddProduct extends React.Component {
         throw new Error(`The product's quantity must be a number.`)
       }
       this.props.postProduct(this.state)
-      this.props.history.push('/products/admin')
+      this.props.history.push(`/products/${Number(match.params.productId)}`)
     } catch (err) {
       this.setState({
         error: err
@@ -54,10 +65,10 @@ class AddProduct extends React.Component {
           value="/products/admin"
           onClick={this.goAddPage}
         >
-          GO BACK
+          CANCEL
         </button>
         <div id="new-item">
-          <h1>ADD A PASTA</h1>
+          <h1>EDIT PASTA</h1>
 
           <ProductForm
             state={this.state}
@@ -70,8 +81,15 @@ class AddProduct extends React.Component {
   }
 }
 
+const mapState = ({product}) => {
+  return {
+    allProducts: product.allProducts,
+    selectedProduct: product.selectedProduct
+  }
+}
 const mapDispatch = dispatch => ({
-  postProduct: product => dispatch(postProduct(product))
+  putProduct: product => dispatch(putProduct(product)),
+  fetchProduct: product => dispatch(fetchProduct(product))
 })
 
-export default connect(null, mapDispatch)(AddProduct)
+export default connect(mapState, mapDispatch)(EditProduct)
