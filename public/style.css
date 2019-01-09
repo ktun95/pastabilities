@@ -101,3 +101,19 @@ form button:disabled:hover {
   color: white;
   margin-left: 1em;
 }
+
+/* Buttons */
+
+.back-btn {
+  background: #30cdff;
+  border: 0;
+  color: white;
+  margin: 10px;
+  margin-left: 20px;
+  padding: 10px;
+  font-size: 0.75em;
+}
+
+.back-btn:hover {
+  background: #4283aa;
+}
