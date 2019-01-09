@@ -1,18 +1,34 @@
 import React from 'react'
 import Paper from '@material-ui/core/Paper'
-import Grid from '@material-ui/core/Grid'
+import {withStyles} from '@material-ui/core/styles'
+import {Typography} from '@material-ui/core'
+import {connect} from 'react-redux'
+
+const styles = () => ({
+  div: {
+    paddingTop: 10,
+    paddingBottom: 10
+  }
+})
 
 function singleProduct(props) {
+  console.log(props)
+  const {classes, currentProduct} = props
+  console.log(currentProduct)
   return (
-    <div>
+    <div className={classes.div}>
       <Paper>
-        <Grid container>
-          <Grid item>Item Picture</Grid>
-          <Grid item>Item Details</Grid>
-        </Grid>
+        <Typography variant="h1" />
       </Paper>
     </div>
   )
 }
 
-export default singleProduct
+const mapStateToProps = state => {
+  console.log(state)
+  return {
+    currentProduct: state.currentProduct
+  }
+}
+
+export default connect(mapStateToProps)(withStyles(styles)(singleProduct))

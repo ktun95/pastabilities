@@ -8,6 +8,8 @@ export {default as AllProducts} from './allProducts'
 export {default as AdminProducts} from './admin-products'
 export {default as AddProduct} from './addProduct'
 export {default as EditProduct} from './editProduct'
+export {default as SingleProduct} from './singleProduct'
+export {default as MainFeatures} from './mainFeatures'
 
 export {default as UserHome} from './user-home'
 export {Login, Signup} from './auth-form'
