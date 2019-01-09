@@ -91,8 +91,7 @@ router.post('/', async (req, res, next) => {
 })
 
 //update existing product in database
-//passes req.body directly into Product.update; probably a security risk, fix later? also anyone can update the database, thats not good
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', isAdmin, async (req, res, next) => {
   try {
     const productId = req.params.id
     Product.update(req.body, {where: {id: productId}})
@@ -102,3 +101,40 @@ router.put('/:id', async (req, res, next) => {
     next(err)
   }
 })
+
+//get products with single filter - UNTESTED
+router.get('/:category', async (req, res, next) => {
+  const shapeOrType = req.params.category
+
+  const queryByShapeOrType = shapeOrType => {
+    const shapes = ['long', 'ribbon', 'tubular', 'stuffed', 'shaped']
+    const types = ['semolina', 'gluten-free', 'whole-wheat']
+    console.log(shapeOrType)
+    console.log(shapes.indexOf(shapeOrType))
+    if (shapes.indexOf(shapeOrType) > -1)
+      return Product.findAll({where: {shape: shapeOrType}})
+    else if (types.indexOf(shapeOrType) > -1)
+      return Product.findAll({where: {type: shapeOrType}})
+    else return 'invalid category'
+  }
+
+  try {
+    const products = queryByShapeOrType(shapeOrType)
+    console.log('Found products?', products)
+    res.json(products)
+  } catch (err) {
+    next(err)
+  }
+})
+
+//get products based on search terms
+// router.get('/search/:terms', (req, res, next) => {
+//   const searchTerms = req.params.terms.split('+')
+//   res.json(searchTerms)
+//   try {
+//     const products = Product.findAll()
+//     res.json(products)
+//   } catch (err) {
+//     next(err)
+//   }
+// })
