@@ -14,7 +14,7 @@ describe.only('Product routes', () => {
     return db.sync({force: true})
   })
 
-  describe('/api/products/', () => {
+  describe('GET /api/products/', () => {
     beforeEach(() => {
       const threeProducts = [
         {

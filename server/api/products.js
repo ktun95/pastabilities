@@ -71,11 +71,11 @@ const isAdmin = (req, res, next) => {
 }
 
 //create new product in database
-router.post('/', isAdmin, async (req, res, next) => {
-  const {name, description, price, quantity, image, type, shape} = req.body
+router.post('/', async (req, res, next) => {
+  const {name, description, price, quantity, image, type, shape} = req.body.data
 
   try {
-    const newProduct = await Product.create({
+    newProduct = await Product.create({
       name,
       description,
       price,
