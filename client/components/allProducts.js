@@ -8,43 +8,43 @@ export class AllProducts extends React.Component {
     super()
   }
   componentDidMount() {
-    // this.props.fetchProducts()
+    this.props.fetchProducts()
   }
   render() {
-    // const {products} = this.props
+    const {products} = this.props
     // THIS IS OUR DUMMY TEST DATA!
-    const products = [
-      {
-        id: 1,
-        name: 'Ravioli',
-        description: 'The best in the city!',
-        quantity: 10,
-        photo: '/imageUrl',
-        type: 'Semolina',
-        shape: 'shaped',
-        price: 995
-      },
-      {
-        id: 2,
-        name: 'Linguini',
-        description: 'The best in the city!',
-        quantity: 7,
-        photo: '/imageUrl',
-        type: 'Gluten-free',
-        shape: 'long',
-        price: 995
-      },
-      {
-        id: 3,
-        name: 'Cavatelli',
-        description: 'The best in the city!',
-        quantity: 5,
-        photo: '/imageUrl',
-        type: 'Whole Wheat',
-        shape: 'long',
-        price: 1995
-      }
-    ]
+    // const products = [
+    //   {
+    //     id: 1,
+    //     name: 'Ravioli',
+    //     description: 'The best in the city!',
+    //     quantity: 10,
+    //     photo: '/imageUrl',
+    //     type: 'Semolina',
+    //     shape: 'shaped',
+    //     price: 995
+    //   },
+    //   {
+    //     id: 2,
+    //     name: 'Linguini',
+    //     description: 'The best in the city!',
+    //     quantity: 7,
+    //     photo: '/imageUrl',
+    //     type: 'Gluten-free',
+    //     shape: 'long',
+    //     price: 995
+    //   },
+    //   {
+    //     id: 3,
+    //     name: 'Cavatelli',
+    //     description: 'The best in the city!',
+    //     quantity: 5,
+    //     photo: '/imageUrl',
+    //     type: 'Whole Wheat',
+    //     shape: 'long',
+    //     price: 1995
+    //   }
+    // ]
     const noProducts = !products || products.length === 0
     return (
       <div className="product-list">
@@ -79,8 +79,9 @@ export class AllProducts extends React.Component {
 }
 
 const mapState = ({product}) => {
+  console.log(product)
   return {
-    products: product.AllProducts
+    products: product.allProducts
   }
 }
 const mapDispatch = {fetchProducts}
