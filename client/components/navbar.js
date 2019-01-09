@@ -17,8 +17,12 @@ const Navbar = ({handleClick, isLoggedIn}) => (
         <Typography variant="h6" color="inherit" noWrap style={{flex: 1}}>
           Pastabilities
         </Typography>
-        <Button>Home</Button>
-        <Button>Catalog</Button>
+        <Link to="/">
+          <Button>Home</Button>
+        </Link>
+        <Link to="/products">
+          <Button>Catalog</Button>
+        </Link>
         <Button>Contact</Button>
         {isLoggedIn ? (
           <Link to="/home">
