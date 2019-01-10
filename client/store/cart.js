@@ -11,32 +11,15 @@ export const addToCart = product => ({type: ADD_TO_CART, product})
 export const removeFromCart = product => ({type: REMOVE_FROM_CART, product})
 
 /**
+ * THUNK CREATORS
+ */
+
+/**
  * INITIAL STATE
  */
 
 const initialState = {
-  cartProducts: [
-    {
-      id: 2,
-      name: 'Linguini',
-      description: 'The best in the city!',
-      quantity: 7,
-      photo: '/imageUrl',
-      type: 'Gluten-free',
-      shape: 'long',
-      price: 995
-    },
-    {
-      id: 3,
-      name: 'Cavatelli',
-      description: 'The best in the city!',
-      quantity: 5,
-      photo: '/imageUrl',
-      type: 'Whole Wheat',
-      shape: 'long',
-      price: 1995
-    }
-  ]
+  cartProducts: []
 }
 
 /**
