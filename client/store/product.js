@@ -46,14 +46,15 @@ export const fetchProduct = productId => async dispatch => {
     console.error(err)
   }
 }
+//NOTE: the below thunk won't work well as long as we have shape and type as ENUM columns; do the filtering in the redux store for now
 export const fetchProductsByCategory = (type, shape) => async dispatch => {
   try {
     if (type === 'all') {
-      const {data} = await axios.get(`/api/products/${shape}`)
+      const {data} = await axios.get(`/api/products/cat/${shape}`)
     } else if (shape === 'all') {
-      const {data} = await axios.get(`/api/products/${type}`)
+      const {data} = await axios.get(`/api/products/cat/${type}`)
     } else {
-      const {data} = await axios.get(`/api/products/${shape}/${type}`)
+      const {data} = await axios.get(`/api/products/cat/${shape}/${type}`)
     }
     dispatch(getProducts(data))
   } catch (err) {
