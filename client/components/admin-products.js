@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {fetchProducts} from '../store'
+import {fetchProducts, destroyProduct} from '../store'
 import {Link} from 'react-router-dom'
 
 export class AdminProducts extends React.Component {
@@ -10,21 +10,25 @@ export class AdminProducts extends React.Component {
   componentDidMount() {
     this.props.fetchProducts()
   }
+  killProduct = event => {
+    this.props.destroyProduct(event.target.value)
+  }
   render() {
     const {products} = this.props
     const noProducts = !products || products.length === 0
     return (
       <div className="product-list">
+        PASTA ADMIN PAGE
         {noProducts ? (
           <div className="title-area">
             <div>There are no matching pastas.</div>
-            <Link to="/products/add">ADD NEW PRODUCT</Link>
+            <Link to="/admin/products/add">ADD NEW PRODUCT</Link>
           </div>
         ) : (
           <div>
             <div className="title-area">
               <div>Pastas</div>
-              <Link to="/products/add">ADD NEW PRODUCT</Link>
+              <Link to="/admin/products/add">ADD NEW PASTA</Link>
             </div>
             <div className="listbox">
               {products.map(product => {
@@ -48,7 +52,18 @@ export class AdminProducts extends React.Component {
                         Quantity: {product.quantity}
                       </p>
                       <p>
-                        <Link to={`/products/${product.id}/edit`}>EDIT</Link>
+                        <Link to={`/admin/products/${product.id}/edit`}>
+                          EDIT
+                        </Link>
+                      </p>
+                      <p>
+                        <button
+                          className="delete-btn"
+                          value={product.id}
+                          onClick={this.killProduct}
+                        >
+                          X
+                        </button>
                       </p>
                     </div>
                   </div>
@@ -67,5 +82,5 @@ const mapState = ({product}) => {
     products: product.allProducts
   }
 }
-const mapDispatch = {fetchProducts}
+const mapDispatch = {fetchProducts, destroyProduct}
 export default connect(mapState, mapDispatch)(AdminProducts)

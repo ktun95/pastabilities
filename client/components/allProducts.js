@@ -13,26 +13,38 @@ import Button from '@material-ui/core/Button'
 import {withStyles} from '@material-ui/core/styles'
 
 const styles = () => ({
-  div: {
-    paddingTop: 10,
-    paddingBottom: 10
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    spacing: 8
   },
-  cardImg: {
-    height: '100%'
-  },
-  gridItem: {
-    width: 150
+  item: {
+    padding: 10,
+    flexGrow: 1,
+    flexBasis: '16%',
+    display: 'flex'
   },
   card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column'
+    width: 200,
+    height: '100%'
   },
   cardMedia: {
-    paddingTop: '56.25%'
+    paddingTop: '70%'
   },
-  cardContent: {
+  productFilter: {
+    display: 'flex',
+    paddingTop: 30,
+    paddingBottom: 30
+  },
+  title: {
     flexGrow: 1
+  },
+  sort: {
+    display: 'flex'
+  },
+  collectionSort: {
+    display: 'flex',
+    flexDirection: 'column'
   }
 })
 export class AllProducts extends React.Component {
@@ -42,19 +54,32 @@ export class AllProducts extends React.Component {
   }
 
   render() {
-    const {classes, products, fetchProduct} = this.props
-    console.log(classes)
+    const {classes, products} = this.props
     const noProducts = !products || products.length === 0
 
     return (
       <React.Fragment>
-        <div className={classes.div}>
-          <Paper>
-            <Typography variant="h1" align="center">
-              Pastas
-            </Typography>
-          </Paper>
+        <nav className={classes.productFilter}>
+          <h1 className={classes.title}>Pastas</h1>
+          <div className={classes.sort}>
+            <div className={classes.collectionSort}>
+              <label>Filter By:</label>
+              <select>
+                <option value="/">All Pastas</option>
+              </select>
+            </div>
+          </div>
+          <div className={classes.sort}>
+            <div className={classes.collectionSort}>
+              <label>Sort By:</label>
+              <select>
+                <option value="/">Featured</option>
+              </select>
+            </div>
+          </div>
+        </nav>
 
+        <div className={classes.div}>
           {noProducts ? (
             <div className={classes.div}>
               <Paper>
@@ -64,36 +89,40 @@ export class AllProducts extends React.Component {
               </Paper>
             </div>
           ) : (
-            <div className={classes.div}>
-              <Grid container spacing={40}>
+            <div className={classes.product}>
+              <Grid container className={classes.container} spacing={16}>
                 {products.map(product => (
-                  <Grid item key={product.id} sm={6} md={4} lg={3}>
+                  <Grid key={product.id} item className={classes.item}>
                     <Card className={classes.card}>
-                      <Link to={`/products/${product.id}`}>
+                      <Link
+                        to={`/products/${product.id}`}
+                        onClick={() => {
+                          this.props.fetchProduct(product.id)
+                        }}
+                      >
                         <CardMedia
                           className={classes.cardMedia}
                           image={product.image}
                         />
                       </Link>
                       <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="h2">
+                        <Typography variant="h5" align="center">
                           {product.name}
                         </Typography>
-                        <Typography>{product.description}</Typography>
                       </CardContent>
                       <CardActions>
                         <Link
                           to={`/products/${product.id}`}
                           onClick={() => {
-                            fetchProduct(product.id)
+                            this.props.fetchProduct(product.id)
                           }}
                         >
                           <Button size="small" color="primary">
-                            Details
+                            View
                           </Button>
                         </Link>
                         <Button size="small" color="primary">
-                          Add to cart
+                          Add to Cart
                         </Button>
                       </CardActions>
                     </Card>
@@ -113,7 +142,6 @@ const mapState = ({product}) => {
     products: product.allProducts
   }
 }
-//const mapDispatch = {fetchProducts}
 
 const mapDispatchToProps = dispatch => {
   return {

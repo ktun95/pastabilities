@@ -1,34 +1,57 @@
-import React from 'react'
-import Paper from '@material-ui/core/Paper'
+import React, {Component} from 'react'
 import {withStyles} from '@material-ui/core/styles'
-import {Typography} from '@material-ui/core'
 import {connect} from 'react-redux'
+import {fetchProduct} from '../store'
+import Button from '@material-ui/core/Button'
 
-const styles = () => ({
-  div: {
-    paddingTop: 10,
-    paddingBottom: 10
+const styles = () => ({})
+
+class singleProduct extends Component {
+  componentDidMount() {
+    const productID = this.props.match.params.productID
+    this.props.fetchProduct(productID)
   }
-})
 
-function singleProduct(props) {
-  console.log(props)
-  const {classes, currentProduct} = props
-  console.log(currentProduct)
-  return (
-    <div className={classes.div}>
-      <Paper>
-        <Typography variant="h1" />
-      </Paper>
-    </div>
-  )
+  render() {
+    const {currentProduct} = this.props
+
+    return (
+      <div className="container">
+        <div className="leftColumn">
+          <img src={currentProduct.image} />
+        </div>
+
+        <div className="rightColumn">
+          <div className="product-description">
+            <span>Pasta</span>
+            <h1>{currentProduct.name}</h1>
+            <p>{currentProduct.description}</p>
+          </div>
+
+          <div className="product-price">
+            <span>${currentProduct.price}</span>
+            <Button size="small" color="primary">
+              Add to Cart
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 }
 
 const mapStateToProps = state => {
-  console.log(state)
   return {
-    currentProduct: state.currentProduct
+    currentProduct: state.product.currentProduct
   }
 }
 
-export default connect(mapStateToProps)(withStyles(styles)(singleProduct))
+const mapDispatchtoProps = dispatch => {
+  return {
+    fetchProduct: id => dispatch(fetchProduct(id))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchtoProps)(
+  withStyles(styles)(singleProduct)
+)

@@ -9,8 +9,15 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import ShoppingCart from '@material-ui/icons/ShoppingCart'
+import {withStyles} from '@material-ui/core/styles'
 
-const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
+const styles = theme => ({
+  button: {
+    margin: theme.spacing.unit
+  }
+})
+
+const Navbar = ({handleClick, isLoggedIn, isAdmin, classes}) => (
   <React.Fragment>
     <AppBar position="static" color="primary">
       <Toolbar>
@@ -18,29 +25,65 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
           Pastabilities
         </Typography>
         {isAdmin ? (
-          <Link to="/products/admin">
-            <Button>Home</Button>
+          <Link to="/admin/products">
+            <Button
+              variant="contained"
+              className={classes.button}
+              color="secondary"
+            >
+              Home
+            </Button>
           </Link>
         ) : (
           <Link to="/">
-            <Button>Home</Button>
+            <Button
+              variant="contained"
+              className={classes.button}
+              color="secondary"
+            >
+              Home
+            </Button>
           </Link>
         )}
-
         <Link to="/products">
-          <Button>Catalog</Button>
+          <Button
+            variant="contained"
+            className={classes.button}
+            color="secondary"
+          >
+            Catalog
+          </Button>
         </Link>
-        <Button>Contact</Button>
+        <Button
+          variant="contained"
+          className={classes.button}
+          color="secondary"
+        >
+          Contact
+        </Button>
         {isLoggedIn ? (
           <Link to="/home">
-            <Button onClick={handleClick}>Logout</Button>
+            <Button
+              variant="contained"
+              className={classes.button}
+              color="secondary"
+              onClick={handleClick}
+            >
+              Logout
+            </Button>
           </Link>
         ) : (
           <Link to="/login">
-            <Button>Login</Button>
+            <Button
+              variant="contained"
+              className={classes.button}
+              color="secondary"
+            >
+              Login
+            </Button>
           </Link>
         )}
-        <IconButton>
+        <IconButton color="inherit">
           <ShoppingCart />
         </IconButton>
       </Toolbar>
@@ -69,4 +112,4 @@ Navbar.propTypes = {
   isAdmin: PropTypes.bool.isRequired
 }
 
-export default connect(mapState, mapDispatch)(Navbar)
+export default connect(mapState, mapDispatch)(withStyles(styles)(Navbar))
