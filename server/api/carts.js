@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Cart, cartProduct} = require('../db/models')
+const {Cart, cartProduct, Product} = require('../db/models')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 module.exports = router
@@ -30,7 +30,8 @@ router.get('/:sessionId', async (req, res, next) => {
     const singleCart = await Cart.findOne({
       where: {
         sessionId
-      }
+      },
+      include: [Product]
     })
     res.json(singleCart)
   } catch (err) {
@@ -42,6 +43,7 @@ router.get('/:sessionId', async (req, res, next) => {
 router.post('/:sessionId', async (req, res, next) => {
   try {
     const sessionId = req.params.sessionId
+    console.log(req.session)
     //maybe use req.session eventually?
     const [instance, wasCreated] = await Cart.findOrCreate({where: {sessionId}})
     res.json(instance)
@@ -57,41 +59,56 @@ router.post('/:cartId/:productId', async (req, res, next) => {
     const productId = +req.params.productId
     const productAddQty = +req.body.quantity
     //maybe use req.session eventually?
-    const [instance, wasCreated] = await cartProduct.findOrCreate({
-      where: {
-        cartId,
-        productId
+    if (productAddQty > 0) {
+      const [instance, wasCreated] = await cartProduct.findOrCreate({
+        where: {
+          cartId,
+          productId
+        }
+      })
+      if (!wasCreated) {
+        await instance.update({quantity: instance.quantity + productAddQty})
+      } else {
+        await instance.update({quantity: productAddQty})
       }
-    })
-    if (!wasCreated) {
-      await instance.update({quantity: instance.quantity + productAddQty})
+      res.json(instance)
     } else {
-      await instance.update({quantity: productAddQty})
+      res.json(0)
     }
-    res.json(instance)
   } catch (err) {
     next(err)
   }
 })
 
-//update item in cart
+//update item in cart -- deletes if quantity is set to 0
 router.put('/:cartId/:productId', async (req, res, next) => {
   try {
     const cartId = +req.params.cartId
     const productId = +req.params.productId
     const productNewQty = +req.body.quantity
     //maybe use req.session eventually?
-    await cartProduct.update(
-      {quantity: productNewQty},
-      {
+    let isUpdated
+    if (productNewQty === 0) {
+      isUpdated = await cartProduct.destroy({
         where: {
           cartId,
           productId
         }
-      }
-    )
+      })
+    } else {
+      isUpdated = await cartProduct.update(
+        {quantity: productNewQty},
+        {
+          where: {
+            cartId,
+            productId
+          }
+        }
+      )
+    }
 
-    res.json({})
+    // update with conditions doesn't return the object--returns '1' if updated
+    res.json(isUpdated[0])
   } catch (err) {
     next(err)
   }
