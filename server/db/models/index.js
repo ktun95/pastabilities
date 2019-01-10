@@ -22,6 +22,8 @@ Order.belongsToMany(Product, {through: orderProduct})
 Cart.belongsToMany(Product, {through: cartProduct})
 Product.belongsToMany(Cart, {through: cartProduct})
 
+User.hasOne(Cart)
+
 module.exports = {
   User,
   Product,
