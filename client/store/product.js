@@ -46,14 +46,15 @@ export const fetchProduct = productId => async dispatch => {
     console.error(err)
   }
 }
+//NOTE: the below thunk won't work well as long as we have shape and type as ENUM columns; do the filtering in the redux store for now
 export const fetchProductsByCategory = (type, shape) => async dispatch => {
   try {
     if (type === 'all') {
-      const {data} = await axios.get(`/api/products/${shape}`)
+      const {data} = await axios.get(`/api/products/cat/${shape}`)
     } else if (shape === 'all') {
-      const {data} = await axios.get(`/api/products/${type}`)
+      const {data} = await axios.get(`/api/products/cat/${type}`)
     } else {
-      const {data} = await axios.get(`/api/products/${shape}/${type}`)
+      const {data} = await axios.get(`/api/products/cat/${shape}/${type}`)
     }
     dispatch(getProducts(data))
   } catch (err) {
@@ -106,7 +107,6 @@ export default function(state = initialState, action) {
       return {...state, allProducts: [...state.allProducts, action.product]}
     case EDIT_PRODUCT:
       return {
-        ...state,
         allProducts: state.allProducts.map(product => {
           if (product.id !== +action.product.id) {
             return product
@@ -117,10 +117,10 @@ export default function(state = initialState, action) {
         currentProduct: {...action.product}
       }
     case DELETE_PRODUCT:
+      console.log(state.allProducts)
       return {
-        ...state,
         allProducts: state.allProducts.filter(
-          product => product.id !== +action.product.id
+          product => product.id !== +action.productId
         ),
         currentProduct: {}
       }

@@ -18,7 +18,7 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin}) => (
           Pastabilities
         </Typography>
         {isAdmin ? (
-          <Link to="/products/admin">
+          <Link to="/admin/products">
             <Button>Home</Button>
           </Link>
         ) : (
