@@ -15,7 +15,28 @@ export const removeFromCart = product => ({type: REMOVE_FROM_CART, product})
  */
 
 const initialState = {
-  cartProducts: []
+  cartProducts: [
+    {
+      id: 2,
+      name: 'Linguini',
+      description: 'The best in the city!',
+      quantity: 7,
+      photo: '/imageUrl',
+      type: 'Gluten-free',
+      shape: 'long',
+      price: 995
+    },
+    {
+      id: 3,
+      name: 'Cavatelli',
+      description: 'The best in the city!',
+      quantity: 5,
+      photo: '/imageUrl',
+      type: 'Whole Wheat',
+      shape: 'long',
+      price: 1995
+    }
+  ]
 }
 
 /**
