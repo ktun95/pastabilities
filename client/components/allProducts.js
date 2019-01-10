@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {fetchProducts, fetchProduct} from '../store'
+import {fetchProducts, fetchProduct, destroyProduct} from '../store'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import Card from '@material-ui/core/Card'
@@ -49,7 +49,6 @@ const styles = () => ({
 })
 export class AllProducts extends React.Component {
   componentDidMount() {
-    console.log(this.props)
     this.props.fetchProducts()
   }
 
@@ -78,7 +77,19 @@ export class AllProducts extends React.Component {
             </div>
           </div>
         </nav>
-
+        {this.props.isAdmin ? (
+          <Link to="/admin/products/add">
+            <Button
+              variant="contained"
+              className={classes.button}
+              color="primary"
+            >
+              ADD NEW PASTA
+            </Button>
+          </Link>
+        ) : (
+          <div />
+        )}
         <div className={classes.div}>
           {noProducts ? (
             <div className={classes.div}>
@@ -111,12 +122,7 @@ export class AllProducts extends React.Component {
                         </Typography>
                       </CardContent>
                       <CardActions>
-                        <Link
-                          to={`/products/${product.id}`}
-                          onClick={() => {
-                            this.props.fetchProduct(product.id)
-                          }}
-                        >
+                        <Link to={`/products/${product.id}`}>
                           <Button size="small" color="primary">
                             View
                           </Button>
@@ -125,6 +131,27 @@ export class AllProducts extends React.Component {
                           Add to Cart
                         </Button>
                       </CardActions>
+                      {this.props.isAdmin ? (
+                        <CardActions>
+                          <Link to={`/admin/products/${product.id}/edit`}>
+                            <Button size="small" color="secondary">
+                              Edit
+                            </Button>
+                          </Link>
+                          <Button
+                            size="small"
+                            color="secondary"
+                            value={product.id}
+                            onClick={() => {
+                              this.props.destroyProduct(product.id)
+                            }}
+                          >
+                            Delete
+                          </Button>
+                        </CardActions>
+                      ) : (
+                        <div />
+                      )}
                     </Card>
                   </Grid>
                 ))}
@@ -137,9 +164,10 @@ export class AllProducts extends React.Component {
   }
 }
 
-const mapState = ({product}) => {
+const mapState = ({product, user}) => {
   return {
-    products: product.allProducts
+    products: product.allProducts,
+    isAdmin: user.isAdmin
   }
 }
 
@@ -150,6 +178,9 @@ const mapDispatchToProps = dispatch => {
     },
     fetchProduct: id => {
       dispatch(fetchProduct(id))
+    },
+    destroyProduct: id => {
+      dispatch(destroyProduct(id))
     }
   }
 }

@@ -1,3 +1,5 @@
+//THIS PAGE HAS BEEN DEPRECATED
+
 import React from 'react'
 import {connect} from 'react-redux'
 import {fetchProducts, destroyProduct} from '../store'
