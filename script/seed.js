@@ -107,11 +107,11 @@ const dummyUsers = [
 
 const dummyReviews = [
   {
-    rating: 2,
+    rating: 2.5,
     comment: 'mehhhhh'
   },
   {
-    rating: 1,
+    rating: 1.5,
     comment: 'ewwwww'
   },
   {
@@ -123,7 +123,7 @@ const dummyReviews = [
     comment: 'could have been better'
   },
   {
-    rating: 0,
+    rating: 0.7,
     comment: 'not edible'
   },
   {

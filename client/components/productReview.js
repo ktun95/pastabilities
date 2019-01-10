@@ -30,7 +30,7 @@ const ProductReview = props => {
     <Card className={classes.card}>
       <CardContent>
         <StarRatings
-          rating={review.rating}
+          rating={Number(review.rating)}
           starRatedColor="blue"
           starDimension="40px"
           starSpacing="15px"
