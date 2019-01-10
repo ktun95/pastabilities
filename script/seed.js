@@ -64,6 +64,76 @@ const pastaProduct = [
       'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
     type: 'semolina',
     shape: 'long'
+  },
+  {
+    name: 'Paginate Pasta',
+    description: 'Tasts awful',
+    price: 30000,
+    quantity: 100,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Fake Pasta',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Pasta1',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Pasta2',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Pasta3',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Pasta4',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Pasta5',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
   }
 ]
 

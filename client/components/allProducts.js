@@ -46,21 +46,38 @@ const styles = () => ({
   collectionSort: {
     display: 'flex',
     flexDirection: 'column'
+  },
+  ul: {
+    display: 'inline-block',
+    paddingLeft: '15px',
+    paddingRight: '15px'
+  },
+  li: {
+    display: 'inline - block'
   }
 })
 export class AllProducts extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      selectedProducts: [],
+      offset: 0
+    }
+  }
   componentDidMount() {
     this.props.fetchProducts()
   }
   //HANDLE PAGE CLICK SHOULD SET CURRENT PRODUCTS
   handlePageClick = () => {
-    let selected
-    let offset
+    // let selected
+    // let offset
     console.log('is this working')
   }
   render() {
     const {classes, products} = this.props
     const noProducts = !products || products.length === 0
+    let selected
+    let offset
 
     return (
       <React.Fragment>
