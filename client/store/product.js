@@ -107,7 +107,6 @@ export default function(state = initialState, action) {
       return {...state, allProducts: [...state.allProducts, action.product]}
     case EDIT_PRODUCT:
       return {
-        ...state,
         allProducts: state.allProducts.map(product => {
           if (product.id !== +action.product.id) {
             return product
@@ -118,10 +117,10 @@ export default function(state = initialState, action) {
         currentProduct: {...action.product}
       }
     case DELETE_PRODUCT:
+      console.log(state.allProducts)
       return {
-        ...state,
         allProducts: state.allProducts.filter(
-          product => product.id !== +action.product.id
+          product => product.id !== +action.productId
         ),
         currentProduct: {}
       }
