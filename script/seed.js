@@ -107,19 +107,19 @@ const dummyUsers = [
 
 const dummyReviews = [
   {
-    rating: 3.5,
+    rating: 2,
     comment: 'mehhhhh'
   },
   {
-    rating: 2.5,
+    rating: 1,
     comment: 'ewwwww'
   },
   {
-    rating: 5.0,
+    rating: 5,
     comment: 'yummmmmmmm'
   },
   {
-    rating: 4.5,
+    rating: 4,
     comment: 'could have been better'
   },
   {
@@ -127,7 +127,7 @@ const dummyReviews = [
     comment: 'not edible'
   },
   {
-    rating: 3.5,
+    rating: 3,
     comment: 'mehhhhh'
   }
 ]
@@ -152,7 +152,16 @@ async function seed() {
   await review2.setProduct(pasta2)
 
   await review3.setUser(user1)
-  await review3.setProduct(pasta3)
+  await review3.setProduct(pasta2)
+
+  await review4.setUser(user3)
+  await review4.setProduct(pasta4)
+
+  await review5.setUser(user4)
+  await review5.setProduct(pasta5)
+
+  await review6.setUser(user4)
+  await review6.setProduct(pasta6)
 }
 
 // We've separated the `seed` function from the `runSeed` function.
