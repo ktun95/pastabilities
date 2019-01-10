@@ -9,7 +9,7 @@ const User = db.model('user')
 const superRequest = require('superagent')
 const auth = require('../auth')
 
-describe.only('Product routes', () => {
+describe('Product routes', () => {
   beforeEach(() => {
     return db.sync({force: true})
   })

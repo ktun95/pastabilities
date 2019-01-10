@@ -1,12 +1,11 @@
 import {expect} from 'chai'
-import {addToCart, removeFromCart} from './cart'
+import reducer, {addToCart, removeFromCart} from './cart'
 
 import configureMockStore from 'redux-mock-store'
 
 const mockStore = configureMockStore()
 
 import {createStore} from 'redux'
-import {reducer} from './index'
 
 describe.only('Cart Action creators', () => {
   let store
@@ -68,6 +67,8 @@ describe.only('Cart Action creators', () => {
   })
 
   describe('removeFromCart', () => {
+    let testStore = createStore(reducer)
+
     it('dispatches the REMOVE FROM CART action', () => {
       const productToRemove = twoProducts[0]
 
@@ -75,8 +76,11 @@ describe.only('Cart Action creators', () => {
       const actions = store.getActions()
       expect(actions[0].type).to.be.equal('REMOVE_FROM_CART')
       expect(actions[0].product).to.be.deep.equal(productToRemove)
-      console.log(store.getState())
-      expect(store.getState()).to.be.deep.equal(twoProducts[1])
+
+      testStore.dispatch(removeFromCart(productToRemove))
+      expect(testStore.getState().cartProducts).to.be.deep.equal([
+        twoProducts[1]
+      ])
     })
   })
 })
