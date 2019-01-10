@@ -73,9 +73,11 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin, classes}) => (
             </Button>
           </Link>
         )}
-        <IconButton color="inherit">
-          <ShoppingCart />
-        </IconButton>
+        <Link to="/cart">
+          <IconButton color="inherit">
+            <ShoppingCart />
+          </IconButton>
+        </Link>
       </Toolbar>
     </AppBar>
   </React.Fragment>
