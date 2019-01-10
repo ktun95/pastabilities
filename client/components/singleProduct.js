@@ -37,15 +37,6 @@ class singleProduct extends Component {
             >
               Add to Cart
             </Button>
-            <Button
-              size="small"
-              color="primary"
-              onClick={() =>
-                this.props.changeQuantity(this.props.currentProduct, 4389)
-              }
-            >
-              Change Quantity to 4389
-            </Button>
           </div>
         </div>
       </div>
