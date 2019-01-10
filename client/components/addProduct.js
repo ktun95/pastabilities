@@ -24,8 +24,9 @@ class AddProduct extends React.Component {
     this.setState({error: {}})
     this.setState({[event.target.name]: event.target.value})
   }
-  submitHandler(event) {
+  async submitHandler(event) {
     try {
+      console.log('YO')
       event.preventDefault()
       if (!Number.isInteger(+this.state.price) || +this.state.price <= 0) {
         throw new Error(
@@ -35,8 +36,8 @@ class AddProduct extends React.Component {
       if (!Number.isInteger(+this.state.quantity) || +this.state.quantity < 0) {
         throw new Error(`The product's quantity must be a number.`)
       }
-      this.props.postProduct(this.state)
-      this.props.history.push('/products')
+      await this.props.postProduct(this.state)
+      this.props.history.push('/admin/products')
     } catch (err) {
       this.setState({
         error: err
@@ -51,7 +52,7 @@ class AddProduct extends React.Component {
       <div>
         <button
           className="back-btn"
-          value="/products/admin"
+          value="/admin/products"
           onClick={this.goAddPage}
         >
           CANCEL

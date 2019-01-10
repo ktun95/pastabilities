@@ -25,7 +25,7 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin, classes}) => (
           Pastabilities
         </Typography>
         {isAdmin ? (
-          <Link to="/products/admin">
+          <Link to="/admin/products">
             <Button
               variant="contained"
               className={classes.button}

@@ -37,11 +37,14 @@ form div {
 
 .item {
   border: 1px solid black;
-  width: 333px;
+  width: 150px;
   flex-direction: column;
   margin: 5px;
   padding: 5px;
   align-items: center;
+}
+.item img {
+  width: 90%;
 }
 .description p {
   text-align: center;
@@ -158,4 +161,22 @@ form button:disabled:hover {
   font-weight: 300;
   color: #86939e;
   line-height: 24px;
+}
+.delete-btn {
+  background: #e58080;
+  border: 0;
+  color: black;
+  margin: 10px;
+  width: 25%;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  font-size: 1em;
+}
+
+.delete-btn:hover {
+  background: #4283aa;
+}
+
+.delete-btn:active {
+  background: #286090;
 }
