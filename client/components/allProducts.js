@@ -11,6 +11,7 @@ import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import {withStyles} from '@material-ui/core/styles'
+import ReactPaginate from 'react-paginate'
 
 const styles = () => ({
   container: {
@@ -51,7 +52,12 @@ export class AllProducts extends React.Component {
   componentDidMount() {
     this.props.fetchProducts()
   }
-
+  //HANDLE PAGE CLICK SHOULD SET CURRENT PRODUCTS
+  handlePageClick = () => {
+    let selected
+    let offset
+    console.log('is this working')
+  }
   render() {
     const {classes, products} = this.props
     const noProducts = !products || products.length === 0
@@ -156,6 +162,15 @@ export class AllProducts extends React.Component {
                   </Grid>
                 ))}
               </Grid>
+              <ReactPaginate
+                previousLabel="previous"
+                nextLabel="next"
+                breakClassName="break-me"
+                marginPagesDisplayed={4}
+                pageRangeDisplayed={5}
+                pageCount={5}
+                onPageChange={this.handlePageClick}
+              />
             </div>
           )}
         </div>
