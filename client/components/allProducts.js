@@ -60,12 +60,20 @@ export class AllProducts extends React.Component {
   constructor() {
     super()
     this.state = {
-      selectedProducts: [],
-      offset: 0
+      // selectedProducts: [],
+      // offset: 0,
+      categoryId: '',
+      allProducts: '',
+      perPage: 5,
+      currentPage: [],
+      numPages: 0
     }
   }
   componentDidMount() {
     this.props.fetchProducts()
+    // this.setState((state, props) => {
+    //   return {}
+    // })
   }
   //HANDLE PAGE CLICK SHOULD SET CURRENT PRODUCTS
   handlePageClick = () => {
@@ -73,6 +81,7 @@ export class AllProducts extends React.Component {
     // let offset
     console.log('is this working')
   }
+  setPageCount = (products, offset) => {}
   render() {
     const {classes, products} = this.props
     const noProducts = !products || products.length === 0
@@ -179,15 +188,21 @@ export class AllProducts extends React.Component {
                   </Grid>
                 ))}
               </Grid>
-              <ReactPaginate
-                previousLabel="previous"
-                nextLabel="next"
-                breakClassName="break-me"
-                marginPagesDisplayed={4}
-                pageRangeDisplayed={5}
-                pageCount={5}
-                onPageChange={this.handlePageClick}
-              />
+              <div id="react-paginate">
+                <ReactPaginate
+                  previousLabel="Prev"
+                  nextLabel="Next"
+                  breakClassName="break-me"
+                  breakLabel="..."
+                  marginPagesDisplayed={2}
+                  pageRangeDisplayed={5}
+                  pageCount={1}
+                  onPageChange={this.handlePageClick}
+                  containerClassName="pagination"
+                  subContainerClassName="pages pagination"
+                  activeClassName="active"
+                />
+              </div>
             </div>
           )}
         </div>
