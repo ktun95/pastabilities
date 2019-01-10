@@ -45,7 +45,7 @@ class AddProduct extends React.Component {
     }
   }
   goAddPage(event) {
-    this.props.history.push(event.target.value)
+    this.props.history.goBack()
   }
   render() {
     return (

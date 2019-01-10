@@ -24,27 +24,17 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin, classes}) => (
         <Typography variant="h6" color="inherit" noWrap style={{flex: 1}}>
           Pastabilities
         </Typography>
-        {isAdmin ? (
-          <Link to="/admin/products">
-            <Button
-              variant="contained"
-              className={classes.button}
-              color="secondary"
-            >
-              Home
-            </Button>
-          </Link>
-        ) : (
-          <Link to="/">
-            <Button
-              variant="contained"
-              className={classes.button}
-              color="secondary"
-            >
-              Home
-            </Button>
-          </Link>
-        )}
+
+        <Link to="/">
+          <Button
+            variant="contained"
+            className={classes.button}
+            color="secondary"
+          >
+            Home
+          </Button>
+        </Link>
+
         <Link to="/products">
           <Button
             variant="contained"
