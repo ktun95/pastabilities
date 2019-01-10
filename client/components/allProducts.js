@@ -59,7 +59,7 @@ export class AllProducts extends React.Component {
     return (
       <React.Fragment>
         <nav className={classes.productFilter}>
-          <h1 className={classes.title}>Pastas</h1>
+          <h1 className={classes.title}>Pasta</h1>
           <div className={classes.sort}>
             <div className={classes.collectionSort}>
               <label>Filter By:</label>

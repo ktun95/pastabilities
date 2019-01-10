@@ -35,7 +35,7 @@ const pastaProduct = [
     shape: 'tubular'
   },
   {
-    name: 'Pasta Grey',
+    name: 'Pasta Greg',
     description: 'Yummy Pasta',
     price: 2500,
     quantity: 100,
