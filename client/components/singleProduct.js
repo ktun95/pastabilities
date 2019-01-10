@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {withStyles} from '@material-ui/core/styles'
 import {connect} from 'react-redux'
-import {fetchProduct, addToCart, removeFromCart} from '../store'
+import {fetchProduct, addToCart, removeFromCart, changeQuantity} from '../store'
 import Button from '@material-ui/core/Button'
 //addToCart does not currently affect database
 const styles = () => ({})
@@ -41,10 +41,10 @@ class singleProduct extends Component {
               size="small"
               color="primary"
               onClick={() =>
-                this.props.removeFromCart(this.props.currentProduct)
+                this.props.changeQuantity(this.props.currentProduct, 4389)
               }
             >
-              Remove from Cart
+              Change Quantity to 4389
             </Button>
           </div>
         </div>
@@ -63,7 +63,9 @@ const mapDispatchtoProps = dispatch => {
   return {
     fetchProduct: id => dispatch(fetchProduct(id)),
     addToCart: product => dispatch(addToCart(product)),
-    removeFromCart: product => dispatch(removeFromCart(product))
+    removeFromCart: product => dispatch(removeFromCart(product)),
+    changeQuantity: (product, quantity) =>
+      dispatch(changeQuantity(product, quantity))
   }
 }
 
