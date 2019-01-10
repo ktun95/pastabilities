@@ -90,7 +90,15 @@ export const destroyProduct = productId => async dispatch => {
  */
 const initialState = {
   allProducts: [],
-  currentProduct: {}
+  currentProduct: {
+    name: '',
+    description: '',
+    price: 0,
+    quantity: 100,
+    image: '',
+    shape: '',
+    type: ''
+  }
 }
 
 /**
