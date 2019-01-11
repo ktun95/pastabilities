@@ -32,7 +32,6 @@ export const addToCartDB = product => async dispatch => {
 /**
  * INITIAL STATE
  */
-
 const initialState = {
   cartProducts: {}
 }
