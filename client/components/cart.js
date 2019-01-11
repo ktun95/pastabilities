@@ -9,6 +9,7 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Button from '@material-ui/core/Button'
 import {withStyles} from '@material-ui/core/styles'
+import {fetchProducts} from '../store'
 
 const pastaProduct = [
   {
@@ -93,11 +94,40 @@ class Cart extends Component {
     }
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.props.fetchProducts()
+    const {classes, cart, allProducts} = this.props
+    console.log('cart', cart)
+    console.log('product', allProducts)
+    const keyProducts = Object.keys(cart)
+    console.log(keyProducts)
+    console.log(allProducts)
+    const bigCart = []
+    allProducts.forEach(item => {
+      console.log(item.quantity)
+      if (keyProducts.includes(item.id.toString())) {
+        item.quantity = cart[item.id]
+        console.log('item qty after change', item.quantity)
+        bigCart.push(item)
+      }
+    })
+    console.log(bigCart)
+  }
 
   render() {
-    const {classes} = this.props
-
+    const {classes, cart, allProducts} = this.props
+    // console.log('cart', cart)
+    // console.log('product', allProducts)
+    // const keyProducts = Object.keys(cart)
+    // console.log(keyProducts)
+    // const bigCart = []
+    // allProducts.forEach(item => {
+    //   if (keyProducts.includes(item.id)) {
+    //     item.quantity = cart[item.id]
+    //     bigCart.push(item)
+    //   }
+    // })
+    // console.log(bigCart)
     return (
       <React.Fragment>
         <div>
@@ -153,12 +183,17 @@ class Cart extends Component {
 
 const mapStateToProps = state => {
   return {
-    cart: state.cartProducts
+    cart: state.cart.cartProducts,
+    allProducts: state.product.allProducts
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  return {}
+  return {
+    fetchProducts: () => {
+      dispatch(fetchProducts())
+    }
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(

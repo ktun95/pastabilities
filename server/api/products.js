@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Product} = require('../db/models')
+const {Product, Review} = require('../db/models')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 module.exports = router
@@ -18,7 +18,13 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const productId = req.params.id
-    const singleProduct = await Product.findById(productId)
+    const singleProduct = await Product.findOne({
+      where: {
+        id: productId
+      },
+      include: [Review]
+    })
+
     res.json(singleProduct)
   } catch (err) {
     next(err)
