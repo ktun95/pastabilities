@@ -102,7 +102,7 @@ export class AllProducts extends React.Component {
           ) : (
             <div className={classes.product}>
               <Grid container className={classes.container} spacing={16}>
-                {products.map(product => (
+                {currentPage.map(product => (
                   <Grid key={product.id} item className={classes.item}>
                     <Card className={classes.card}>
                       <Link
@@ -167,7 +167,8 @@ export class AllProducts extends React.Component {
 const mapState = ({product, user}) => {
   return {
     products: product.allProducts,
-    isAdmin: user.isAdmin
+    isAdmin: user.isAdmin,
+    currentPage: product.currentPage
   }
 }
 
