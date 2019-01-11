@@ -23,10 +23,10 @@ const styles = theme => ({
     display: 'flex'
   },
   cardGrid: {
-    padding: `${theme.spacing.unit * 8}px 0`
+    padding: 50
   },
   card: {
-    minWidth: 400,
+    minWidth: 350,
     display: 'flex',
     flexDirection: 'column'
   },
@@ -37,7 +37,7 @@ const styles = theme => ({
     flexGrow: 1
   },
   footer: {
-    padding: 50
+    padding: 20
   },
   paperFooter: {
     flexGrow: 1
@@ -117,51 +117,15 @@ const MainFeatures = props => {
               </CardActions>
             </Card>
           </Grid>
-          {/* <Grid item className={classes.item}>
-          <Card className={classes.card}>
-            <CardMedia
-              className={classes.cardMedia}
-              image="https://cdn.pixabay.com/photo/2017/06/06/22/46/mediterranean-cuisine-2378758_1280.jpg"
-            />
-            <CardContent className={classes.cardContent}>
-              <Typography gutterBottom variant="h5">
-                Pasta On Sale!
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button size="small" color="primary">
-                Go
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid> */}
-          {/* <Grid item className={classes.item}>
-          <Card className={classes.card}>
-            <CardMedia
-              className={classes.cardMedia}
-              image="https://cdn.pixabay.com/photo/2016/02/05/15/34/pasta-1181189_1280.jpg"
-            />
-            <CardContent className={classes.cardContent}>
-              <Typography gutterBottom variant="h5">
-                Pasta Reciepe
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button size="small" color="primary">
-                Go
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid> */}
         </Grid>
       </div>
       <footer className={classes.footer}>
         <Paper className={classes.paperFooter}>
-          <Tabs indicatorColor="primary" textColor="primary" centered>
-            <Tab label="Greg" href="https://github.com/apoyando" />
-            <Tab label="Chris" href="https://github.com/celipas" />
-            <Tab label="Kevin" href="https://github.com/ktun95" />
-            <Tab label="Duc" href="https://github.com/ducvtrann" />
+          <Tabs value={0} indicatorColor="primary" textColor="primary" centered>
+            <Tab label="Greg" value={0} href="https://github.com/apoyando" />
+            <Tab label="Chris" alue={1} href="https://github.com/celipas" />
+            <Tab label="Kevin" alue={2} href="https://github.com/ktun95" />
+            <Tab label="Duc" alue={3} href="https://github.com/ducvtrann" />
           </Tabs>
         </Paper>
       </footer>

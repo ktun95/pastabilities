@@ -25,36 +25,41 @@ const styles = theme => ({
 class Cart extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      cart: []
-    }
+    this.state = {}
   }
 
   componentDidMount() {
     this.props.fetchProducts()
-    const {cart, allProducts} = this.props
-    const keyProducts = Object.keys(cart)
-    const bigCart = []
-    allProducts.forEach(item => {
-      if (keyProducts.includes(item.id.toString())) {
-        item.quantity = cart[item.id]
-        bigCart.push(item)
-      }
-    })
-    this.setState({
-      cart: bigCart
-    })
+
+    // const keyProducts = Object.keys(cart)
+    // const bigCart = []
+    // allProducts.forEach(item => {
+    //   if (keyProducts.includes(item.id.toString())) {
+    //     item.quantity = cart[item.id]
+    //     bigCart.push(item)
+    //   }
+    // })
+    // const subTotal = bigCart.reduce((pVal, curVal) => (pVal.price + curVal), 0)
+    // const tax = (subTotal * .07).toFixed(2)
+    // const total = subTotal + tax
   }
 
   render() {
-    const {classes} = this.props
-
+    const {classes, cart} = this.props
+    console.log('cart props', cart)
+    const subTotal = cart.reduce((total, curVal) => {
+      return total + curVal.price * curVal.quantity
+    }, 0)
+    console.log('subtotal', subTotal)
+    const tax = (subTotal * 0.07).toFixed(2)
+    console.log('tax', tax)
+    const total = subTotal + parseInt(tax, 10)
+    console.log('total', total)
     return (
       <React.Fragment>
         <div>
           <h1>Cart</h1>
         </div>
-
         <Paper className={classes.root}>
           <Table className={classes.table}>
             <TableHead>
@@ -67,7 +72,7 @@ class Cart extends Component {
             </TableHead>
 
             <TableBody>
-              {this.state.cart.map(product => (
+              {cart.map(product => (
                 <TableRow key={product.name}>
                   <TableCell>{product.name}</TableCell>
 
@@ -80,16 +85,16 @@ class Cart extends Component {
               <TableRow>
                 <TableCell rowSpan={3} />
                 <TableCell colSpan={2}>Subtotal</TableCell>
-                <TableCell align="right">{100}</TableCell>
+                <TableCell align="right">{subTotal}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Tax</TableCell>
                 <TableCell align="right">{}</TableCell>
-                <TableCell align="right">{}</TableCell>
+                <TableCell align="right">{tax}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell colSpan={2}>Total</TableCell>
-                <TableCell align="right">{100}</TableCell>
+                <TableCell align="right">{total}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
@@ -104,7 +109,7 @@ class Cart extends Component {
 
 const mapStateToProps = state => {
   return {
-    cart: state.cart.cartProducts,
+    cart: state.cart.cart,
     allProducts: state.product.allProducts
   }
 }
