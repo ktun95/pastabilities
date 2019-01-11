@@ -12,7 +12,9 @@ import {
   EditProduct,
   HomePage,
   SingleProduct,
-  Cart
+  Cart,
+  AddProductReview,
+  EditProductReview
 } from './components'
 import {me} from './store'
 
@@ -43,6 +45,16 @@ class Routes extends Component {
               exact
               path="/admin/products/:productId/edit"
               component={EditProduct}
+            />
+            <Route
+              exact
+              path="/products/:productId/review/"
+              component={AddProductReview}
+            />
+            <Route
+              exact
+              path="/products/:productId/review/:reviewId"
+              component={EditProductReview}
             />
           </Switch>
         )}
