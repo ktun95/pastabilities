@@ -147,6 +147,7 @@ const GET_PRODUCTS = 'GET_PRODUCTS'
 const ADD_PRODUCT = 'ADD_PRODUCT'
 const EDIT_PRODUCT = 'EDIT_PRODUCT'
 const DELETE_PRODUCT = 'DELETE_PRODUCT'
+const ADD_REVIEW = 'ADD_REVIEW'
 
 /**
  * ACTION CREATORS
@@ -156,6 +157,7 @@ const getProducts = products => ({type: GET_PRODUCTS, products})
 const addProduct = product => ({type: ADD_PRODUCT, product})
 const editProduct = product => ({type: EDIT_PRODUCT, product})
 const deleteProduct = productId => ({type: DELETE_PRODUCT, productId})
+const addReview = review => ({type: ADD_REVIEW, review})
 
 /**
  * THUNK CREATORS
@@ -225,6 +227,18 @@ export const destroyProduct = productId => async dispatch => {
   }
 }
 
+export const postReview = review => async dispatch => {
+  try {
+    const {data} = await axios.post(
+      `/api/products/${review.productId}/review`,
+      review
+    )
+    dispatch(addReview(data))
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 /**
  * INITIAL STATE
  */
@@ -280,6 +294,14 @@ export default function(state = initialState, action) {
           product => product.id !== +action.productId
         ),
         currentProduct: {}
+      }
+    case ADD_REVIEW:
+      return {
+        ...state,
+        currentProduct: {
+          ...state.currentProduct,
+          reviews: [...state.currentProduct.reviews, action.review]
+        }
       }
     default:
       return state

@@ -67,6 +67,31 @@ const isAdmin = (req, res, next) => {
   }
 }
 
+const isUser = (req, res, next) => {
+  if (!req.user) {
+    return res.sendStatus(403)
+  } else {
+    next()
+  }
+}
+
+//create new product review in database
+router.post('/:productId/review', isUser, async (req, res, next) => {
+  const {rating, comment, userId, productId} = req.body
+
+  try {
+    const newReview = await Review.create({
+      rating,
+      comment,
+      userId,
+      productId
+    })
+    res.json(newReview)
+  } catch (err) {
+    next(err)
+  }
+})
+
 //create new product in database
 router.post('/', async (req, res, next) => {
   const {name, description, price, quantity, image, type, shape} = req.body
