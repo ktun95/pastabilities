@@ -61,6 +61,7 @@ class EditProduct extends React.Component {
     return (
       <div>
         <button
+          type="button"
           className="back-btn"
           value="/products/admin"
           onClick={this.goAddPage}

@@ -1,40 +1,22 @@
 import axios from 'axios'
 
-/**
- * ACTION TYPES
- */
+/**ACTION TYPES***/
 const ADD_TO_CART = 'ADD_TO_CART'
 const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
 const CHANGE_QUANTITY = 'CHANGE_QUANTITY'
 const SET_CART = 'SET_CART'
-/**
- * ACTION CREATORS
- */
-export const setCart = cart => ({SET_CARD, cart})
+const GET_GUEST_CART = 'GET_GUEST_CART'
+
+/*** ACTION CREATORS***/
 export const addToCart = product => ({type: ADD_TO_CART, product})
-export const changeQuantity = (product, quantity) => ({
-  type: CHANGE_QUANTITY,
-  product,
-  quantity
-})
 export const removeFromCart = product => ({type: REMOVE_FROM_CART, product})
-/**
- * THUNK CREATORS
- */
+export const getGuestCart = () => ({type: GET_GUEST_CART})
 
-export const getCart = () => async dispatch => {}
-export const addToCartDB = product => async dispatch => {
-  //rest of code here
+/*** THUNK CREATORS***/
 
-  dispatch(addToCart(product))
-}
-
-/**
- * INITIAL STATE
- */
-
+/*** INITIAL STATE***/
 const initialState = {
-  cartProducts: {}
+  cart: []
 }
 // {
 
@@ -44,44 +26,34 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case ADD_TO_CART: {
-      let productId = action.product.id
-      let newOrAddedProduct = state.cartProducts[productId]
-        ? state.cartProducts[productId] + 1
-        : 1
+      let foundIdx
+      const prevState = {...state}
+      const found = prevState.cart.find((item, index) => {
+        foundIdx = index
+        return item.id === action.product.id
+      })
+      if (found) {
+        found.quantity = state.cart[foundIdx].quantity + 1
 
-      return {
-        ...state,
-        cartProducts: {
-          ...state.cartProducts,
-          [productId]: newOrAddedProduct
-        }
-      }
-    }
-    case REMOVE_FROM_CART: {
-      let productId = action.product.id
-
-      if (!state.cartProducts[productId]) {
-        console.log('That item is not in the cart')
-        return state
-      } else {
-        return {
+        const newState = {
           ...state,
-          cartProducts: {
-            ...state.cartProducts,
-            [productId]: 0
-          }
+          cart: [...state.cart]
         }
+        window.localStorage.pastaCart = JSON.stringify(newState)
+        return newState
+      } else {
+        const newState = {
+          ...state,
+          cart: [...state.cart, {...action.product, quantity: 1}]
+        }
+        window.localStorage.pastaCart = JSON.stringify(newState)
+        return newState
       }
     }
-    case CHANGE_QUANTITY:
-      return {
-        ...state,
-        cartProducts: {
-          ...state.cartProducts,
-          [action.product.id]: action.quantity
-        }
-      }
-
+    case GET_GUEST_CART: {
+      if (window.localStorage.pastaCart)
+        return JSON.parse(window.localStorage.pastaCart)
+    }
     default:
       return state
   }
