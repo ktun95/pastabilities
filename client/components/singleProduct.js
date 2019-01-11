@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import ProductReview from './productReview'
-import AddProductReview from './AddProductReview'
+import AddProductReview from './addProductReview'
 import {withStyles} from '@material-ui/core/styles'
 import {connect} from 'react-redux'
 import {fetchProduct, addToCart, removeFromCart, changeQuantity} from '../store'
@@ -16,8 +16,18 @@ class singleProduct extends Component {
   }
 
   render() {
-    const {currentProduct, classes} = this.props
-    console.log(classes)
+    const {currentProduct, classes, userId} = this.props
+
+    let alreadyReviewed = false
+    if (currentProduct.reviews) {
+      if (
+        currentProduct.reviews.findIndex(review => {
+          return review.userId === userId
+        }) !== -1
+      )
+        alreadyReviewed = true
+    }
+
     return (
       <div className="container">
         <div className="leftColumn">
@@ -48,12 +58,52 @@ class singleProduct extends Component {
             spacing={16}
           >
             {!currentProduct.reviews || currentProduct.reviews.length === 0 ? (
-              <h2>No reviews for {currentProduct.name}</h2>
+              <React.Fragment>
+                <h2>No reviews yet</h2>
+                {userId && !alreadyReviewed ? (
+                  <Button
+                    size="small"
+                    color="secondary"
+                    className={classes.button}
+                    onClick={() =>
+                      this.props.history.push(
+                        `/products/${currentProduct.id}/review`
+                      )
+                    }
+                  >
+                    Add a Review
+                  </Button>
+                ) : (
+                  <div />
+                )}
+              </React.Fragment>
             ) : (
               <div className="card-box">
                 <h2>Reviews</h2>
+                {userId && !alreadyReviewed ? (
+                  <Button
+                    size="small"
+                    color="secondary"
+                    className={classes.button}
+                    onClick={() =>
+                      this.props.history.push(
+                        `/products/${currentProduct.id}/review`
+                      )
+                    }
+                  >
+                    Add a Review
+                  </Button>
+                ) : (
+                  <div />
+                )}
+
                 {currentProduct.reviews.map(review => (
-                  <ProductReview key={review.id} review={review} />
+                  <ProductReview
+                    key={review.id}
+                    review={review}
+                    userId={userId}
+                    history={this.props.history}
+                  />
                 ))}
               </div>
             )}
@@ -66,7 +116,8 @@ class singleProduct extends Component {
 
 const mapStateToProps = state => {
   return {
-    currentProduct: state.product.currentProduct
+    currentProduct: state.product.currentProduct,
+    userId: state.user.id
   }
 }
 
