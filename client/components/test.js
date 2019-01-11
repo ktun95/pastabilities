@@ -2,7 +2,6 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {fetchProducts, fetchProduct, destroyProduct} from '../store'
-
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import Card from '@material-ui/core/Card'
@@ -12,10 +11,6 @@ import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import {withStyles} from '@material-ui/core/styles'
-
-import ReactPaginate from 'react-paginate'
-import AllProductsList from './allProductsList'
-// import { Pagination } from 'semantic-ui-react'
 
 const styles = () => ({
   container: {
@@ -50,64 +45,17 @@ const styles = () => ({
   collectionSort: {
     display: 'flex',
     flexDirection: 'column'
-  },
-  ul: {
-    display: 'inline-block',
-    paddingLeft: '15px',
-    paddingRight: '15px'
-  },
-  li: {
-    display: 'inline - block'
   }
 })
-
 export class AllProducts extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-      // selectedProducts: [],
-      // offset: 0,
-      categoryId: '',
-      allProducts: '',
-      perPage: 5,
-      currentPage: [],
-      pageCount: 0
-    }
-  }
-  async componentDidMount() {
-    if (this.props.fetchProducts) {
-      await this.props.fetchProducts()
-      //this is where we caculate pagination
-      const products = this.props.products
-      const perPage = products.length
-      // const firstPage = this.props.products.slice(0, perPage)
-      // const numPages = Math.ceil(this.props.products.length / perPage)
-      this.setState({
-        pageCount: products
-      })
-    }
-  }
-  //HANDLE PAGE CLICK SHOULD SET CURRENT PRODUCTS
-
-  handlePageClick = (evt, {activePage}) => {
-    const startIndex = (activePage - 1) * this.state.perPage
-    const endIndex = startIndex + this.state.perPage
-    const pageProducts = this.state.products.slice(startIndex, endIndex)
-    this.setState({currentPage: pageProducts})
-  }
-  handleSelectPagination = (evt, {activePage}) => {
-    const startIndex = (activePage - 1) * this.state.perPage
-    const endIndex = startIndex + this.state.perPage
-    const pageProducts = this.state.products.slice(startIndex, endIndex)
-    this.setState({currentPage: pageProducts})
+  componentDidMount() {
+    this.props.fetchProducts()
   }
 
-  setPageCount = (products, offset) => {}
-
-  //
   render() {
     const {classes, products} = this.props
     const noProducts = !products || products.length === 0
+
     return (
       <React.Fragment>
         <nav className={classes.productFilter}>
@@ -154,18 +102,60 @@ export class AllProducts extends React.Component {
           ) : (
             <div className={classes.product}>
               <Grid container className={classes.container} spacing={16}>
-                <AllProductsList products={products} />
+                {products.map(product => (
+                  <Grid key={product.id} item className={classes.item}>
+                    <Card className={classes.card}>
+                      <Link
+                        to={`/products/${product.id}`}
+                        onClick={() => {
+                          this.props.fetchProduct(product.id)
+                        }}
+                      >
+                        <CardMedia
+                          className={classes.cardMedia}
+                          image={product.image}
+                        />
+                      </Link>
+                      <CardContent className={classes.cardContent}>
+                        <Typography variant="h5" align="center">
+                          {product.name}
+                        </Typography>
+                      </CardContent>
+                      <CardActions>
+                        <Link to={`/products/${product.id}`}>
+                          <Button size="small" color="primary">
+                            View
+                          </Button>
+                        </Link>
+                        <Button size="small" color="primary">
+                          Add to Cart
+                        </Button>
+                      </CardActions>
+                      {this.props.isAdmin ? (
+                        <CardActions>
+                          <Link to={`/admin/products/${product.id}/edit`}>
+                            <Button size="small" color="secondary">
+                              Edit
+                            </Button>
+                          </Link>
+                          <Button
+                            size="small"
+                            color="secondary"
+                            value={product.id}
+                            onClick={() => {
+                              this.props.destroyProduct(product.id)
+                            }}
+                          >
+                            Delete
+                          </Button>
+                        </CardActions>
+                      ) : (
+                        <div />
+                      )}
+                    </Card>
+                  </Grid>
+                ))}
               </Grid>
-              <div id="react-paginate">
-                <ReactPaginate
-                  boundaryRange={1}
-                  siblingRange={1}
-                  // onPageChange={this.handleSelectPagination}
-                  size="mini"
-                  onPageChange={this.handlePageClick}
-                  pageCount={this.state.pageCount}
-                />
-              </div>
             </div>
           )}
         </div>
