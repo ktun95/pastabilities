@@ -11,7 +11,8 @@ import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import {withStyles} from '@material-ui/core/styles'
-import ReactPaginate from 'react-paginate'
+// import ReactPaginate from 'react-paginate'
+import {Pagination} from 'semantic-ui-react'
 
 const styles = () => ({
   container: {
@@ -189,18 +190,25 @@ export class AllProducts extends React.Component {
                 ))}
               </Grid>
               <div id="react-paginate">
-                <ReactPaginate
-                  previousLabel="Prev"
-                  nextLabel="Next"
-                  breakClassName="break-me"
-                  breakLabel="..."
-                  marginPagesDisplayed={2}
-                  pageRangeDisplayed={5}
-                  pageCount={1}
-                  onPageChange={this.handlePageClick}
-                  containerClassName="pagination"
-                  subContainerClassName="pages pagination"
-                  activeClassName="active"
+                {/* <ReactPaginate
+                    previousLabel="Prev"
+                    nextLabel="Next"
+                    breakClassName="break-me"
+                    breakLabel="..."
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    pageCount={10}
+                    onPageChange={this.handlePageClick}
+                    containerClassName="pagination"
+                    subContainerClassName="pages pagination"
+                    activeClassName="active"
+                  /> */}
+                <Pagination
+                  boundaryRange={1}
+                  siblingRange={1}
+                  onPageChange={this.handleSelectPagination}
+                  size="mini"
+                  totalPages={10}
                 />
               </div>
             </div>
