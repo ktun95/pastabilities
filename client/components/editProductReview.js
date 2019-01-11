@@ -6,7 +6,7 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import StarRatings from 'react-star-ratings'
 import {connect} from 'react-redux'
-import {fetchProduct, postReview} from '../store'
+import {fetchProduct, putReview} from '../store'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 
@@ -28,7 +28,7 @@ const styles = {
   }
 }
 
-class AddProductReview extends React.Component {
+class EditProductReview extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -43,10 +43,21 @@ class AddProductReview extends React.Component {
     this.submitHandler = this.submitHandler.bind(this)
     this.goAddPage = this.goAddPage.bind(this)
   }
-  componentDidMount() {
-    const productID = this.props.match.params.productId
-    this.props.fetchProduct(productID)
-    this.setState({userId: this.props.userId, productId: productID})
+  async componentDidMount() {
+    const productId = this.props.match.params.productId
+    const reviewId = +this.props.match.params.reviewId
+    await this.props.fetchProduct(productId)
+    let currReview
+    if (this.props.currentProduct.reviews) {
+      currReview = this.props.currentProduct.reviews.find(
+        item => item.id === reviewId
+      )
+    }
+    console.log(reviewId, currReview)
+
+    // let thisReview =
+    //this.setState({userId: this.props.userId, productId: productID})
+    //need to get review!
   }
 
   changeRating(newRating, name) {
@@ -64,7 +75,7 @@ class AddProductReview extends React.Component {
     try {
       event.preventDefault()
       console.log(this.state)
-      this.props.postReview(this.state)
+      this.props.putReview(this.state)
       this.props.history.push(`/products/${Number(match.params.productId)}`)
     } catch (err) {
       this.setState({
@@ -138,7 +149,7 @@ class AddProductReview extends React.Component {
   }
 }
 
-AddProductReview.propTypes = {
+EditProductReview.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
@@ -152,10 +163,10 @@ const mapStateToProps = state => {
 const mapDispatchtoProps = dispatch => {
   return {
     fetchProduct: id => dispatch(fetchProduct(id)),
-    postReview: review => dispatch(postReview(review))
+    putReview: review => dispatch(putReview(review))
   }
 }
 
 export default connect(mapStateToProps, mapDispatchtoProps)(
-  withStyles(styles)(AddProductReview)
+  withStyles(styles)(EditProductReview)
 )

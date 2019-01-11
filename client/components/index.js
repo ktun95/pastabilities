@@ -11,6 +11,8 @@ export {default as AddProduct} from './addProduct'
 export {default as EditProduct} from './editProduct'
 export {default as SingleProduct} from './singleProduct'
 export {default as Cart} from './cart'
+export {default as AddProductReview} from './addProductReview'
+export {default as EditProductReview} from './editProductReview'
 
 export {default as UserHome} from './user-home'
 export {Login, Signup} from './auth-form'
