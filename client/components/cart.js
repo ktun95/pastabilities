@@ -11,70 +11,6 @@ import Button from '@material-ui/core/Button'
 import {withStyles} from '@material-ui/core/styles'
 import {fetchProducts} from '../store'
 
-const pastaProduct = [
-  {
-    name: 'Pasta al Tartufo',
-    description: 'Yummy Pasta',
-    price: 1000,
-    quantity: 100,
-    image:
-      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/p/a/pasta_al_tartufo.jpg',
-    type: 'whole-wheat',
-    shape: 'long'
-  },
-  {
-    name: 'Pasta Duc',
-    description: 'Yummy Pasta',
-    price: 1500,
-    quantity: 100,
-    image:
-      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/s/p/spaghetti_pomodoro_gift_box_update_1.jpg',
-    type: 'gluten-free',
-    shape: 'ribbon'
-  },
-  {
-    name: 'Pasta Chris',
-    description: 'Yummy Pasta',
-    price: 2000,
-    quantity: 100,
-    image:
-      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/b/u/bucatini_al_tonno_eataly_update6.jpg',
-    type: 'semolina',
-    shape: 'tubular'
-  },
-  {
-    name: 'Pasta Grey',
-    description: 'Yummy Pasta',
-    price: 2500,
-    quantity: 100,
-    image:
-      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/1/1/1128201.jpg',
-    type: 'gluten-free',
-    shape: 'stuffed'
-  },
-  {
-    name: 'Pasta Kevin',
-    description: 'Yummy Pasta',
-    price: 2500,
-    quantity: 100,
-    image:
-      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/a/f/afeltra-carta-paglia-calamaro-500g-182405-1.jpg',
-    type: 'whole-wheat',
-    shape: 'tubular'
-    //testing
-  },
-  {
-    name: 'Pasta Sam',
-    description: 'Yummy Pasta',
-    price: 3000,
-    quantity: 100,
-    image:
-      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
-    type: 'semolina',
-    shape: 'long'
-  }
-]
-
 const styles = theme => ({
   root: {
     width: '100%',
@@ -89,51 +25,41 @@ const styles = theme => ({
 class Cart extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      cart: pastaProduct
-    }
+    this.state = {}
   }
 
   componentDidMount() {
     this.props.fetchProducts()
-    const {classes, cart, allProducts} = this.props
-    console.log('cart', cart)
-    console.log('product', allProducts)
-    const keyProducts = Object.keys(cart)
-    console.log(keyProducts)
-    console.log(allProducts)
-    const bigCart = []
-    allProducts.forEach(item => {
-      console.log(item.quantity)
-      if (keyProducts.includes(item.id.toString())) {
-        item.quantity = cart[item.id]
-        console.log('item qty after change', item.quantity)
-        bigCart.push(item)
-      }
-    })
-    console.log(bigCart)
-  }
 
-  render() {
-    const {classes, cart, allProducts} = this.props
-    // console.log('cart', cart)
-    // console.log('product', allProducts)
     // const keyProducts = Object.keys(cart)
-    // console.log(keyProducts)
     // const bigCart = []
     // allProducts.forEach(item => {
-    //   if (keyProducts.includes(item.id)) {
+    //   if (keyProducts.includes(item.id.toString())) {
     //     item.quantity = cart[item.id]
     //     bigCart.push(item)
     //   }
     // })
-    // console.log(bigCart)
+    // const subTotal = bigCart.reduce((pVal, curVal) => (pVal.price + curVal), 0)
+    // const tax = (subTotal * .07).toFixed(2)
+    // const total = subTotal + tax
+  }
+
+  render() {
+    const {classes, cart} = this.props
+    console.log('cart props', cart)
+    const subTotal = cart.reduce((total, curVal) => {
+      return total + curVal.price * curVal.quantity
+    }, 0)
+    console.log('subtotal', subTotal)
+    const tax = (subTotal * 0.07).toFixed(2)
+    console.log('tax', tax)
+    const total = subTotal + parseInt(tax, 10)
+    console.log('total', total)
     return (
       <React.Fragment>
         <div>
           <h1>Cart</h1>
         </div>
-
         <Paper className={classes.root}>
           <Table className={classes.table}>
             <TableHead>
@@ -146,7 +72,7 @@ class Cart extends Component {
             </TableHead>
 
             <TableBody>
-              {this.state.cart.map(product => (
+              {cart.map(product => (
                 <TableRow key={product.name}>
                   <TableCell>{product.name}</TableCell>
 
@@ -159,16 +85,16 @@ class Cart extends Component {
               <TableRow>
                 <TableCell rowSpan={3} />
                 <TableCell colSpan={2}>Subtotal</TableCell>
-                <TableCell align="right">{100}</TableCell>
+                <TableCell align="right">{subTotal}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Tax</TableCell>
                 <TableCell align="right">{}</TableCell>
-                <TableCell align="right">{}</TableCell>
+                <TableCell align="right">{tax}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell colSpan={2}>Total</TableCell>
-                <TableCell align="right">{100}</TableCell>
+                <TableCell align="right">{total}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
@@ -183,7 +109,7 @@ class Cart extends Component {
 
 const mapStateToProps = state => {
   return {
-    cart: state.cart.cartProducts,
+    cart: state.cart.cart,
     allProducts: state.product.allProducts
   }
 }
