@@ -13,7 +13,8 @@ import {withStyles} from '@material-ui/core/styles'
 
 const styles = theme => ({
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing.unit,
+    color: 'white'
   }
 })
 
@@ -26,37 +27,24 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin, classes}) => (
         </Typography>
 
         <Link to="/">
-          <Button
-            variant="contained"
-            className={classes.button}
-            color="secondary"
-          >
+          <Button variant="text" className={classes.button} color="primary">
             Home
           </Button>
         </Link>
 
         <Link to="/products">
-          <Button
-            variant="contained"
-            className={classes.button}
-            color="secondary"
-          >
+          <Button variant="text" className={classes.button}>
             Catalog
           </Button>
         </Link>
-        <Button
-          variant="contained"
-          className={classes.button}
-          color="secondary"
-        >
+        <Button variant="text" className={classes.button}>
           Contact
         </Button>
         {isLoggedIn ? (
           <Link to="/home">
             <Button
-              variant="contained"
+              variant="text"
               className={classes.button}
-              color="secondary"
               onClick={handleClick}
             >
               Logout
@@ -64,17 +52,13 @@ const Navbar = ({handleClick, isLoggedIn, isAdmin, classes}) => (
           </Link>
         ) : (
           <Link to="/login">
-            <Button
-              variant="contained"
-              className={classes.button}
-              color="secondary"
-            >
+            <Button variant="text" className={classes.button}>
               Login
             </Button>
           </Link>
         )}
         <Link to="/cart">
-          <IconButton color="inherit">
+          <IconButton color="secondary">
             <ShoppingCart />
           </IconButton>
         </Link>
