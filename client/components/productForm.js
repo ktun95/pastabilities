@@ -10,6 +10,10 @@ import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import FormLabel from '@material-ui/core/FormLabel'
+import Button from '@material-ui/core/Button'
+import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
+import InputAdornment from '@material-ui/core/InputAdornment'
 
 //I have just started incorporating the Material.UI code. Holding until after code review
 
@@ -44,18 +48,6 @@ export function ProductForm(props) {
   const {classes} = props
   return (
     <form>
-      {/* <label htmlFor="name">
-        Pasta Name:
-        <span className="warning" hidden={props.state.name !== ''}>
-          Field is required
-        </span>
-      </label>
-      <input
-        type="text"
-        name="name"
-        value={props.state.name}
-        onChange={props.updateHandler}
-      /> */}
       <TextField
         id="standard-name"
         label="Name"
@@ -132,13 +124,13 @@ export function ProductForm(props) {
         </RadioGroup>
       </FormControl>
 
-      <label htmlFor="description">
+      <InputLabel htmlFor="description">
         Description:
         <span className="warning" hidden={props.state.description !== ''}>
           Field is required
         </span>
-      </label>
-      <input
+      </InputLabel>
+      <Input
         type="text"
         name="description"
         value={props.state.description}
@@ -146,27 +138,29 @@ export function ProductForm(props) {
       />
       <br />
 
-      <label htmlFor="price">
-        Price:
+      <InputLabel htmlFor="price">
+        Price (in cents):
         <span className="warning" hidden={props.state.price !== ''}>
           Field is required
         </span>
-      </label>
-      <input
+      </InputLabel>
+      <Input
         type="text"
         name="price"
         value={props.state.price}
         onChange={props.updateHandler}
+        startAdornment={<InputAdornment position="start">$</InputAdornment>}
       />
+
       <br />
 
-      <label htmlFor="quantity">
-        Quantity:
+      <InputLabel htmlFor="quantity">
+        Inventory Quantity:
         <span className="warning" hidden={props.state.quantity !== ''}>
           Field is required
         </span>
-      </label>
-      <input
+      </InputLabel>
+      <Input
         type="text"
         name="quantity"
         value={props.state.quantity}
@@ -174,23 +168,22 @@ export function ProductForm(props) {
       />
       <br />
 
-      <label htmlFor="image">
+      <InputLabel htmlFor="image">
         Image Url:
         <span className="warning" hidden={props.state.image !== ''}>
           Field is required
         </span>
-      </label>
+      </InputLabel>
 
-      <input
+      <Input
         type="text"
         name="image"
         value={props.state.image}
         onChange={props.updateHandler}
       />
 
-      <button
+      <Button
         type="submit"
-        className="nav-btn"
         disabled={
           props.state.name === '' ||
           props.state.type === '' ||
@@ -203,7 +196,7 @@ export function ProductForm(props) {
         onClick={props.submitHandler}
       >
         Submit
-      </button>
+      </Button>
       {props.state.error.toString() === '[object Object]' ? (
         <div />
       ) : (
