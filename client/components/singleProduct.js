@@ -42,7 +42,7 @@ class singleProduct extends Component {
           </div>
 
           <div className="product-price">
-            <span>${currentProduct.price}</span>
+            <span>${(currentProduct.price / 100).toFixed(2)}</span>
             <Button
               size="small"
               color="primary"

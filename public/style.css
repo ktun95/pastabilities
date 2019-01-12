@@ -156,6 +156,12 @@ form button:disabled:hover {
   color: #43484d;
   letter-spacing: -2px;
 }
+.container h2 {
+  font-weight: bold;
+  font-size: 24px;
+  color: #43484d;
+  margin-left: 10px;
+}
 .product-description p {
   font-size: 16px;
   font-weight: 300;
