@@ -95,23 +95,27 @@ router.post('/:productId/review', isUser, async (req, res, next) => {
 //edit product review in database
 router.put('/:productId/review/:reviewId', isUser, async (req, res, next) => {
   const {rating, comment, userId, productId, id} = req.body
-  try {
-    const updatedReview = await Review.update(
-      {
-        rating,
-        comment,
-        userId,
-        productId
-      },
-      {
-        where: {
-          id
+  if (userId !== req.user.id) {
+    res.sendStatus(403)
+  } else {
+    try {
+      const updatedReview = await Review.update(
+        {
+          rating,
+          comment,
+          userId,
+          productId
+        },
+        {
+          where: {
+            id
+          }
         }
-      }
-    )
-    res.json(updatedReview)
-  } catch (err) {
-    next(err)
+      )
+      res.json(updatedReview)
+    } catch (err) {
+      next(err)
+    }
   }
 })
 
