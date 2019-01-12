@@ -149,7 +149,7 @@ export function ProductForm(props) {
         name="price"
         value={props.state.price}
         onChange={props.updateHandler}
-        startAdornment={<InputAdornment position="start">$</InputAdornment>}
+        // startAdornment={<InputAdornment position="start">$</InputAdornment>}
       />
 
       <br />
