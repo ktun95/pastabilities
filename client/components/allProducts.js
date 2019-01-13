@@ -1,7 +1,13 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {fetchProducts, fetchProduct, destroyProduct, updatePage} from '../store'
+import {
+  fetchProducts,
+  fetchProduct,
+  destroyProduct,
+  updatePage,
+  filterProducts
+} from '../store'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import Card from '@material-ui/core/Card'
@@ -52,19 +58,54 @@ export class AllProducts extends React.Component {
   componentDidMount() {
     this.props.fetchProducts()
   }
+  compo
 
   handlePaginateClick = data => {
     const indexStart = data.selected * this.props.productsPerPage
     const indexEnd = indexStart + this.props.productsPerPage
     const newPage = this.props.visibleProducts.slice(indexStart, indexEnd)
+    console.log('newpage<>', newPage)
     this.props.updatePage(newPage)
   }
 
-  handleFilterSelection = () => {
-    this.props.fetchProducts()
+  handleFilterSelection = data => {
+    const newVisiableProducts = this.props.products.filter(
+      product => product.type === data.target.value
+    )
+    this.props.filterProducts(newVisiableProducts)
+
+    const indexStart = 0
+    const indexEnd = indexStart + this.props.productsPerPage
+    const newPage = this.props.visibleProducts.slice(indexStart, indexEnd)
+    this.props.updatePage(newPage)
   }
 
-  handleSortSelection = () => {}
+  handleSortSelection = data => {
+    const sortedProducts = this.props.visibleProducts.sort(
+      compareValues(data.target.value)
+    )
+    console.log(sortedProducts)
+  }
+
+  compareValues(key, order = 'asc') {
+    return function(a, b) {
+      if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+        // property doesn't exist on either object
+        return 0
+      }
+
+      const varA = typeof a[key] === 'string' ? a[key].toUpperCase() : a[key]
+      const varB = typeof b[key] === 'string' ? b[key].toUpperCase() : b[key]
+
+      let comparison = 0
+      if (varA < varB) {
+        comparison = 1
+      } else if (varA > varB) {
+        comparison = -1
+      }
+      return order === 'desc' ? comparison * -1 : comparison
+    }
+  }
 
   render() {
     const {
@@ -79,6 +120,13 @@ export class AllProducts extends React.Component {
       {id: 2, value: 'gluten-free'},
       {id: 3, value: 'semolina'}
     ]
+    const sortBy = [
+      {id: 1, value: 'name'},
+      {id: 2, value: 'description'},
+      {id: 3, value: 'price'},
+      {id: 4, value: 'type'},
+      {id: 5, value: 'shape'}
+    ]
 
     const noProducts = !products || products.length === 0
     return (
@@ -88,11 +136,11 @@ export class AllProducts extends React.Component {
           <div className={classes.sort}>
             <div className={classes.collectionSort}>
               <label>Filter By:</label>
-              <select>
+              <select name="filter" onChange={this.handleFilterSelection}>
                 <option value="/">All Pastas</option>
                 {types.map(type => {
                   return (
-                    <option key={type.id} value={type.id}>
+                    <option key={type.id} value={type.value}>
                       {type.value}
                     </option>
                   )
@@ -103,8 +151,15 @@ export class AllProducts extends React.Component {
           <div className={classes.sort}>
             <div className={classes.collectionSort}>
               <label>Sort By:</label>
-              <select>
+              <select name="sort" onChange={this.handleSortSelection}>
                 <option value="/">Featured</option>
+                {sortBy.map(filter => {
+                  return (
+                    <option key={filter.id} value={filter.id}>
+                      {filter.value}
+                    </option>
+                  )
+                })}
               </select>
             </div>
           </div>
@@ -236,6 +291,9 @@ const mapDispatchToProps = dispatch => {
     },
     updatePage: id => {
       dispatch(updatePage(id))
+    },
+    filterProducts: id => {
+      dispatch(filterProducts(id))
     }
   }
 }
