@@ -11,6 +11,7 @@ import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import {withStyles} from '@material-ui/core/styles'
+import StarRatings from 'react-star-ratings'
 
 const styles = () => ({
   container: {
@@ -25,7 +26,7 @@ const styles = () => ({
     display: 'flex'
   },
   card: {
-    width: 200,
+    width: 225,
     height: '100%'
   },
   cardMedia: {
@@ -117,9 +118,25 @@ export class AllProducts extends React.Component {
                         />
                       </Link>
                       <CardContent className={classes.cardContent}>
-                        <Typography variant="h5" align="center">
+                        <Typography variant="h5" align="center" noWrap={true}>
                           {product.name}
                         </Typography>
+                        <Typography variant="subtitle1" align="center">
+                          ${(product.price / 100).toFixed(2)}
+                        </Typography>
+                        <div align="center">
+                          <br />
+                          <StarRatings
+                            rating={Number(
+                              product.reviews.reduce((sum, item) => {
+                                return sum + +item.rating
+                              }, 0) / product.reviews.length
+                            )}
+                            starRatedColor="blue"
+                            starDimension="20px"
+                            starSpacing="5px"
+                          />
+                        </div>
                       </CardContent>
                       <CardActions>
                         <Link to={`/products/${product.id}`}>
