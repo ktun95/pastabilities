@@ -8,10 +8,9 @@ import StepLabel from '@material-ui/core/StepLabel'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import AddressForm from './addressForm'
-import PaymentForm from './paymentForm'
 import Review from './reviewForm'
 
-const steps = ['Shipping address', 'Payment details', 'Review your order']
+const steps = ['Shipping address', 'Review your order']
 
 const styles = theme => ({
   layout: {
@@ -39,9 +38,7 @@ const styles = theme => ({
   },
   buttons: {
     display: 'flex',
-    justifyContent: 'flex-end'
-  },
-  button: {
+    justifyContent: 'flex-end',
     marginTop: theme.spacing.unit * 3,
     marginLeft: theme.spacing.unit
   }
@@ -61,17 +58,34 @@ class checkout extends Component {
       state: '',
       zipCode: '',
       country: ''
+      // ccName: '',
+      // ccNumber: '',
+      // ccExpdate: '',
+      // cvv: ''
     }
   }
 
   handleNext = () => {
     const {activeStep, ...userInfo} = this.state
-    const {firstName, lastName, email, address} = userInfo
+    const {
+      firstName,
+      lastName,
+      email,
+      // ccName,
+      // ccNumber,
+      // ccExpdate,
+      // cvv,
+      ...address
+    } = userInfo
     const userObj = {firstName, lastName, email}
+    //const billing = {ccName, ccNumber, ccExpdate, cvv}
     if (activeStep === 0) {
       window.localStorage.user = JSON.stringify(userObj)
       window.localStorage.address = JSON.stringify(address)
     }
+    // if (activeStep === 1) {
+    //   window.localStorage.user = JSON.stringify(billing)
+    // }
     this.setState(state => ({
       activeStep: state.activeStep + 1
     }))
@@ -137,8 +151,13 @@ class checkout extends Component {
                         state={this.state}
                       />
                     ) : null}
-                    {activeStep === 1 ? <PaymentForm /> : null}
-                    {activeStep === 2 ? <Review /> : null}
+                    {/* {activeStep === 1 ? (
+                      <PaymentForm
+                        handleTextChange={this.handleTextChange}
+                        state={this.state}
+                      />
+                    ) : null} */}
+                    {activeStep === 1 ? <Review /> : null}
                     <div className={classes.buttons}>
                       {activeStep !== 0 && (
                         <Button
@@ -152,7 +171,7 @@ class checkout extends Component {
                         variant="contained"
                         color="primary"
                         onClick={this.handleNext}
-                        className={classes.button}
+                        className={classes.buttons}
                       >
                         {activeStep === steps.length - 1
                           ? 'Place order'

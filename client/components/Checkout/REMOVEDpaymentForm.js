@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField'
 
 class paymentForm extends Component {
   render() {
+    const {handleTextChange, state} = this.props
     return (
       <React.Fragment>
         <Typographhy variant="h6" gutterBottom>
@@ -14,6 +15,9 @@ class paymentForm extends Component {
                 required
                 id="cardName"
                 label="Name on card"
+                name="ccName"
+                value={state.ccName}
+                onChange={handleTextChange}
                 fullWidth
               />
             </Grid>
@@ -22,6 +26,9 @@ class paymentForm extends Component {
                 required
                 id="cardNumber"
                 label="Card number"
+                name="ccNumber"
+                value={state.ccNumber}
+                onChange={handleTextChange}
                 fullWidth
               />
             </Grid>
@@ -29,12 +36,23 @@ class paymentForm extends Component {
               <TextField
                 required
                 id="expirationDate"
+                name="ccExpdate"
+                value={state.ccExpdate}
+                onChange={handleTextChange}
                 label="Expiration date"
                 fullWidth
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField required id="cvv" label="CVV" fullWidth />
+              <TextField
+                required
+                id="cvv"
+                name="cvv"
+                value={state.cvv}
+                onChange={handleTextChange}
+                label="CVV"
+                fullWidth
+              />
             </Grid>
           </Grid>
         </Typographhy>
