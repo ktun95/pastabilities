@@ -126,16 +126,18 @@ export class AllProducts extends React.Component {
                         </Typography>
                         <div align="center">
                           <br />
-                          <StarRatings
-                            rating={Number(
-                              product.reviews.reduce((sum, item) => {
-                                return sum + +item.rating
-                              }, 0) / product.reviews.length
-                            )}
-                            starRatedColor="blue"
-                            starDimension="20px"
-                            starSpacing="5px"
-                          />
+                          {product.reviews.length > 0 && (
+                            <StarRatings
+                              rating={Number(
+                                product.reviews.reduce((sum, item) => {
+                                  return sum + +item.rating
+                                }, 0) / product.reviews.length
+                              )}
+                              starRatedColor="blue"
+                              starDimension="20px"
+                              starSpacing="5px"
+                            />
+                          )}
                         </div>
                       </CardContent>
                       <CardActions>
