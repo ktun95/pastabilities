@@ -28,21 +28,7 @@ class Cart extends Component {
     this.state = {}
   }
 
-  componentDidMount() {
-    this.props.fetchProducts()
-
-    // const keyProducts = Object.keys(cart)
-    // const bigCart = []
-    // allProducts.forEach(item => {
-    //   if (keyProducts.includes(item.id.toString())) {
-    //     item.quantity = cart[item.id]
-    //     bigCart.push(item)
-    //   }
-    // })
-    // const subTotal = bigCart.reduce((pVal, curVal) => (pVal.price + curVal), 0)
-    // const tax = (subTotal * .07).toFixed(2)
-    // const total = subTotal + tax
-  }
+  componentDidMount() {}
 
   render() {
     const {classes, cart} = this.props

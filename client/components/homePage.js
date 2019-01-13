@@ -26,7 +26,7 @@ const styles = theme => ({
     padding: 50
   },
   card: {
-    minWidth: 350,
+    minWidth: 300,
     display: 'flex',
     flexDirection: 'column'
   },
@@ -118,10 +118,10 @@ const MainFeatures = props => {
       <footer className={classes.footer}>
         <Paper className={classes.paperFooter}>
           <Tabs value={0} indicatorColor="primary" textColor="primary" centered>
-            <Tab label="Greg" value={0} href="https://github.com/apoyando" />
-            <Tab label="Chris" alue={1} href="https://github.com/celipas" />
-            <Tab label="Kevin" alue={2} href="https://github.com/ktun95" />
-            <Tab label="Duc" alue={3} href="https://github.com/ducvtrann" />
+            <Tab label="Greg" href="https://github.com/apoyando" />
+            <Tab label="Chris" href="https://github.com/celipas" />
+            <Tab label="Kevin" href="https://github.com/ktun95" />
+            <Tab label="Duc" href="https://github.com/ducvtrann" />
           </Tabs>
         </Paper>
       </footer>
