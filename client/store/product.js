@@ -138,6 +138,7 @@
 // }
 
 import axios from 'axios'
+import {freemem} from 'os'
 
 /**
  * ACTION TYPES
@@ -149,6 +150,10 @@ const EDIT_PRODUCT = 'EDIT_PRODUCT'
 const DELETE_PRODUCT = 'DELETE_PRODUCT'
 const ADD_REVIEW = 'ADD_REVIEW'
 
+// const GET_CATEGORIES = 'GET_CATEGORIES'
+const UPDATE_PAGE = 'UPDATE_PAGE'
+const FILTER_PRODUCTS = 'FILTER_PRODUCTS'
+
 /**
  * ACTION CREATORS
  */
@@ -158,6 +163,9 @@ const addProduct = product => ({type: ADD_PRODUCT, product})
 const editProduct = product => ({type: EDIT_PRODUCT, product})
 const deleteProduct = productId => ({type: DELETE_PRODUCT, productId})
 const addReview = review => ({type: ADD_REVIEW, review})
+
+export const updatePage = page => ({type: UPDATE_PAGE, page})
+export const filter = data => ({type: FILTER_PRODUCTS, data})
 
 /**
  * THUNK CREATORS
@@ -187,6 +195,7 @@ export const fetchProduct = productId => async dispatch => {
     console.error(err)
   }
 }
+
 //NOTE: the below thunk won't work well as long as we have shape and type as ENUM columns; do the filtering in the redux store for now
 export const fetchProductsByCategory = (type, shape) => async dispatch => {
   try {
@@ -244,10 +253,12 @@ export const postReview = review => async dispatch => {
  */
 const initialState = {
   allProducts: [],
+  visibleProducts: [],
   numProductPages: 0,
   productsPerPage: 5,
   numPages: 0,
   currentPage: [],
+  cagegories: [],
   currentProduct: {
     name: '',
     description: '',
@@ -268,9 +279,11 @@ export default function(state = initialState, action) {
       return {
         ...state,
         allProducts: action.products,
+        visibleProducts: action.products,
         numProductPages: action.products.length,
         numPages: Math.ceil(action.products.length / 5),
-        currentPage: action.products.slice(0, state.productsPerPage)
+        currentPage: action.products.slice(0, state.productsPerPage),
+        types: [...new Set(['whole-wheat', 'gluten-freemem', 'semolina'])]
       }
     case GET_PRODUCT:
       return {...state, currentProduct: action.product}
@@ -303,6 +316,12 @@ export default function(state = initialState, action) {
           reviews: [...state.currentProduct.reviews, action.review]
         }
       }
+    case UPDATE_PAGE:
+      return {
+        ...state,
+        currentPage: action.page
+      }
+
     default:
       return state
   }
