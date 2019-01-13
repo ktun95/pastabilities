@@ -25,24 +25,19 @@ const User = db.define('user', {
     }
   },
   firstName: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      notEmpty: true
-    }
+    type: Sequelize.STRING
   },
   lastName: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      notEmpty: true
-    }
+    type: Sequelize.STRING
   },
   isAdmin: {
     type: Sequelize.BOOLEAN,
     defaultValue: false
   },
   googleId: {
+    type: Sequelize.STRING
+  },
+  facebookId: {
     type: Sequelize.STRING
   }
 })
