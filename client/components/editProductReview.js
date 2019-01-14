@@ -32,6 +32,7 @@ class EditProductReview extends React.Component {
   constructor() {
     super()
     this.state = {
+      id: '',
       userId: 0,
       productId: 0,
       rating: 0,
@@ -53,11 +54,14 @@ class EditProductReview extends React.Component {
         item => item.id === reviewId
       )
     }
-    console.log(reviewId, currReview)
 
-    // let thisReview =
-    //this.setState({userId: this.props.userId, productId: productID})
-    //need to get review!
+    this.setState({
+      userId: +currReview.userId,
+      productId: +currReview.productId,
+      rating: +currReview.rating,
+      comment: currReview.comment,
+      id: currReview.id
+    })
   }
 
   changeRating(newRating, name) {
@@ -74,7 +78,6 @@ class EditProductReview extends React.Component {
 
     try {
       event.preventDefault()
-      console.log(this.state)
       this.props.putReview(this.state)
       this.props.history.push(`/products/${Number(match.params.productId)}`)
     } catch (err) {
