@@ -13,6 +13,7 @@ import Review from './reviewForm'
 import StripeBtn from './stripe'
 import ConfirmationPage from './confirmationPage'
 import {billing} from '../UtilityFunctions.js/functions'
+import {createOrder} from '../../store'
 
 const steps = ['Shipping address', 'Review your order']
 
@@ -62,15 +63,19 @@ class checkout extends Component {
       state: '',
       zipCode: '',
       country: '',
-      paid: false
+      paid: false,
+      orderId: 0,
+      cart: []
     }
   }
 
   componentDidMount() {
     document.getElementsByClassName('StripeCheckout')[0].style.display = 'none'
   }
-  isPaid = () => {
-    this.setState({paid: true})
+  isPaid = async () => {
+    // await createOrder(this.state.cart)
+    this.setState({paid: true, cart: []})
+    window.localStorage.clear()
   }
   handleNext = () => {
     const {activeStep, ...userInfo} = this.state
@@ -125,7 +130,7 @@ class checkout extends Component {
               <React.Fragment>
                 {console.log('active step', activeStep)}
                 {this.state.paid === true ? (
-                  <ConfirmationPage />
+                  <ConfirmationPage orderId={this.state.orderId} />
                 ) : (
                   <React.Fragment>
                     {activeStep === 0 ? (
@@ -173,5 +178,14 @@ const mapStateToProps = state => {
     allProducts: state.product.allProducts
   }
 }
+const mapDispatchToProps = dispatch => {
+  return {
+    createOrder: order => {
+      dispatch(createOrder(order))
+    }
+  }
+}
 
-export default connect(mapStateToProps)(withStyles(styles)(checkout))
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withStyles(styles)(checkout)
+)

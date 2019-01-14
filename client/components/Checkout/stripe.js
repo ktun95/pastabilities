@@ -22,7 +22,6 @@ class TakeMoney extends React.Component {
 
   render() {
     const publishableKey = 'pk_test_DUbKNX2jBsDxZV2i0McVhWe6'
-    console.log(this.props)
     return (
       <StripeCheckout
         label="Order"
