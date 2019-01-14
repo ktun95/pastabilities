@@ -15,6 +15,7 @@ import Button from '@material-ui/core/Button'
 const styles = () => ({})
 import Grid from '@material-ui/core/Grid'
 import {Link} from 'react-router-dom'
+import StarRatings from 'react-star-ratings'
 
 class singleProduct extends Component {
   componentDidMount() {
@@ -67,7 +68,22 @@ class singleProduct extends Component {
           <div className="product-description">
             <span>Pasta</span>
             <h1>{currentProduct.name}</h1>
-
+            {currentProduct.reviews && currentProduct.reviews.length ? (
+              <div>
+                <StarRatings
+                  rating={Number(
+                    currentProduct.reviews.reduce((sum, item) => {
+                      return sum + +item.rating
+                    }, 0) / currentProduct.reviews.length
+                  )}
+                  starRatedColor="blue"
+                  starDimension="20px"
+                  starSpacing="5px"
+                />
+              </div>
+            ) : (
+              <div />
+            )}
             <p>{currentProduct.description}</p>
           </div>
 
