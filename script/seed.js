@@ -190,7 +190,7 @@ const dummyOrders = [
     email: 'Test@user.com'
   },
   {
-    status: 'cancelled',
+    status: 'canceled',
     orderDate: new Date(),
     email: 'Test2@user.com'
   },
