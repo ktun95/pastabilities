@@ -61,12 +61,16 @@ class checkout extends Component {
       city: '',
       state: '',
       zipCode: '',
-      country: ''
+      country: '',
+      paid: false
     }
   }
 
   componentDidMount() {
     document.getElementsByClassName('StripeCheckout')[0].style.display = 'none'
+  }
+  isPaid = () => {
+    this.setState({paid: true})
   }
   handleNext = () => {
     const {activeStep, ...userInfo} = this.state
@@ -79,6 +83,7 @@ class checkout extends Component {
     }
     if (activeStep === steps.length - 1) {
       document.getElementsByClassName('StripeCheckout')[0].click()
+      return
     }
     this.setState(state => ({
       activeStep: state.activeStep + 1
@@ -100,8 +105,6 @@ class checkout extends Component {
   render() {
     const {classes, cart} = this.props
     const bill = parseFloat(billing(cart).total * 100).toFixed(2)
-    console.log(typeof bill)
-    console.log(bill)
     const {activeStep} = this.state
 
     return (
@@ -120,7 +123,8 @@ class checkout extends Component {
                 ))}
               </Stepper>
               <React.Fragment>
-                {activeStep === steps.length ? (
+                {console.log('active step', activeStep)}
+                {this.state.paid === true ? (
                   <ConfirmationPage />
                 ) : (
                   <React.Fragment>
@@ -150,7 +154,7 @@ class checkout extends Component {
                           ? 'Place my order'
                           : 'Next'}
                       </Button>
-                      <StripeBtn bill={bill} />
+                      <StripeBtn bill={bill} isPaid={this.isPaid} />
                     </div>
                   </React.Fragment>
                 )}
