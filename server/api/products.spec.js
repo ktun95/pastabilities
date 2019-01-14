@@ -74,7 +74,6 @@ describe('Product routes', () => {
       const res = await request(app)
         .get('/api/products')
         .expect(200)
-      console.log('res.body', res.body)
       expect(res.body).to.be.an('array')
       expect(res.body[0].name).to.be.equal('Ravioli')
       expect(res.body[1].name).to.be.equal('Linguini')

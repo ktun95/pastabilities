@@ -70,15 +70,49 @@ router.get('/orderHistory/:userId', async (req, res, next) => {
 })
 
 // PUT Update Order Status -- admin only
-router.put('/:id', isAdmin, async (req, res, next) => {
+//add back is admin
+router.put('/:id', async (req, res, next) => {
   try {
-    const orderId = req.params.id
-    Order.update(req.body, {where: {id: orderId}})
-    const updatedOrder = await Order.findById(orderId)
-    res.json(updatedOrder.dataValues)
+    const orderId = +req.params.id
+    const {status} = req.body
+    let isUpdated
+    isUpdated = await Order.update(
+      {status},
+      {
+        where: {
+          id: orderId
+        }
+      }
+    )
+    res.json(isUpdated)
   } catch (err) {
     next(err)
   }
 })
 
-// Create Tests
+// POST Create Order
+// add admin or user back
+router.post('/checkout', async (req, res, next) => {
+  // const userId = req.user.id
+
+  const {email, status, userId, cart} = req.body
+
+  //from the cart we'll get
+  //cart is an array of products
+  //quantity
+  //productID
+  //price
+  //check admin or user here
+  // if (isAdmin || req.user.id === userId) {
+  try {
+    const instance = await Order.create({
+      status,
+      email,
+      orderDate: new Date(),
+      userId
+    })
+    res.json(instance)
+  } catch (err) {
+    next(err)
+  }
+})

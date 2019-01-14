@@ -66,7 +66,6 @@ export class AllProducts extends React.Component {
     const indexStart = data.selected * this.props.productsPerPage
     const indexEnd = indexStart + this.props.productsPerPage
     const newPage = this.props.visibleProducts.slice(indexStart, indexEnd)
-    console.log('newpage<>', newPage)
     this.props.updatePage(newPage)
   }
 
@@ -86,7 +85,6 @@ export class AllProducts extends React.Component {
     const sortedProducts = this.props.visibleProducts.sort(
       compareValues(data.target.value)
     )
-    console.log(sortedProducts)
   }
 
   compareValues(key, order = 'asc') {

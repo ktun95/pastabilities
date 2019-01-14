@@ -9,7 +9,7 @@ const ADD_ORDER = 'ADD_ORDER'
 const GET_ORDERS = 'GET_ORDERS'
 const GET_ORDERS_BY_USER = 'GET_ORDERS_BY_USER'
 const GET_ORDERS_BY_STATUS = 'GET_ORDERS_BY_STATUS'
-const GET_SINGLE_ORDER = 'GET_SINGLE_ORDER'
+const GET_ORDER = 'GET_ORDER'
 const UPDATE_STATUS = 'UPDATE_STATUS'
 
 /**
@@ -28,7 +28,7 @@ const getOrders = orders => ({
 })
 
 const getOrder = singleOrder => ({
-  type: GET_SINGLE_ORDER,
+  type: GET_ORDER,
   singleOrder
 })
 
@@ -52,7 +52,7 @@ const updateOrdersByStatus = updatedOrder => ({
  */
 export const postOrder = cart => async dispatch => {
   try {
-    const res = await axios.post(`/api/orders`, cart)
+    const res = await axios.post(`/api/orders/checkout`, cart)
     return dispatch(createOrder(res.data))
   } catch (error) {
     console.error(error)
@@ -68,12 +68,12 @@ export const fetchOrders = () => async dispatch => {
   }
 }
 
-export const fetchSingleOrder = id => async dispatch => {
+export const fetchOrder = orderId => async dispatch => {
   try {
-    const res = await axios.get(`/api/orders/${id}`)
-    dispatch(getOrder(res.data))
-  } catch (error) {
-    console.error(error)
+    const {data} = await axios.get(`/api/orders/${orderId}`)
+    dispatch(getOrder(data))
+  } catch (err) {
+    console.error(err)
   }
 }
 
@@ -125,7 +125,7 @@ const reducer = (state = initialState, action) => {
         orders: [...state.orders, action.order],
         singleOrder: action.order
       }
-    case GET_SINGLE_ORDER:
+    case GET_ORDER:
       return {...state, singleOrder: action.singleOrder}
     case GET_ORDERS_BY_USER:
       return {...state, userOrders: action.orders}
