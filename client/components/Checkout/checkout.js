@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
 import withStyles from '@material-ui/core/styles/withStyles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Paper from '@material-ui/core/Paper'
@@ -9,6 +10,9 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import AddressForm from './addressForm'
 import Review from './reviewForm'
+import StripeBtn from './stripe'
+import ConfirmationPage from './confirmationPage'
+import {billing} from '../UtilityFunctions.js/functions'
 
 const steps = ['Shipping address', 'Review your order']
 
@@ -58,34 +62,24 @@ class checkout extends Component {
       state: '',
       zipCode: '',
       country: ''
-      // ccName: '',
-      // ccNumber: '',
-      // ccExpdate: '',
-      // cvv: ''
     }
   }
 
+  componentDidMount() {
+    document.getElementsByClassName('StripeCheckout')[0].style.display = 'none'
+  }
   handleNext = () => {
     const {activeStep, ...userInfo} = this.state
-    const {
-      firstName,
-      lastName,
-      email,
-      // ccName,
-      // ccNumber,
-      // ccExpdate,
-      // cvv,
-      ...address
-    } = userInfo
+    const {firstName, lastName, email, ...address} = userInfo
     const userObj = {firstName, lastName, email}
-    //const billing = {ccName, ccNumber, ccExpdate, cvv}
+
     if (activeStep === 0) {
       window.localStorage.user = JSON.stringify(userObj)
       window.localStorage.address = JSON.stringify(address)
     }
-    // if (activeStep === 1) {
-    //   window.localStorage.user = JSON.stringify(billing)
-    // }
+    if (activeStep === steps.length - 1) {
+      document.getElementsByClassName('StripeCheckout')[0].click()
+    }
     this.setState(state => ({
       activeStep: state.activeStep + 1
     }))
@@ -97,25 +91,17 @@ class checkout extends Component {
     }))
   }
 
-  handleReset = () => {
-    this.setState({
-      activeStep: 0
-    })
-  }
-
   handleTextChange = event => {
     this.setState({
       [event.target.name]: event.target.value
     })
   }
 
-  handleSubmitUserInfo = () => {
-    console.log(this.state)
-  }
-
   render() {
-    const {classes} = this.props
+    const {classes, cart} = this.props
+    const bill = billing(cart)
     const {activeStep} = this.state
+
     return (
       <React.Fragment>
         <CssBaseline>
@@ -133,16 +119,7 @@ class checkout extends Component {
               </Stepper>
               <React.Fragment>
                 {activeStep === steps.length ? (
-                  <React.Fragment>
-                    <Typography variant="h5" gutterBottom>
-                      Thank you for your order
-                    </Typography>
-                    <Typography variant="subtitle1">
-                      Your order number is 12345. We have emailed your order
-                      confirmation, and will send you an update when your order
-                      has been shipped
-                    </Typography>
-                  </React.Fragment>
+                  <ConfirmationPage />
                 ) : (
                   <React.Fragment>
                     {activeStep === 0 ? (
@@ -151,12 +128,6 @@ class checkout extends Component {
                         state={this.state}
                       />
                     ) : null}
-                    {/* {activeStep === 1 ? (
-                      <PaymentForm
-                        handleTextChange={this.handleTextChange}
-                        state={this.state}
-                      />
-                    ) : null} */}
                     {activeStep === 1 ? <Review /> : null}
                     <div className={classes.buttons}>
                       {activeStep !== 0 && (
@@ -174,9 +145,10 @@ class checkout extends Component {
                         className={classes.buttons}
                       >
                         {activeStep === steps.length - 1
-                          ? 'Place order'
+                          ? 'Place my order'
                           : 'Next'}
                       </Button>
+                      <StripeBtn bill={bill.total} />
                     </div>
                   </React.Fragment>
                 )}
@@ -189,4 +161,11 @@ class checkout extends Component {
   }
 }
 
-export default withStyles(styles)(checkout)
+const mapStateToProps = state => {
+  return {
+    cart: state.cart.cart,
+    allProducts: state.product.allProducts
+  }
+}
+
+export default connect(mapStateToProps)(withStyles(styles)(checkout))

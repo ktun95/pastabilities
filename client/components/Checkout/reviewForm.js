@@ -26,7 +26,6 @@ class reviewForm extends Component {
     const address = JSON.parse(window.localStorage.address)
     const LocalStorageCart = JSON.parse(window.localStorage.pastaCart)
     const bill = billing(cart)
-    console.log(itemPrice)
 
     return (
       <React.Fragment>
