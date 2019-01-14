@@ -13,6 +13,7 @@ import Review from './reviewForm'
 import StripeBtn from './stripe'
 import ConfirmationPage from './confirmationPage'
 import {billing} from '../UtilityFunctions.js/functions'
+import {createOrder} from '../../store'
 
 const steps = ['Shipping address', 'Review your order']
 
@@ -61,12 +62,32 @@ class checkout extends Component {
       city: '',
       state: '',
       zipCode: '',
-      country: ''
+      country: '',
+      paid: false,
+      orderId: 0,
+      userId: 0,
+      cart: [],
+      bill: {}
     }
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
     document.getElementsByClassName('StripeCheckout')[0].style.display = 'none'
+    const localCart = JSON.parse(window.localStorage.pastaCart)
+    // we're currently just loading up the redux cart!
+    // await this.setState({cart: [...localCart.cart]})
+    await this.setState({cart: [...this.props.cart]})
+  }
+  isPaid = async () => {
+    // await createOrder(this.state)
+
+    //the below is a temporary hack because browser refresh currently kills the redux state cart and it isn't reloaded
+    this.setState({paid: true, cart: []})
+    window.localStorage.clear()
+  }
+  getBill = async bill => {
+    await this.setState({bill})
+    console.log(this.state)
   }
   handleNext = () => {
     const {activeStep, ...userInfo} = this.state
@@ -79,6 +100,7 @@ class checkout extends Component {
     }
     if (activeStep === steps.length - 1) {
       document.getElementsByClassName('StripeCheckout')[0].click()
+      return
     }
     this.setState(state => ({
       activeStep: state.activeStep + 1
@@ -100,8 +122,6 @@ class checkout extends Component {
   render() {
     const {classes, cart} = this.props
     const bill = parseFloat(billing(cart).total * 100).toFixed(2)
-    console.log(typeof bill)
-    console.log(bill)
     const {activeStep} = this.state
 
     return (
@@ -120,8 +140,8 @@ class checkout extends Component {
                 ))}
               </Stepper>
               <React.Fragment>
-                {activeStep === steps.length ? (
-                  <ConfirmationPage />
+                {this.state.paid === true ? (
+                  <ConfirmationPage orderId={this.state.orderId} />
                 ) : (
                   <React.Fragment>
                     {activeStep === 0 ? (
@@ -130,7 +150,9 @@ class checkout extends Component {
                         state={this.state}
                       />
                     ) : null}
-                    {activeStep === 1 ? <Review /> : null}
+                    {activeStep === 1 ? (
+                      <Review getBill={this.getBill} />
+                    ) : null}
                     <div className={classes.buttons}>
                       {activeStep !== 0 && (
                         <Button
@@ -150,7 +172,7 @@ class checkout extends Component {
                           ? 'Place my order'
                           : 'Next'}
                       </Button>
-                      <StripeBtn bill={bill} />
+                      <StripeBtn isPaid={this.isPaid} />
                     </div>
                   </React.Fragment>
                 )}
@@ -169,5 +191,14 @@ const mapStateToProps = state => {
     allProducts: state.product.allProducts
   }
 }
+const mapDispatchToProps = dispatch => {
+  return {
+    createOrder: order => {
+      dispatch(createOrder(order))
+    }
+  }
+}
 
-export default connect(mapStateToProps)(withStyles(styles)(checkout))
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withStyles(styles)(checkout)
+)
