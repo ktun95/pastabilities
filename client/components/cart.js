@@ -10,11 +10,17 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
+import ExposureNeg1 from '@material-ui/icons/ExposureNeg1'
+import ExposurePlus1 from '@material-ui/icons/ExposurePlus1'
+import FormControl from '@material-ui/core/FormControl'
 import Delete from '@material-ui/icons/DeleteRounded'
 import {withStyles} from '@material-ui/core/styles'
-import {fetchProducts, removeFromCart} from '../store'
-import {Typography} from '@material-ui/core'
+import {fetchProducts, removeFromCart, changeQuantity} from '../store'
+import {Typography, Icon} from '@material-ui/core'
 import {billing} from './UtilityFunctions.js/functions'
+import InputLabel from '@material-ui/core/InputLabel'
+import MenuItem from '@material-ui/core/MenuItem'
+import Select from '@material-ui/core/Select'
 
 const styles = theme => ({
   root: {
@@ -46,10 +52,18 @@ const styles = theme => ({
 class Cart extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      qty: 0
+    }
   }
 
   componentDidMount() {}
+
+  handleChange = (event, product) => {
+    this.setState({[event.target.name]: event.target.value}, () => {
+      this.props.changeQty(product, this.state.qty)
+    })
+  }
 
   render() {
     const {classes, cart} = this.props
@@ -88,7 +102,6 @@ class Cart extends Component {
                       {cart.map(product => (
                         <TableRow key={product.name}>
                           <TableCell>{product.name}</TableCell>
-
                           <TableCell align="right">
                             {product.description}
                           </TableCell>
@@ -96,7 +109,23 @@ class Cart extends Component {
                             {(product.price / 100).toFixed(2)}
                           </TableCell>
                           <TableCell align="right">
-                            {product.quantity}
+                            <FormControl>
+                              <Select
+                                value={product.quantity}
+                                onChange={event =>
+                                  this.handleChange(event, product)
+                                }
+                                inputProps={{
+                                  name: 'qty'
+                                }}
+                              >
+                                <MenuItem value={1}>1</MenuItem>
+                                <MenuItem value={2}>2</MenuItem>
+                                <MenuItem value={3}>3</MenuItem>
+                                <MenuItem value={4}>4</MenuItem>
+                                <MenuItem value={5}>5</MenuItem>
+                              </Select>
+                            </FormControl>
                           </TableCell>
                           <TableCell align="right">
                             <IconButton
@@ -109,7 +138,6 @@ class Cart extends Component {
                           </TableCell>
                         </TableRow>
                       ))}
-
                       <TableRow>
                         <TableCell rowSpan={3} />
                         <TableCell colSpan={2} align="right">
@@ -158,7 +186,7 @@ class Cart extends Component {
                     CheckOut
                   </Button>
                 </Link>
-              </div>)
+              </div>
             </React.Fragment>
           )}
         </CssBaseline>
@@ -170,17 +198,17 @@ class Cart extends Component {
 const mapStateToProps = state => {
   return {
     cart: state.cart.cart,
-    allProducts: state.product.allProducts
+    userId: state.user.id
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchProducts: () => {
-      dispatch(fetchProducts())
-    },
     removeItem: product => {
       dispatch(removeFromCart(product))
+    },
+    changeQty: (product, qty) => {
+      dispatch(changeQuantity(product, qty))
     }
   }
 }

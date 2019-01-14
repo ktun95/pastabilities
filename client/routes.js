@@ -17,7 +17,7 @@ import {
   EditProductReview,
   Checkout
 } from './components'
-import {me} from './store'
+import {me, getGuestCart} from './store'
 
 class Routes extends Component {
   componentDidMount() {
@@ -78,6 +78,7 @@ const mapDispatch = dispatch => {
   return {
     loadInitialData() {
       dispatch(me())
+      dispatch(getGuestCart())
     }
   }
 }
