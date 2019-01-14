@@ -9,6 +9,7 @@ const ADD_PRODUCT = 'ADD_PRODUCT'
 const EDIT_PRODUCT = 'EDIT_PRODUCT'
 const DELETE_PRODUCT = 'DELETE_PRODUCT'
 const ADD_REVIEW = 'ADD_REVIEW'
+const EDIT_REVIEW = 'EDIT_REVIEW'
 
 // const GET_CATEGORIES = 'GET_CATEGORIES'
 const UPDATE_PAGE = 'UPDATE_PAGE'
@@ -23,6 +24,7 @@ const addProduct = product => ({type: ADD_PRODUCT, product})
 const editProduct = product => ({type: EDIT_PRODUCT, product})
 const deleteProduct = productId => ({type: DELETE_PRODUCT, productId})
 const addReview = review => ({type: ADD_REVIEW, review})
+const editReview = review => ({type: EDIT_REVIEW, review})
 
 export const updatePage = page => ({type: UPDATE_PAGE, page})
 export const filterProducts = page => ({type: FILTER_PRODUCTS, page})
@@ -108,6 +110,18 @@ export const postReview = review => async dispatch => {
   }
 }
 
+export const putReview = review => async dispatch => {
+  try {
+    const {data} = await axios.put(
+      `/api/products/${review.productId}/review/${review.id}`,
+      review
+    )
+    dispatch(editReview(data))
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 /**
  * INITIAL STATE
  */
@@ -188,6 +202,22 @@ export default function(state = initialState, action) {
         visibleProducts: [...action.page]
       }
 
+    case EDIT_REVIEW:
+      return {
+        ...state,
+        currentProduct: {
+          ...state.currentProduct,
+          reviews: [
+            ...state.currentProduct.reviews.map(review => {
+              if (review.id === action.review.id) {
+                return action.review
+              } else {
+                return review
+              }
+            })
+          ]
+        }
+      }
     default:
       return state
   }

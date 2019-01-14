@@ -7,7 +7,9 @@ module.exports = router
 //get all products from 'Product' Table
 router.get('/', async (req, res, next) => {
   try {
-    const products = await Product.findAll()
+    const products = await Product.findAll({
+      include: [Review]
+    })
     res.json(products)
   } catch (err) {
     next(err)
@@ -89,6 +91,33 @@ router.post('/:productId/review', isUser, async (req, res, next) => {
     res.json(newReview)
   } catch (err) {
     next(err)
+  }
+})
+
+//edit product review in database
+router.put('/:productId/review/:reviewId', isUser, async (req, res, next) => {
+  const {rating, comment, userId, productId, id} = req.body
+  if (userId !== req.user.id) {
+    res.sendStatus(403)
+  } else {
+    try {
+      const updatedReview = await Review.update(
+        {
+          rating,
+          comment,
+          userId,
+          productId
+        },
+        {
+          where: {
+            id
+          }
+        }
+      )
+      res.json(updatedReview)
+    } catch (err) {
+      next(err)
+    }
   }
 })
 

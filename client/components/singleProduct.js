@@ -3,11 +3,19 @@ import ProductReview from './productReview'
 import AddProductReview from './addProductReview'
 import {withStyles} from '@material-ui/core/styles'
 import {connect} from 'react-redux'
-import {fetchProduct, addToCart, removeFromCart, changeQuantity} from '../store'
+import {
+  fetchProduct,
+  addToCart,
+  removeFromCart,
+  changeQuantity,
+  destroyProduct
+} from '../store'
 import Button from '@material-ui/core/Button'
 //addToCart does not currently affect database
 const styles = () => ({})
 import Grid from '@material-ui/core/Grid'
+import {Link} from 'react-router-dom'
+import StarRatings from 'react-star-ratings'
 
 class singleProduct extends Component {
   componentDidMount() {
@@ -30,19 +38,57 @@ class singleProduct extends Component {
 
     return (
       <div className="container">
-        <div className="leftColumn">
+        <div className="leftColumn" align="center">
           <img src={currentProduct.image} />
+          <br />
+          {this.props.isAdmin ? (
+            <React.Fragment>
+              <Link to={`/admin/products/${currentProduct.id}/edit`}>
+                <Button size="small" color="secondary">
+                  Edit Product
+                </Button>
+              </Link>
+              {/* <Button
+                  size="small"
+                  color="secondary"
+                  value={product.id}
+                  onClick={() => {
+                    this.props.destroyProduct(currentProduct.id)
+                  }}
+                >
+                  Delete
+                </Button> */}
+            </React.Fragment>
+          ) : (
+            <div />
+          )}
         </div>
 
         <div className="rightColumn">
           <div className="product-description">
             <span>Pasta</span>
             <h1>{currentProduct.name}</h1>
+            {currentProduct.reviews && currentProduct.reviews.length ? (
+              <div>
+                <StarRatings
+                  rating={Number(
+                    currentProduct.reviews.reduce((sum, item) => {
+                      return sum + +item.rating
+                    }, 0) / currentProduct.reviews.length
+                  )}
+                  starRatedColor="blue"
+                  starDimension="20px"
+                  starSpacing="5px"
+                />
+              </div>
+            ) : (
+              <div />
+            )}
             <p>{currentProduct.description}</p>
           </div>
 
           <div className="product-price">
-            <span>${currentProduct.price}</span>
+            <span>${(currentProduct.price / 100).toFixed(2)}</span>
             <Button
               size="small"
               color="primary"
@@ -117,7 +163,8 @@ class singleProduct extends Component {
 const mapStateToProps = state => {
   return {
     currentProduct: state.product.currentProduct,
-    userId: state.user.id
+    userId: state.user.id,
+    isAdmin: state.user.isAdmin
   }
 }
 
@@ -127,7 +174,10 @@ const mapDispatchtoProps = dispatch => {
     addToCart: product => dispatch(addToCart(product)),
     removeFromCart: product => dispatch(removeFromCart(product)),
     changeQuantity: (product, quantity) =>
-      dispatch(changeQuantity(product, quantity))
+      dispatch(changeQuantity(product, quantity)),
+    destroyProduct: id => {
+      dispatch(destroyProduct(id))
+    }
   }
 }
 
