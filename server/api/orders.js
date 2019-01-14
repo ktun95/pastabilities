@@ -103,6 +103,7 @@ router.post('/checkout', async (req, res, next) => {
   //productID
   //price
   //check admin or user here
+  //destructure the array then bulk create
   // if (isAdmin || req.user.id === userId) {
   try {
     const instance = await Order.create({
