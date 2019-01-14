@@ -117,4 +117,36 @@ const initialState = {
   singleOrder: {}
 }
 
+const reducer = (state = initialState, action) => {
+  switch (action.type) {
+    case ADD_ORDER:
+      return {
+        ...state,
+        orders: [...state.orders, action.order],
+        singleOrder: action.order
+      }
+    case GET_SINGLE_ORDER:
+      return {...state, singleOrder: action.singleOrder}
+    case GET_ORDERS_BY_USER:
+      return {...state, userOrders: action.orders}
+    case GET_ORDERS:
+      return {...state, orders: action.orders}
+    case GET_ORDERS_BY_STATUS:
+      return {...state, orders: action.orders}
+    // eslint-disable-next-line no-case-declarations
+    case UPDATE_STATUS:
+      const updatedOrders = state.orders.map(
+        order =>
+          action.updatedOrder.id === order.id ? action.updatedOrder : order
+      )
+      return {
+        ...state,
+        orders: updatedOrders,
+        singleOrder: action.updatedOrder
+      }
+    default:
+      return state
+  }
+}
+
 export default reducer
