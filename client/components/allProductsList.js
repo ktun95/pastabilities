@@ -58,66 +58,58 @@ const styles = () => ({
 })
 
 const AllProductsList = props => {
-  const {products, classes} = props
+  const {product, classes} = props
 
   return (
     <div>
-      {
-        // products.map(product => (
-        //     <div key={product.id}>{product.name}</div>
-        // )
-        // )
-      }
-      {products.map(product => (
-        <Grid key={product.id} item>
-          <Card>
-            <Link
-              to={`/products/${product.id}`}
-              onClick={() => {
-                this.props.fetchProduct(product.id)
-              }}
-            >
-              <CardMedia image={product.image} />
+      <Grid key={product.id} item>
+        <Card>
+          <Link
+            to={`/products/${product.id}`}
+            onClick={() => {
+              fetchProduct(product.id)
+            }}
+          >
+            <CardMedia image={product.image} />
+          </Link>
+          <CardContent>
+            <Typography variant="h5" align="center">
+              {product.name}
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Link to={`/products/${product.id}`}>
+              <Button size="small" color="primary">
+                View
+              </Button>
             </Link>
-            <CardContent>
-              <Typography variant="h5" align="center">
-                {product.name}
-              </Typography>
-            </CardContent>
+            <Button size="small" color="primary">
+              Add to Cart
+            </Button>
+          </CardActions>
+          {props.isAdmin ? (
             <CardActions>
-              <Link to={`/products/${product.id}`}>
-                <Button size="small" color="primary">
-                  View
+              <Link to={`/admin/products/${product.id}/edit`}>
+                <Button size="small" color="secondary">
+                  Edit
                 </Button>
               </Link>
-              <Button size="small" color="primary">
-                Add to Cart
+              <Button
+                size="small"
+                color="secondary"
+                value={product.id}
+                onClick={() => {
+                  destroyProduct(product.id)
+                }}
+              >
+                Delete
               </Button>
             </CardActions>
-            {props.isAdmin ? (
-              <CardActions>
-                <Link to={`/admin/products/${product.id}/edit`}>
-                  <Button size="small" color="secondary">
-                    Edit
-                  </Button>
-                </Link>
-                <Button
-                  size="small"
-                  color="secondary"
-                  value={product.id}
-                  onClick={() => {
-                    this.props.destroyProduct(product.id)
-                  }}
-                >
-                  Delete
-                </Button>
-              </CardActions>
-            ) : (
-              <div />
-            )}
-          </Card>
-        </Grid>
-      ))}
+          ) : (
+            <div />
+          )}
+        </Card>
+      </Grid>
     </div>
   )
 }
