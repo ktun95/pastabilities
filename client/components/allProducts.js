@@ -6,7 +6,8 @@ import {
   fetchProduct,
   destroyProduct,
   updatePage,
-  filterProducts
+  filterProducts,
+  addToCart
 } from '../store'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
@@ -234,7 +235,11 @@ export class AllProducts extends React.Component {
                             View
                           </Button>
                         </Link>
-                        <Button size="small" color="primary">
+                        <Button
+                          size="small"
+                          color="primary"
+                          onClick={() => this.props.addToCart(product)}
+                        >
                           Add to Cart
                         </Button>
                       </CardActions>
@@ -314,6 +319,9 @@ const mapDispatchToProps = dispatch => {
     },
     filterProducts: id => {
       dispatch(filterProducts(id))
+    },
+    addToCart: product => {
+      dispatch(addToCart(product))
     }
   }
 }
