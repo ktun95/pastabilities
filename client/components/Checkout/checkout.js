@@ -99,7 +99,9 @@ class checkout extends Component {
 
   render() {
     const {classes, cart} = this.props
-    const bill = billing(cart)
+    const bill = parseFloat(billing(cart).total * 100).toFixed(2)
+    console.log(typeof bill)
+    console.log(bill)
     const {activeStep} = this.state
 
     return (
@@ -148,7 +150,7 @@ class checkout extends Component {
                           ? 'Place my order'
                           : 'Next'}
                       </Button>
-                      <StripeBtn bill={bill.total} />
+                      <StripeBtn bill={bill} />
                     </div>
                   </React.Fragment>
                 )}
