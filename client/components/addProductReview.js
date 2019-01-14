@@ -25,6 +25,9 @@ const styles = {
   },
   pos: {
     marginBottom: 22
+  },
+  textField: {
+    width: '350px'
   }
 }
 
@@ -63,7 +66,9 @@ class AddProductReview extends React.Component {
 
     try {
       event.preventDefault()
-      console.log(this.state)
+      if (this.state.comment.length < 30 || this.state.comment.length > 50) {
+        throw new Error(`Your comment must be between 30 and 50 characters.`)
+      }
       this.props.postReview(this.state)
       this.props.history.push(`/products/${Number(match.params.productId)}`)
     } catch (err) {
@@ -108,7 +113,6 @@ class AddProductReview extends React.Component {
               changeRating={this.changeRating}
             />
             <br />
-            {/* <Typography component="p">{review.comment}</Typography> */}
             <TextField
               id="standard-name"
               label="Comments"
@@ -131,6 +135,12 @@ class AddProductReview extends React.Component {
               Submit Review
             </Button>
             <br />
+            <div
+              className="error"
+              hidden={this.state.error.toString() === '[object Object]'}
+            >
+              {this.state.error.toString()}
+            </div>
           </CardContent>
         </Card>
       </div>

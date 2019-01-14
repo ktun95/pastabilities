@@ -148,6 +148,7 @@ const ADD_PRODUCT = 'ADD_PRODUCT'
 const EDIT_PRODUCT = 'EDIT_PRODUCT'
 const DELETE_PRODUCT = 'DELETE_PRODUCT'
 const ADD_REVIEW = 'ADD_REVIEW'
+const EDIT_REVIEW = 'EDIT_REVIEW'
 
 /**
  * ACTION CREATORS
@@ -158,6 +159,7 @@ const addProduct = product => ({type: ADD_PRODUCT, product})
 const editProduct = product => ({type: EDIT_PRODUCT, product})
 const deleteProduct = productId => ({type: DELETE_PRODUCT, productId})
 const addReview = review => ({type: ADD_REVIEW, review})
+const editReview = review => ({type: EDIT_REVIEW, review})
 
 /**
  * THUNK CREATORS
@@ -239,6 +241,18 @@ export const postReview = review => async dispatch => {
   }
 }
 
+export const putReview = review => async dispatch => {
+  try {
+    const {data} = await axios.put(
+      `/api/products/${review.productId}/review/${review.id}`,
+      review
+    )
+    dispatch(editReview(data))
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 /**
  * INITIAL STATE
  */
@@ -301,6 +315,22 @@ export default function(state = initialState, action) {
         currentProduct: {
           ...state.currentProduct,
           reviews: [...state.currentProduct.reviews, action.review]
+        }
+      }
+    case EDIT_REVIEW:
+      return {
+        ...state,
+        currentProduct: {
+          ...state.currentProduct,
+          reviews: [
+            ...state.currentProduct.reviews.map(review => {
+              if (review.id === action.review.id) {
+                return action.review
+              } else {
+                return review
+              }
+            })
+          ]
         }
       }
     default:
