@@ -11,6 +11,11 @@ const GET_GUEST_CART = 'GET_GUEST_CART'
 export const addToCart = product => ({type: ADD_TO_CART, product})
 export const removeFromCart = product => ({type: REMOVE_FROM_CART, product})
 export const getGuestCart = () => ({type: GET_GUEST_CART})
+export const changeQuantity = (product, quantity) => ({
+  type: CHANGE_QUANTITY,
+  product,
+  quantity
+})
 
 /*** THUNK CREATORS***/
 
@@ -62,7 +67,7 @@ export default function(state = initialState, action) {
       if (!found) {
         console.log('There is no such item in the cart.')
       } else {
-        found.quantity = state.cart[foundIdx].quantity + action.quantity
+        found.quantity = action.quantity
         newState = {
           ...state,
           cart: [...state.cart]
