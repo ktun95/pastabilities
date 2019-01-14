@@ -28,6 +28,7 @@ const stripeBtn = props => {
       amount={props.bill.total}
       token={onToken}
       stripeKey={publishableKey}
+      closed={this.onClosed}
     />
   )
 }
