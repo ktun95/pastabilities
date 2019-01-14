@@ -26,7 +26,7 @@ const styles = theme => ({
     padding: 50
   },
   card: {
-    minWidth: 350,
+    minWidth: 300,
     display: 'flex',
     flexDirection: 'column'
   },
@@ -55,11 +55,7 @@ const MainFeatures = props => {
   return (
     <React.Fragment>
       <div className={classes.main}>
-        <img
-          className={classes.content}
-          src="https://cdn.pixabay.com/photo/2015/03/07/13/55/pasta-663096_1280.jpg"
-          alt="pasta"
-        />
+        <img className={classes.content} src="/images/hero.jpg" alt="pasta" />
       </div>
       <div className={classNames(classes.layout, classes.cardGrid)}>
         <Grid container spacing={16} justify="space-evenly">
@@ -67,7 +63,7 @@ const MainFeatures = props => {
             <Card className={classes.card}>
               <CardMedia
                 className={classes.cardMedia}
-                image="https://cdn.pixabay.com/photo/2017/02/12/19/05/noodles-2060886_1280.jpg"
+                image="/images/pasta1.jpg"
               />
               <CardContent className={classes.cardContent}>
                 <Typography gutterBottom variant="h5" component="h2">
@@ -85,7 +81,7 @@ const MainFeatures = props => {
             <Card className={classes.card}>
               <CardMedia
                 className={classes.cardMedia}
-                image="https://cdn.pixabay.com/photo/2016/04/06/17/49/noodles-1312384_1280.jpg"
+                image="/images/pasta2.jpg"
               />
               <CardContent className={classes.cardContent}>
                 <Typography gutterBottom variant="h5" component="h2">
@@ -103,7 +99,7 @@ const MainFeatures = props => {
             <Card className={classes.card}>
               <CardMedia
                 className={classes.cardMedia}
-                image="https://cdn.pixabay.com/photo/2018/07/24/20/18/noodles-3559956_1280.jpg"
+                image="/images/pasta3.jpg"
               />
               <CardContent className={classes.cardContent}>
                 <Typography gutterBottom variant="h5" component="h2">
@@ -122,10 +118,10 @@ const MainFeatures = props => {
       <footer className={classes.footer}>
         <Paper className={classes.paperFooter}>
           <Tabs value={0} indicatorColor="primary" textColor="primary" centered>
-            <Tab label="Greg" value={0} href="https://github.com/apoyando" />
-            <Tab label="Chris" alue={1} href="https://github.com/celipas" />
-            <Tab label="Kevin" alue={2} href="https://github.com/ktun95" />
-            <Tab label="Duc" alue={3} href="https://github.com/ducvtrann" />
+            <Tab label="Greg" href="https://github.com/apoyando" />
+            <Tab label="Chris" href="https://github.com/celipas" />
+            <Tab label="Kevin" href="https://github.com/ktun95" />
+            <Tab label="Duc" href="https://github.com/ducvtrann" />
           </Tabs>
         </Paper>
       </footer>

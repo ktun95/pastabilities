@@ -13,6 +13,7 @@ export {default as SingleProduct} from './singleProduct'
 export {default as Cart} from './cart'
 export {default as AddProductReview} from './addProductReview'
 export {default as EditProductReview} from './editProductReview'
+export {default as Checkout} from './Checkout/checkout'
 
 export {default as UserHome} from './user-home'
 export {Login, Signup} from './auth-form'
