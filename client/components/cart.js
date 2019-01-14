@@ -10,11 +10,16 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
+import ExposureNeg1 from '@material-ui/icons/ExposureNeg1'
+import ExposurePlus1 from '@material-ui/icons/ExposurePlus1'
 import Delete from '@material-ui/icons/DeleteRounded'
 import {withStyles} from '@material-ui/core/styles'
 import {fetchProducts, removeFromCart} from '../store'
-import {Typography} from '@material-ui/core'
+import {Typography, Icon} from '@material-ui/core'
 import {billing} from './UtilityFunctions.js/functions'
+import InputLabel from '@material-ui/core/InputLabel'
+import MenuItem from '@material-ui/core/MenuItem'
+import Select from '@material-ui/core/Select'
 
 const styles = theme => ({
   root: {
@@ -40,6 +45,10 @@ const styles = theme => ({
   main: {
     marginLeft: theme.spacing.unit * 5,
     marginRight: theme.spacing.unit * 5
+  },
+  qtyNav: {
+    display: 'flex',
+    justifyContent: 'center'
   }
 })
 
@@ -79,7 +88,7 @@ class Cart extends Component {
                         <TableCell>Name</TableCell>
                         <TableCell align="right">Description</TableCell>
                         <TableCell align="right">Price</TableCell>
-                        <TableCell align="right">Quantity</TableCell>
+                        <TableCell align="center">Quantity</TableCell>
                         <TableCell align="right">Remove</TableCell>
                       </TableRow>
                     </TableHead>
@@ -88,15 +97,18 @@ class Cart extends Component {
                       {cart.map(product => (
                         <TableRow key={product.name}>
                           <TableCell>{product.name}</TableCell>
-
                           <TableCell align="right">
                             {product.description}
                           </TableCell>
                           <TableCell align="right">
                             {(product.price / 100).toFixed(2)}
                           </TableCell>
-                          <TableCell align="right">
-                            {product.quantity}
+                          <TableCell align="center">
+                            <div className={classes.qtyNav}>
+                              <button>-</button>
+                              {product.quantity}
+                              <button>+</button>
+                            </div>
                           </TableCell>
                           <TableCell align="right">
                             <IconButton
@@ -109,7 +121,6 @@ class Cart extends Component {
                           </TableCell>
                         </TableRow>
                       ))}
-
                       <TableRow>
                         <TableCell rowSpan={3} />
                         <TableCell colSpan={2} align="right">
@@ -169,8 +180,7 @@ class Cart extends Component {
 
 const mapStateToProps = state => {
   return {
-    cart: state.cart.cart,
-    allProducts: state.product.allProducts
+    cart: state.cart.cart
   }
 }
 
