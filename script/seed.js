@@ -1,7 +1,15 @@
 'use strict'
 
 const db = require('../server/db')
-const {User, Product, Review, Address} = require('../server/db/models')
+const {
+  User,
+  Product,
+  Review,
+  Order,
+  orderProduct,
+  Cart,
+  cartProduct
+} = require('../server/db/models')
 
 const pastaProduct = [
   {
@@ -175,6 +183,26 @@ const dummyUsers = [
   }
 ]
 
+const dummyOrders = [
+  {
+    status: 'completed',
+    orderDate: new Date(),
+    email: 'Test@user.com'
+  },
+  {
+    status: 'cancelled',
+    orderDate: new Date(),
+    email: 'Test2@user.com'
+  },
+  {
+    status: 'processing',
+    orderDate: new Date(),
+    email: 'Test3@user.com'
+  }
+]
+
+const dummyCarts = [{}, {}, {}]
+
 const dummyReviews = [
   {
     rating: 2.5,
@@ -202,18 +230,96 @@ const dummyReviews = [
   }
 ]
 
+const dummyOrderProducts = [
+  {
+    quantity: 1,
+    price: 1999,
+    productId: 1,
+    orderId: 1
+  },
+  {
+    quantity: 2,
+    price: 499,
+    productId: 1,
+    orderId: 2
+  },
+  {
+    quantity: 3,
+    price: 1849,
+    productId: 2,
+    orderId: 1
+  },
+  {
+    quantity: 2,
+    price: 2500,
+    productId: 3,
+    orderId: 1
+  },
+  {
+    quantity: 1,
+    price: 399,
+    productId: 4,
+    orderId: 3
+  },
+  {
+    quantity: 4,
+    price: 2499,
+    productId: 4,
+    orderId: 2
+  }
+]
+
+const dummyCartProducts = [
+  {
+    quantity: 1,
+    productId: 1,
+    cartId: 1
+  },
+  {
+    quantity: 2,
+    productId: 1,
+    cartId: 2
+  },
+  {
+    quantity: 3,
+    productId: 2,
+    cartId: 1
+  },
+  {
+    quantity: 2,
+    productId: 3,
+    cartId: 1
+  },
+  {
+    quantity: 1,
+    productId: 4,
+    cartId: 3
+  },
+  {
+    quantity: 4,
+    productId: 4,
+    cartId: 2
+  }
+]
+
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
-  const [product, user, review] = await Promise.all([
+  const [product, user, review, order, orderproduct, cart] = await Promise.all([
     Product.bulkCreate(pastaProduct, {returning: true}),
     User.bulkCreate(dummyUsers, {individualHooks: true, returning: true}),
-    Review.bulkCreate(dummyReviews, {returning: true})
+    Review.bulkCreate(dummyReviews, {returning: true}),
+    Order.bulkCreate(dummyOrders, {returning: true}),
+    orderProduct.bulkCreate(dummyOrderProducts, {returning: true}),
+    Cart.bulkCreate(dummyCarts, {returning: true}),
+    cartProduct.bulkCreate(dummyCartProducts, {returning: true})
   ])
   const [pasta1, pasta2, pasta3, pasta4, pasta5, pasta6] = product
   const [user1, user2, user3, user4, user5] = user
   const [review1, review2, review3, review4, review5, review6] = review
+  const [order1, order2, order3] = order
+  const [cart1, cart2, cart3] = cart
 
   await review1.setUser(user1)
   await review1.setProduct(pasta1)
@@ -232,6 +338,13 @@ async function seed() {
 
   await review6.setUser(user4)
   await review6.setProduct(pasta6)
+
+  await order1.setUser(user1)
+  await order2.setUser(user2)
+  await order3.setUser(user1)
+
+  await cart1.setUser(user1)
+  await cart2.setUser(user2)
 }
 
 // We've separated the `seed` function from the `runSeed` function.

@@ -16,6 +16,9 @@ Review.belongsTo(Product)
 User.hasOne(Address)
 Address.belongsTo(User)
 
+Order.belongsTo(User)
+User.hasMany(Order)
+
 Product.belongsToMany(Order, {through: orderProduct})
 Order.belongsToMany(Product, {through: orderProduct})
 
@@ -23,6 +26,7 @@ Cart.belongsToMany(Product, {through: cartProduct})
 Product.belongsToMany(Cart, {through: cartProduct})
 
 User.hasOne(Cart)
+Cart.belongsTo(User)
 
 module.exports = {
   User,
