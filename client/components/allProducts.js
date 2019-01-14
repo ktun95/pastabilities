@@ -138,6 +138,7 @@ export class AllProducts extends React.Component {
               <label>Filter By:</label>
               <select name="filter" onChange={this.handleFilterSelection}>
                 <option value="/">All Pastas</option>
+                {/* need to handle for all pastats */}
                 {types.map(type => {
                   return (
                     <option key={type.id} value={type.value}>
