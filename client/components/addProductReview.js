@@ -63,7 +63,6 @@ class AddProductReview extends React.Component {
 
     try {
       event.preventDefault()
-      console.log(this.state)
       this.props.postReview(this.state)
       this.props.history.push(`/products/${Number(match.params.productId)}`)
     } catch (err) {

@@ -21,13 +21,14 @@ class EditProduct extends React.Component {
     this.goAddPage = this.goAddPage.bind(this)
   }
   async componentDidMount() {
-    const {match, allProducts} = this.props
+    const {match} = this.props
     const productId = Number(match.params.productId)
-    const thisProduct = allProducts.find(item => item.id === productId)
-    await this.setState(thisProduct)
-    // this.props.fetchProduct(productId)
+    // const thisProduct = allProducts.find(item => item.id === productId)
+    // await this.setState(thisProduct)
+    await this.props.fetchProduct(productId)
     // const {selectedProduct} = this.props
-    // this.setState(selectedProduct)
+    console.log(this.props)
+    this.setState(this.props.currentProduct)
   }
   updateHandler(event) {
     this.setState({error: {}})
@@ -85,7 +86,7 @@ class EditProduct extends React.Component {
 const mapState = ({product}) => {
   return {
     allProducts: product.allProducts,
-    selectedProduct: product.selectedProduct
+    currentProduct: product.currentProduct
   }
 }
 const mapDispatch = dispatch => ({
