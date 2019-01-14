@@ -69,11 +69,11 @@ export class AllProducts extends React.Component {
     this.props.updatePage(newPage)
   }
 
-  handleFilterSelection = data => {
+  handleFilterSelection = async data => {
     const newVisiableProducts = this.props.products.filter(
       product => product.type === data.target.value
     )
-    this.props.filterProducts(newVisiableProducts)
+    await this.props.filterProducts(newVisiableProducts)
 
     const indexStart = 0
     const indexEnd = indexStart + this.props.productsPerPage
@@ -139,6 +139,7 @@ export class AllProducts extends React.Component {
               <label>Filter By:</label>
               <select name="filter" onChange={this.handleFilterSelection}>
                 <option value="/">All Pastas</option>
+                {/* need to handle for all pastats */}
                 {types.map(type => {
                   return (
                     <option key={type.id} value={type.value}>
