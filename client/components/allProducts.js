@@ -68,11 +68,11 @@ export class AllProducts extends React.Component {
     this.props.updatePage(newPage)
   }
 
-  handleFilterSelection = data => {
+  handleFilterSelection = async data => {
     const newVisiableProducts = this.props.products.filter(
       product => product.type === data.target.value
     )
-    this.props.filterProducts(newVisiableProducts)
+    await this.props.filterProducts(newVisiableProducts)
 
     const indexStart = 0
     const indexEnd = indexStart + this.props.productsPerPage
