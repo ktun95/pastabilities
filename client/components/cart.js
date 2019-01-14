@@ -12,9 +12,10 @@ import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import ExposureNeg1 from '@material-ui/icons/ExposureNeg1'
 import ExposurePlus1 from '@material-ui/icons/ExposurePlus1'
+import FormControl from '@material-ui/core/FormControl'
 import Delete from '@material-ui/icons/DeleteRounded'
 import {withStyles} from '@material-ui/core/styles'
-import {fetchProducts, removeFromCart} from '../store'
+import {fetchProducts, removeFromCart, changeQuantity} from '../store'
 import {Typography, Icon} from '@material-ui/core'
 import {billing} from './UtilityFunctions.js/functions'
 import InputLabel from '@material-ui/core/InputLabel'
@@ -45,21 +46,30 @@ const styles = theme => ({
   main: {
     marginLeft: theme.spacing.unit * 5,
     marginRight: theme.spacing.unit * 5
-  },
-  qtyNav: {
-    display: 'flex',
-    justifyContent: 'center'
   }
 })
 
 class Cart extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      qty: 0
+    }
   }
 
   componentDidMount() {}
 
+  handleChange = (event, product) => {
+    this.setState(
+      {
+        [event.target.name]: event.target.value
+      },
+      () => {
+        console.log(this.state)
+        this.props.changeQty(product, this.state.qty)
+      }
+    )
+  }
   render() {
     const {classes, cart} = this.props
     const bill = billing(cart)
@@ -88,7 +98,7 @@ class Cart extends Component {
                         <TableCell>Name</TableCell>
                         <TableCell align="right">Description</TableCell>
                         <TableCell align="right">Price</TableCell>
-                        <TableCell align="center">Quantity</TableCell>
+                        <TableCell align="right">Quantity</TableCell>
                         <TableCell align="right">Remove</TableCell>
                       </TableRow>
                     </TableHead>
@@ -103,12 +113,24 @@ class Cart extends Component {
                           <TableCell align="right">
                             {(product.price / 100).toFixed(2)}
                           </TableCell>
-                          <TableCell align="center">
-                            <div className={classes.qtyNav}>
-                              <button>-</button>
-                              {product.quantity}
-                              <button>+</button>
-                            </div>
+                          <TableCell align="right">
+                            <FormControl>
+                              <Select
+                                value={product.quantity}
+                                onChange={event =>
+                                  this.handleChange(event, product)
+                                }
+                                inputProps={{
+                                  name: 'qty'
+                                }}
+                              >
+                                <MenuItem value={1}>1</MenuItem>
+                                <MenuItem value={2}>2</MenuItem>
+                                <MenuItem value={3}>3</MenuItem>
+                                <MenuItem value={4}>4</MenuItem>
+                                <MenuItem value={5}>5</MenuItem>
+                              </Select>
+                            </FormControl>
                           </TableCell>
                           <TableCell align="right">
                             <IconButton
@@ -169,7 +191,7 @@ class Cart extends Component {
                     CheckOut
                   </Button>
                 </Link>
-              </div>)
+              </div>
             </React.Fragment>
           )}
         </CssBaseline>
@@ -191,6 +213,9 @@ const mapDispatchToProps = dispatch => {
     },
     removeItem: product => {
       dispatch(removeFromCart(product))
+    },
+    changeQty: (product, qty) => {
+      dispatch(changeQuantity(product, qty))
     }
   }
 }
