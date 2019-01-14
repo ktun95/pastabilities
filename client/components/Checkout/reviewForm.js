@@ -20,12 +20,23 @@ const styles = theme => ({
 })
 
 class reviewForm extends Component {
+  constructor() {
+    super()
+    this.state = {
+      bill: {}
+    }
+  }
+  componentDidMount() {
+    const bill = billing(this.props.cart)
+    this.setState({bill})
+    this.props.getBill(bill)
+  }
   render() {
     const {classes, cart} = this.props
     const user = JSON.parse(window.localStorage.user)
     const address = JSON.parse(window.localStorage.address)
     const LocalStorageCart = JSON.parse(window.localStorage.pastaCart)
-    const bill = billing(cart)
+    const bill = this.state.bill
 
     return (
       <React.Fragment>
