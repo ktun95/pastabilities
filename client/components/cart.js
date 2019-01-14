@@ -60,16 +60,11 @@ class Cart extends Component {
   componentDidMount() {}
 
   handleChange = (event, product) => {
-    this.setState(
-      {
-        [event.target.name]: event.target.value
-      },
-      () => {
-        console.log(this.state)
-        this.props.changeQty(product, this.state.qty)
-      }
-    )
+    this.setState({[event.target.name]: event.target.value}, () => {
+      this.props.changeQty(product, this.state.qty)
+    })
   }
+
   render() {
     const {classes, cart} = this.props
     const bill = billing(cart)
@@ -202,15 +197,13 @@ class Cart extends Component {
 
 const mapStateToProps = state => {
   return {
-    cart: state.cart.cart
+    cart: state.cart.cart,
+    userId: state.user.id
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchProducts: () => {
-      dispatch(fetchProducts())
-    },
     removeItem: product => {
       dispatch(removeFromCart(product))
     },
