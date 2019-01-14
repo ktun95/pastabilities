@@ -12,7 +12,7 @@ import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import Delete from '@material-ui/icons/DeleteRounded'
 import {withStyles} from '@material-ui/core/styles'
-import {fetchProducts} from '../store'
+import {fetchProducts, removeFromCart} from '../store'
 import {Typography} from '@material-ui/core'
 import {billing} from './UtilityFunctions.js/functions'
 
@@ -99,7 +99,11 @@ class Cart extends Component {
                             {product.quantity}
                           </TableCell>
                           <TableCell align="right">
-                            <IconButton>
+                            <IconButton
+                              onClick={() => {
+                                this.props.removeItem(product)
+                              }}
+                            >
                               <Delete />
                             </IconButton>
                           </TableCell>
@@ -174,6 +178,9 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchProducts: () => {
       dispatch(fetchProducts())
+    },
+    removeItem: product => {
+      dispatch(removeFromCart(product))
     }
   }
 }

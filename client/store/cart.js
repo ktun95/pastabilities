@@ -27,33 +27,69 @@ export default function(state = initialState, action) {
   switch (action.type) {
     case ADD_TO_CART: {
       let foundIdx
-      const prevState = {...state}
-      const found = prevState.cart.find((item, index) => {
+      let newState
+
+      const found = state.cart.find((item, index) => {
         foundIdx = index
         return item.id === action.product.id
       })
+
       if (found) {
         found.quantity = state.cart[foundIdx].quantity + 1
-
-        const newState = {
+        newState = {
           ...state,
           cart: [...state.cart]
         }
-        window.localStorage.pastaCart = JSON.stringify(newState)
-        return newState
       } else {
-        const newState = {
+        newState = {
           ...state,
           cart: [...state.cart, {...action.product, quantity: 1}]
         }
-        window.localStorage.pastaCart = JSON.stringify(newState)
-        return newState
       }
+      window.localStorage.pastaCart = JSON.stringify(newState)
+      return newState
     }
+
+    case CHANGE_QUANTITY: {
+      let foundIdx
+      let newState
+
+      const found = state.cart.find((item, index) => {
+        foundIdx = index
+        return item.id === action.product.id
+      })
+
+      if (!found) {
+        console.log('There is no such item in the cart.')
+      } else {
+        found.quantity = state.cart[foundIdx].quantity + action.quantity
+        newState = {
+          ...state,
+          cart: [...state.cart]
+        }
+      }
+      window.localStorage.pastaCart = JSON.stringify(newState)
+      return newState
+    }
+
+    case REMOVE_FROM_CART: {
+      const updatedCart = state.cart.filter(
+        item => item.id !== action.product.id
+      )
+
+      const newState = {
+        ...state,
+        cart: [...updatedCart]
+      }
+      window.localStorage.pastaCart = JSON.stringify(newState)
+      return newState
+    }
+
     case GET_GUEST_CART: {
       if (window.localStorage.pastaCart)
         return JSON.parse(window.localStorage.pastaCart)
     }
+
     default:
       return state
   }

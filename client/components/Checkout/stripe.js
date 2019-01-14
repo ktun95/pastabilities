@@ -2,34 +2,34 @@ import React from 'react'
 import StripeCheckout from 'react-stripe-checkout'
 import axios from 'axios'
 
-const stripeBtn = props => {
-  const publishableKey = 'pk_test_DUbKNX2jBsDxZV2i0McVhWe6'
-
-  const onToken = token => {
-    const body = {
-      amount: props.bill.total,
-      token: token
-    }
-    axios
-      .post('http://localhost:8000/payment', body)
-      .then(response => {
-        console.log(response)
+class TakeMoney extends React.Component {
+  onToken = token => {
+    fetch('/save-stripe-token', {
+      method: 'POST',
+      body: JSON.stringify(token)
+    }).then(response => {
+      response.json().then(data => {
+        alert(`We are in business, ${data.email}`)
       })
-      .catch(error => {
-        console.log('Payment Error: ', error)
-      })
+    })
   }
-  return (
-    <StripeCheckout
-      label="Order"
-      name="Pastabilities"
-      description="Pastas heading your way."
-      panelLabel="Order"
-      amount={props.bill.total}
-      token={onToken}
-      stripeKey={publishableKey}
-      closed={this.onClosed}
-    />
-  )
+
+  // ...
+
+  render() {
+    const publishableKey = 'pk_test_DUbKNX2jBsDxZV2i0McVhWe6'
+    return (
+      <StripeCheckout
+        label="Order"
+        name="Pastabilities"
+        description="Pastas heading your way."
+        panelLabel="Order"
+        amount={parseFloat(this.props.bill)}
+        token={this.onToken}
+        stripeKey={publishableKey}
+        closed={this.onClosed}
+      />
+    )
+  }
 }
-export default stripeBtn
+export default TakeMoney
