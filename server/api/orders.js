@@ -27,7 +27,8 @@ const isUser = (req, res, next) => {
 router.get('/', async (req, res, next) => {
   try {
     const orders = await Order.findAll({
-      include: [Product]
+      include: [Product],
+      order: [['id', 'ASC']]
     })
     res.json(orders)
   } catch (err) {
@@ -53,8 +54,6 @@ router.get('/:orderId', async (req, res, next) => {
 })
 
 //get all orders for a single user -- eager load products
-// POST New Order
-
 router.get('/orderHistory/:userId', async (req, res, next) => {
   const userId = req.params.userId
   try {
@@ -71,6 +70,15 @@ router.get('/orderHistory/:userId', async (req, res, next) => {
 })
 
 // PUT Update Order Status -- admin only
-router.put('/status/')
+router.put('/:id', isAdmin, async (req, res, next) => {
+  try {
+    const orderId = req.params.id
+    Order.update(req.body, {where: {id: orderId}})
+    const updatedOrder = await Order.findById(orderId)
+    res.json(updatedOrder.dataValues)
+  } catch (err) {
+    next(err)
+  }
+})
 
 // Create Tests
