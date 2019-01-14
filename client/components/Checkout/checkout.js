@@ -65,17 +65,29 @@ class checkout extends Component {
       country: '',
       paid: false,
       orderId: 0,
-      cart: []
+      userId: 0,
+      cart: [],
+      bill: {}
     }
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
     document.getElementsByClassName('StripeCheckout')[0].style.display = 'none'
+    const localCart = JSON.parse(window.localStorage.pastaCart)
+    // we're currently just loading up the redux cart!
+    // await this.setState({cart: [...localCart.cart]})
+    await this.setState({cart: [...this.props.cart]})
   }
   isPaid = async () => {
-    // await createOrder(this.state.cart)
+    // await createOrder(this.state)
+
+    //the below is a temporary hack because browser refresh currently kills the redux state cart and it isn't reloaded
     this.setState({paid: true, cart: []})
     window.localStorage.clear()
+  }
+  getBill = async bill => {
+    await this.setState({bill})
+    console.log(this.state)
   }
   handleNext = () => {
     const {activeStep, ...userInfo} = this.state
@@ -128,7 +140,6 @@ class checkout extends Component {
                 ))}
               </Stepper>
               <React.Fragment>
-                {console.log('active step', activeStep)}
                 {this.state.paid === true ? (
                   <ConfirmationPage orderId={this.state.orderId} />
                 ) : (
@@ -139,7 +150,9 @@ class checkout extends Component {
                         state={this.state}
                       />
                     ) : null}
-                    {activeStep === 1 ? <Review /> : null}
+                    {activeStep === 1 ? (
+                      <Review getBill={this.getBill} />
+                    ) : null}
                     <div className={classes.buttons}>
                       {activeStep !== 0 && (
                         <Button
@@ -159,7 +172,7 @@ class checkout extends Component {
                           ? 'Place my order'
                           : 'Next'}
                       </Button>
-                      <StripeBtn bill={bill} isPaid={this.isPaid} />
+                      <StripeBtn isPaid={this.isPaid} />
                     </div>
                   </React.Fragment>
                 )}
