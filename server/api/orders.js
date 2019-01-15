@@ -71,7 +71,7 @@ router.get('/orderHistory/:userId', async (req, res, next) => {
 
 // PUT Update Order Status -- admin only
 //add back is admin
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', isAdmin, async (req, res, next) => {
   try {
     const orderId = +req.params.id
     const {status} = req.body

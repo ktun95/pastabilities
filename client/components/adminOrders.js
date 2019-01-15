@@ -10,7 +10,9 @@ import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import {withStyles} from '@material-ui/core/styles'
-import {fetchOrders} from '../store'
+import {fetchOrders, updateOrderStatus} from '../store'
+import MenuItem from '@material-ui/core/MenuItem'
+import Select from '@material-ui/core/Select'
 
 const styles = theme => ({
   productFilter: {
@@ -63,6 +65,12 @@ const styles = theme => ({
   },
   paper: {
     marginTop: '10px'
+  },
+  tableHeader: {
+    fontWeight: 'bold'
+  },
+  table: {
+    marginLeft: '10px'
   }
 })
 class AdminOrders extends React.Component {
@@ -77,19 +85,41 @@ class AdminOrders extends React.Component {
     return (
       <Paper className={classes.paper}>
         <Grid container className={classes.container} spacing={16}>
-          <Paper>
-            <Typography variant="h3" align="center">
-              All Orders
-            </Typography>
-          </Paper>
-          {allOrders &&
-            allOrders.map(order => (
-              <Card key={order.id}>
-                <div>Order Id: {order.id}</div>
-                <div>Order Date: {order.orderDate}</div>
-                <div>Status: {order.status}</div>
-              </Card>
-            ))}
+          <Typography variant="h3" align="center">
+            All Orders
+          </Typography>
+          <hr />
+          <table className={classes.table}>
+            <tbody>
+              <tr className={classes.tableHeader}>
+                <td>Order Id</td>
+                <td>Order Date</td>
+                <td>Status</td>
+              </tr>
+              {allOrders &&
+                allOrders.map(order => (
+                  <tr key={order.id}>
+                    <td>{order.id}</td>
+                    <td>{order.orderDate.slice(0, 10)}</td>
+                    <td>
+                      {order.status}
+                      <Select
+                        value={order.status}
+                        // onChange={this.props.updateHandler}
+                        inputProps={{
+                          name: 'status',
+                          id: 'status'
+                        }}
+                      >
+                        <MenuItem value="">
+                          <em>None</em>
+                        </MenuItem>
+                      </Select>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
         </Grid>
       </Paper>
     )
@@ -114,7 +144,8 @@ const mapStateToProps = ({order}) => ({
 })
 const mapDispatchToProps = dispatch => {
   return {
-    fetchOrders: () => dispatch(fetchOrders())
+    fetchOrders: () => dispatch(fetchOrders()),
+    updateOrderStatus: updatedOrder => dispatch(updateOrderStatus())
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(
