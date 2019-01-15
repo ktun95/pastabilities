@@ -1,4 +1,5 @@
 import React from 'react'
+import CssBaseline from '@material-ui/core/CssBaseline'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {
@@ -20,8 +21,26 @@ import Button from '@material-ui/core/Button'
 import {withStyles} from '@material-ui/core/styles'
 import ReactPaginate from 'react-paginate'
 import StarRatings from 'react-star-ratings'
+import TextField from '@material-ui/core/TextField'
+import MenuItem from '@material-ui/core/MenuItem'
 
-const styles = () => ({
+const styles = theme => ({
+  productFilter: {
+    display: 'flex',
+    margin: theme.spacing.unit * 2,
+    justifyContent: 'center'
+  },
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  },
+  margin: {
+    margin: theme.spacing.unit
+  },
+  textField: {
+    flexBasis: 200,
+    margin: theme.spacing.unit
+  },
   container: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -40,14 +59,7 @@ const styles = () => ({
   cardMedia: {
     paddingTop: '70%'
   },
-  productFilter: {
-    display: 'flex',
-    paddingTop: 30,
-    paddingBottom: 30
-  },
-  title: {
-    flexGrow: 1
-  },
+
   sort: {
     display: 'flex'
   },
@@ -57,10 +69,21 @@ const styles = () => ({
   }
 })
 export class AllProducts extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      types: 'All Pastas',
+      sortBy: 'Name',
+      search: ''
+    }
+  }
   componentDidMount() {
     this.props.fetchProducts()
   }
-  compo
+
+  handleChange = event => {
+    this.setState({[event.target.name]: event.target.value})
+  }
 
   handlePaginateClick = data => {
     const indexStart = data.selected * this.props.productsPerPage
@@ -69,16 +92,25 @@ export class AllProducts extends React.Component {
     this.props.updatePage(newPage)
   }
 
-  handleFilterSelection = async data => {
-    const newVisiableProducts = this.props.products.filter(
-      product => product.type === data.target.value
-    )
-    await this.props.filterProducts(newVisiableProducts)
+  handleFilterSelection = data => {
+    this.setState({[data.target.name]: data.target.value}, async () => {
+      let newVisiableProducts = []
+      if (data.target.value === 'All Pastas') {
+        newVisiableProducts = this.props.products.filter(
+          product => product.name !== ''
+        )
+      } else {
+        newVisiableProducts = this.props.products.filter(
+          product => product.type === data.target.value
+        )
+        await this.props.filterProducts(newVisiableProducts)
 
-    const indexStart = 0
-    const indexEnd = indexStart + this.props.productsPerPage
-    const newPage = this.props.visibleProducts.slice(indexStart, indexEnd)
-    this.props.updatePage(newPage)
+        const indexStart = 0
+        const indexEnd = indexStart + this.props.productsPerPage
+        const newPage = this.props.visibleProducts.slice(indexStart, indexEnd)
+        this.props.updatePage(newPage)
+      }
+    })
   }
 
   handleSortSelection = data => {
@@ -108,182 +140,169 @@ export class AllProducts extends React.Component {
   }
 
   render() {
-    const {
-      classes,
-      products,
-      currentPage,
-      numPages,
-      visibleProducts
-    } = this.props
-    const types = [
-      {id: 1, value: 'whole-wheat'},
-      {id: 2, value: 'gluten-free'},
-      {id: 3, value: 'semolina'}
-    ]
-    const sortBy = [
-      {id: 1, value: 'name'},
-      {id: 2, value: 'description'},
-      {id: 3, value: 'price'},
-      {id: 4, value: 'type'},
-      {id: 5, value: 'shape'}
-    ]
-
+    const {classes, products, currentPage, numPages} = this.props
     const noProducts = !products || products.length === 0
+
+    let searchPage = currentPage.filter(
+      product =>
+        product.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !==
+        -1
+    )
+
     return (
       <React.Fragment>
-        <nav className={classes.productFilter}>
-          <h1 className={classes.title}>Pasta</h1>
-          <div className={classes.sort}>
-            <div className={classes.collectionSort}>
-              <label>Filter By:</label>
-              <select name="filter" onChange={this.handleFilterSelection}>
-                <option value="/">All Pastas</option>
-                {/* need to handle for all pastats */}
-                {types.map(type => {
-                  return (
-                    <option key={type.id} value={type.value}>
-                      {type.value}
-                    </option>
-                  )
-                })}
-              </select>
-            </div>
+        <CssBaseline>
+          <div className={classes.productFilter}>
+            <Typography variant="h3" align="center">
+              Our Products
+            </Typography>
           </div>
-          <div className={classes.sort}>
-            <div className={classes.collectionSort}>
-              <label>Sort By:</label>
-              <select name="sort" onChange={this.handleSortSelection}>
-                <option value="/">Featured</option>
-                {sortBy.map(filter => {
-                  return (
-                    <option key={filter.id} value={filter.id}>
-                      {filter.value}
-                    </option>
-                  )
-                })}
-              </select>
-            </div>
-          </div>
-        </nav>
-        {this.props.isAdmin ? (
-          <Link to="/admin/products/add">
-            <Button
-              variant="contained"
-              className={classes.button}
-              color="primary"
+          <div className={classes.productFilter}>
+            <TextField
+              name="search"
+              className={classes.textField}
+              variant="filled"
+              label="Search"
+              onChange={this.handleChange}
+            />
+            <TextField
+              select
+              name="types"
+              label="Filter By"
+              variant="filled"
+              value={this.state.types}
+              className={classes.textField}
+              onChange={event => {
+                this.handleFilterSelection(event)
+              }}
             >
-              ADD NEW PASTA
-            </Button>
-          </Link>
-        ) : (
-          <div />
-        )}
-        <div className={classes.div}>
-          {noProducts ? (
-            <div className={classes.div}>
-              <Paper>
-                <Typography variant="h1">
-                  We ran out of Pasta! Please come back soon!
-                </Typography>
-              </Paper>
-            </div>
+              <MenuItem value="All Pastas">All Pastas</MenuItem>
+              <MenuItem value="whole-wheat">Whole-wheat</MenuItem>
+              <MenuItem value="gluten-free">Gluten-free</MenuItem>
+              <MenuItem value="semolina">Semolina</MenuItem>
+            </TextField>
+          </div>
+
+          {this.props.isAdmin ? (
+            <Link to="/admin/products/add">
+              <Button
+                variant="contained"
+                className={classes.button}
+                color="primary"
+              >
+                ADD NEW PASTA
+              </Button>
+            </Link>
           ) : (
-            <div className={classes.product}>
-              <Grid container className={classes.container} spacing={16}>
-                {currentPage.map(product => (
-                  <Grid key={product.id} item className={classes.item}>
-                    <Card className={classes.card}>
-                      <Link
-                        to={`/products/${product.id}`}
-                        onClick={() => {
-                          this.props.fetchProduct(product.id)
-                        }}
-                      >
-                        <CardMedia
-                          className={classes.cardMedia}
-                          image={product.image}
-                        />
-                      </Link>
-                      <CardContent className={classes.cardContent}>
-                        <Typography variant="h5" align="center" noWrap={true}>
-                          {product.name}
-                        </Typography>
-                        <Typography variant="subtitle1" align="center">
-                          ${(product.price / 100).toFixed(2)}
-                        </Typography>
-                        <div align="center">
-                          <br />
-                          {product.reviews.length > 0 && (
-                            <StarRatings
-                              rating={Number(
-                                product.reviews.reduce((sum, item) => {
-                                  return sum + +item.rating
-                                }, 0) / product.reviews.length
-                              )}
-                              starRatedColor="blue"
-                              starDimension="20px"
-                              starSpacing="5px"
-                            />
-                          )}
-                        </div>
-                      </CardContent>
-                      <CardActions>
-                        <Link to={`/products/${product.id}`}>
-                          <Button size="small" color="primary">
-                            View
-                          </Button>
-                        </Link>
-                        <Button
-                          size="small"
-                          color="primary"
-                          onClick={() => this.props.addToCart(product)}
+            <div />
+          )}
+          <div className={classes.div}>
+            {noProducts ? (
+              <div className={classes.div}>
+                <Paper>
+                  <Typography variant="h1">
+                    We ran out of Pasta! Please come back soon!
+                  </Typography>
+                </Paper>
+              </div>
+            ) : (
+              <div className={classes.product}>
+                <Grid container className={classes.container} spacing={16}>
+                  {searchPage.map(product => (
+                    <Grid key={product.id} item className={classes.item}>
+                      <Card className={classes.card}>
+                        <Link
+                          to={`/products/${product.id}`}
+                          onClick={() => {
+                            this.props.fetchProduct(product.id)
+                          }}
                         >
-                          Add to Cart
-                        </Button>
-                      </CardActions>
-                      {this.props.isAdmin ? (
+                          <CardMedia
+                            className={classes.cardMedia}
+                            image={product.image}
+                          />
+                        </Link>
+                        <CardContent className={classes.cardContent}>
+                          <Typography variant="h5" align="center" noWrap={true}>
+                            {product.name}
+                          </Typography>
+                          <Typography variant="subtitle1" align="center">
+                            ${(product.price / 100).toFixed(2)}
+                          </Typography>
+                          <div align="center">
+                            <br />
+                            {product.reviews.length > 0 && (
+                              <StarRatings
+                                rating={Number(
+                                  product.reviews.reduce((sum, item) => {
+                                    return sum + +item.rating
+                                  }, 0) / product.reviews.length
+                                )}
+                                starRatedColor="blue"
+                                starDimension="20px"
+                                starSpacing="5px"
+                              />
+                            )}
+                          </div>
+                        </CardContent>
                         <CardActions>
-                          <Link to={`/admin/products/${product.id}/edit`}>
-                            <Button size="small" color="secondary">
-                              Edit
+                          <Link to={`/products/${product.id}`}>
+                            <Button size="small" color="primary">
+                              View
                             </Button>
                           </Link>
                           <Button
                             size="small"
-                            color="secondary"
-                            value={product.id}
-                            onClick={() => {
-                              this.props.destroyProduct(product.id)
-                            }}
+                            color="primary"
+                            onClick={() => this.props.addToCart(product)}
                           >
-                            Delete
+                            Add to Cart
                           </Button>
                         </CardActions>
-                      ) : (
-                        <div />
-                      )}
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
-              <div id="react-paginate">
-                <ReactPaginate
-                  previousLabel="Prev"
-                  nextLabel="Next"
-                  breakLabel="..."
-                  breakClassName="break-me"
-                  pageCount={numPages}
-                  marginPagesDisplayed={2}
-                  pageRangeDisplayed={5}
-                  onPageChange={this.handlePaginateClick}
-                  containerClassName="pagination"
-                  subContainerClassName="pages pagination"
-                  activeClassName="active"
-                />
+                        {this.props.isAdmin ? (
+                          <CardActions>
+                            <Link to={`/admin/products/${product.id}/edit`}>
+                              <Button size="small" color="secondary">
+                                Edit
+                              </Button>
+                            </Link>
+                            <Button
+                              size="small"
+                              color="secondary"
+                              value={product.id}
+                              onClick={() => {
+                                this.props.destroyProduct(product.id)
+                              }}
+                            >
+                              Delete
+                            </Button>
+                          </CardActions>
+                        ) : (
+                          <div />
+                        )}
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+                <div id="react-paginate" className={classes.productFilter}>
+                  <ReactPaginate
+                    previousLabel="Prev"
+                    nextLabel="Next"
+                    breakLabel="..."
+                    breakClassName="break-me"
+                    pageCount={numPages}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={this.handlePaginateClick}
+                    containerClassName="pagination"
+                    subContainerClassName="pages pagination"
+                    activeClassName="active"
+                  />
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        </CssBaseline>
       </React.Fragment>
     )
   }
