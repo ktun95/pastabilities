@@ -13,7 +13,7 @@ import Review from './reviewForm'
 import StripeBtn from './stripe'
 import ConfirmationPage from './confirmationPage'
 import {billing} from '../UtilityFunctions.js/functions'
-import {createOrder, postOrder} from '../../store'
+import {createOrder, postOrder, addToCart} from '../../store'
 
 const steps = ['Shipping address', 'Review your order']
 
@@ -81,6 +81,15 @@ class checkout extends Component {
   isPaid = async () => {
     await createOrder(this.state)
     await postOrder(this.state)
+    await addToCart({
+      description: 'Yummy Pasta',
+      id: 2,
+      image:
+        'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/s/p/spaghetti_pomodoro_gift_box_update_1.jpg',
+      name: 'Pasta Duc',
+      price: 1500,
+      quantity: 1
+    })
     console.log('do we hit this')
     //the below is a temporary hack because browser refresh currently kills the redux state cart and it isn't reloaded
     this.setState({paid: true, cart: []})
