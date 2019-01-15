@@ -56,6 +56,8 @@ router.get('/:orderId', async (req, res, next) => {
 //get all orders for a single user -- eager load products
 router.get('/orderHistory/:userId', async (req, res, next) => {
   const userId = req.params.userId
+  console.log('do we hit this')
+  console.log(req.params)
   try {
     const orders = await Order.findAll({
       where: {

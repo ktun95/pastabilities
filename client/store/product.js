@@ -15,6 +15,11 @@ const EDIT_REVIEW = 'EDIT_REVIEW'
 const UPDATE_PAGE = 'UPDATE_PAGE'
 const FILTER_PRODUCTS = 'FILTER_PRODUCTS'
 
+const GET_TYPES = 'GET_TYPES'
+const GET_SHAPES = 'GET_SHAPES'
+const NEW_SHAPE = 'NEW_SHAPE'
+const NEW_TYPE = 'NEW_TYPE'
+
 /**
  * ACTION CREATORS
  */
@@ -25,6 +30,10 @@ const editProduct = product => ({type: EDIT_PRODUCT, product})
 const deleteProduct = productId => ({type: DELETE_PRODUCT, productId})
 const addReview = review => ({type: ADD_REVIEW, review})
 const editReview = review => ({type: EDIT_REVIEW, review})
+const getTypes = types => ({type: GET_TYPES, types})
+const getShapes = shapes => ({type: GET_SHAPES, shapes})
+export const newShape = shapeNew => ({type: NEW_SHAPE, shapeNew})
+export const newType = typeNew => ({type: NEW_TYPE, typeNew})
 
 export const updatePage = page => ({type: UPDATE_PAGE, page})
 export const filterProducts = page => ({type: FILTER_PRODUCTS, page})
@@ -125,6 +134,22 @@ export const putReview = review => async dispatch => {
   }
 }
 
+export const fetchTypes = () => async dispatch => {
+  try {
+    const {data} = await axios.get('/api/admin/products/categories/types')
+    dispatch(getTypes(data))
+  } catch (err) {
+    console.error(err)
+  }
+}
+export const fetchShapes = () => async dispatch => {
+  try {
+    const {data} = await axios.get('/api/admin/products/categories/shapes')
+    dispatch(getShapes(data))
+  } catch (err) {
+    console.error(err)
+  }
+}
 /**
  * INITIAL STATE
  */
@@ -143,7 +168,9 @@ const initialState = {
     image: '',
     shape: '',
     type: ''
-  }
+  },
+  types: [],
+  shapes: []
 }
 
 /**
@@ -160,8 +187,7 @@ export default function(state = initialState, action) {
         visibleProducts: action.products,
         numProductPages: action.products.length,
         numPages: Math.ceil(action.products.length / 5),
-        currentPage: action.products.slice(0, state.productsPerPage),
-        types: [...new Set(['whole-wheat', 'gluten-freemem', 'semolina'])]
+        currentPage: action.products.slice(0, state.productsPerPage)
       }
     case GET_PRODUCT:
       return {...state, currentProduct: action.product}
@@ -199,9 +225,11 @@ export default function(state = initialState, action) {
         currentPage: action.page
       }
     case FILTER_PRODUCTS:
+      console.log([...action.page])
       return {
         ...state,
-        visibleProducts: [...action.page]
+        visibleProducts: [...action.page],
+        numPages: Math.ceil(action.page.length / 5)
       }
 
     case EDIT_REVIEW:
@@ -220,6 +248,14 @@ export default function(state = initialState, action) {
           ]
         }
       }
+    case GET_TYPES:
+      return {...state, types: action.types}
+    case GET_SHAPES:
+      return {...state, shapes: action.shapes}
+    case NEW_SHAPE:
+      return {...state, shapes: [...state.shapes, action.shapeNew]}
+    case NEW_TYPE:
+      return {...state, types: [...state.types, action.typeNew]}
     default:
       return state
   }
