@@ -13,10 +13,10 @@ const Order = db.define('order', {
     }
   },
   email: {
-    type: Sequelize.STRING,
-    validate: {
-      isEmail: true
-    }
+    type: Sequelize.STRING
+    // validate: {
+    //   isEmail: true
+    // }
   },
   firstName: {
     type: Sequelize.STRING
@@ -25,36 +25,36 @@ const Order = db.define('order', {
     type: Sequelize.STRING
   },
   streetLine1: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      notEmpty: true
-    }
+    type: Sequelize.STRING
+    // allowNull: false
+    // validate: {
+    //   notEmpty: true
+    // }
   },
   streetLine2: {
     type: Sequelize.STRING
   },
   city: {
     type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      notEmpty: true
-    }
+    allowNull: false
+    // validate: {
+    //   notEmpty: true
+    // }
   },
   state: {
     type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      notEmpty: true
-    }
+    allowNull: false
+    // validate: {
+    //   notEmpty: true
+    // }
   },
   zipCode: {
     type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      notEmpty: true,
-      len: [5, 9]
-    }
+    allowNull: false
+    // validate: {
+    //   notEmpty: true,
+    //   len: [5, 9]
+    // }
   },
   tax: {
     type: Sequelize.INTEGER
