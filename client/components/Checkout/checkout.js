@@ -182,7 +182,10 @@ class checkout extends Component {
                           ? 'Place my order'
                           : 'Next'}
                       </Button>
-                      <StripeBtn isPaid={this.isPaid} />
+                      <StripeBtn
+                        isPaid={this.isPaid}
+                        onClick={postOrder(this.state)}
+                      />
                     </div>
                   </React.Fragment>
                 )}
