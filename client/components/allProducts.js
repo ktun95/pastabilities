@@ -7,7 +7,8 @@ import {
   destroyProduct,
   updatePage,
   filterProducts,
-  addToCart
+  addToCart,
+  me
 } from '../store'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
@@ -63,7 +64,6 @@ export class AllProducts extends React.Component {
   componentDidMount() {
     this.props.fetchProducts()
   }
-  compo
 
   handlePaginateClick = data => {
     const indexStart = data.selected * this.props.productsPerPage

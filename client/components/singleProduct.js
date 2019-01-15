@@ -93,14 +93,18 @@ class singleProduct extends Component {
           </div>
 
           <div className="product-price">
-            <span>${(currentProduct.price / 100).toFixed(2)}</span>
-            <Button
-              size="small"
-              color="primary"
-              onClick={() => this.props.addToCart(this.props.currentProduct)}
-            >
-              Add to Cart
-            </Button>
+            <span>${(currentProduct.price / 100).toFixed(2)}</span>&nbsp;&nbsp;
+            {currentProduct.quantity > 0 ? (
+              <Button
+                size="small"
+                color="primary"
+                onClick={() => this.props.addToCart(this.props.currentProduct)}
+              >
+                Add to Cart
+              </Button>
+            ) : (
+              <span>Currently Unavailable</span>
+            )}
           </div>
           <Grid
             container

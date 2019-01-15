@@ -4,13 +4,34 @@ const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 module.exports = router
 
-//get all products from 'Product' Table
+//authenticate
+const isAdmin = (req, res, next) => {
+  if (!req.user || !req.user.isAdmin) {
+    return res.sendStatus(403)
+  } else {
+    next()
+  }
+}
+
+const isUser = (req, res, next) => {
+  if (!req.user) {
+    return res.sendStatus(403)
+  } else {
+    next()
+  }
+}
+
+//get all products from 'Product' Table with inventory
 router.get('/', async (req, res, next) => {
   try {
-    const products = await Product.findAll({
-      include: [Review]
-    })
-    res.json(products)
+    const products = await Product.findAll({include: [Review]})
+    let productsFiltered = {}
+    if (!req.user || !req.user.isAdmin) {
+      productsFiltered = products.filter(item => item.quantity > 0)
+    } else {
+      productsFiltered = products
+    }
+    res.json(productsFiltered)
   } catch (err) {
     next(err)
   }
@@ -60,23 +81,6 @@ router.get('/search/:string', async (req, res, next) => {
   }
 })
 
-//authenticate
-const isAdmin = (req, res, next) => {
-  if (!req.user || !req.user.isAdmin) {
-    return res.sendStatus(403)
-  } else {
-    next()
-  }
-}
-
-const isUser = (req, res, next) => {
-  if (!req.user) {
-    return res.sendStatus(403)
-  } else {
-    next()
-  }
-}
-
 //create new product review in database
 router.post('/:productId/review', isUser, async (req, res, next) => {
   const {rating, comment, userId, productId} = req.body
@@ -122,7 +126,7 @@ router.put('/:productId/review/:reviewId', isUser, async (req, res, next) => {
 })
 
 //create new product in database
-router.post('/', async (req, res, next) => {
+router.post('/', isAdmin, async (req, res, next) => {
   const {name, description, price, quantity, image, type, shape} = req.body
 
   try {
@@ -154,7 +158,7 @@ router.put('/:id', isAdmin, async (req, res, next) => {
 })
 
 //delete product in database
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', isAdmin, (req, res, next) => {
   try {
     const productId = req.params.id
     Product.destroy({

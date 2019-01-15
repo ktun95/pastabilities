@@ -41,6 +41,7 @@ export const fetchProducts = () => async dispatch => {
     console.error(err)
   }
 }
+
 export const searchProductsName = searchString => async dispatch => {
   try {
     const {data} = await axios.get(`/api/products/search/${searchString}`)
@@ -93,7 +94,7 @@ export const destroyProduct = productId => async dispatch => {
   try {
     await axios.delete(`/api/products/${productId}`)
     dispatch(deleteProduct(productId))
-    const {data} = await axios.get('/api/products')
+    const {data} = await axios.get('/api/admin/products')
     dispatch(getProducts(data))
   } catch (err) {
     console.error(err)
