@@ -13,7 +13,7 @@ import Review from './reviewForm'
 import StripeBtn from './stripe'
 import ConfirmationPage from './confirmationPage'
 import {billing} from '../UtilityFunctions.js/functions'
-import {createOrder} from '../../store'
+import {createOrder, postOrder} from '../../store'
 
 const steps = ['Shipping address', 'Review your order']
 
@@ -79,8 +79,9 @@ class checkout extends Component {
     await this.setState({cart: [...this.props.cart]})
   }
   isPaid = async () => {
-    // await createOrder(this.state)
-
+    await createOrder(this.state)
+    await postOrder(this.state)
+    console.log('do we hit this')
     //the below is a temporary hack because browser refresh currently kills the redux state cart and it isn't reloaded
     this.setState({paid: true, cart: []})
     window.localStorage.clear()
@@ -195,6 +196,9 @@ const mapDispatchToProps = dispatch => {
   return {
     createOrder: order => {
       dispatch(createOrder(order))
+    },
+    postOrder: order => {
+      dispatch(postOrder(order))
     }
   }
 }
