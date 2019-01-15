@@ -201,7 +201,8 @@ export default function(state = initialState, action) {
     case FILTER_PRODUCTS:
       return {
         ...state,
-        visibleProducts: [...action.page]
+        visibleProducts: [...action.page],
+        numPages: Math.ceil(action.page.length / 5)
       }
 
     case EDIT_REVIEW:
