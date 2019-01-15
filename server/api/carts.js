@@ -74,6 +74,7 @@ router.post('/:cartId/:productId', async (req, res, next) => {
     const cartId = +req.params.cartId
     const productId = +req.params.productId
     const productAddQty = +req.body.quantity
+
     //maybe use req.session eventually?
     if (productAddQty > 0) {
       const [instance, wasCreated] = await cartProduct.findOrCreate({
@@ -82,6 +83,7 @@ router.post('/:cartId/:productId', async (req, res, next) => {
           productId
         }
       })
+
       if (!wasCreated) {
         await instance.update({quantity: instance.quantity + productAddQty})
       } else {
