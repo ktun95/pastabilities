@@ -288,19 +288,23 @@ export class AllProducts extends React.Component {
                   ))}
                 </Grid>
                 <div id="react-paginate" className={classes.productFilter}>
-                  <ReactPaginate
-                    previousLabel="Prev"
-                    nextLabel="Next"
-                    breakLabel="..."
-                    breakClassName="break-me"
-                    pageCount={numPages}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={this.handlePaginateClick}
-                    containerClassName="pagination"
-                    subContainerClassName="pages pagination"
-                    activeClassName="active"
-                  />
+                  {numPages > 1 ? (
+                    <ReactPaginate
+                      previousLabel="Prev"
+                      nextLabel="Next"
+                      breakLabel="..."
+                      breakClassName="break-me"
+                      pageCount={numPages}
+                      marginPagesDisplayed={2}
+                      pageRangeDisplayed={5}
+                      onPageChange={this.handlePaginateClick}
+                      containerClassName="pagination"
+                      subContainerClassName="pages pagination"
+                      activeClassName="active"
+                    />
+                  ) : (
+                    ''
+                  )}
                 </div>
               </div>
             )}
