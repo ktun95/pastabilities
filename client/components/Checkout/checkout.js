@@ -89,9 +89,10 @@ class checkout extends Component {
       state,
       zipCode,
       bill,
-      userId
+      userId,
+      cart
     } = this.state
-    console.log('address line one', address1)
+    console.log('userId before passing', userId)
     const {subTotal, tax, total} = bill
     const orderDate = new Date()
     const status = 'processing'
@@ -102,13 +103,14 @@ class checkout extends Component {
       email,
       firstName,
       lastName,
-      streetLine1: `data`,
+      streetLine1: address1,
       streetLine2: address2,
       city,
       zipCode,
       tax,
-      userId: 1,
-      state
+      userId,
+      state,
+      cart
     })
     // await postOrder({
     //   garbo: 'garbo'

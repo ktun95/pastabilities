@@ -187,8 +187,7 @@ export default function(state = initialState, action) {
         visibleProducts: action.products,
         numProductPages: action.products.length,
         numPages: Math.ceil(action.products.length / 5),
-        currentPage: action.products.slice(0, state.productsPerPage),
-        types: [...new Set(['whole-wheat', 'gluten-freemem', 'semolina'])]
+        currentPage: action.products.slice(0, state.productsPerPage)
       }
     case GET_PRODUCT:
       return {...state, currentProduct: action.product}
@@ -226,9 +225,11 @@ export default function(state = initialState, action) {
         currentPage: action.page
       }
     case FILTER_PRODUCTS:
+      console.log([...action.page])
       return {
         ...state,
-        visibleProducts: [...action.page]
+        visibleProducts: [...action.page],
+        numPages: Math.ceil(action.page.length / 5)
       }
 
     case EDIT_REVIEW:
