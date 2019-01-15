@@ -10,15 +10,12 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
-import ExposureNeg1 from '@material-ui/icons/ExposureNeg1'
-import ExposurePlus1 from '@material-ui/icons/ExposurePlus1'
 import FormControl from '@material-ui/core/FormControl'
 import Delete from '@material-ui/icons/DeleteRounded'
 import {withStyles} from '@material-ui/core/styles'
 import {fetchProducts, removeFromCart, changeQuantity} from '../store'
-import {Typography, Icon} from '@material-ui/core'
+import Typography from '@material-ui/core'
 import {billing} from './UtilityFunctions.js/functions'
-import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
 import Select from '@material-ui/core/Select'
 
@@ -115,9 +112,6 @@ class Cart extends Component {
                                 onChange={event =>
                                   this.handleChange(event, product)
                                 }
-                                inputProps={{
-                                  name: 'qty'
-                                }}
                               >
                                 <MenuItem value={1}>1</MenuItem>
                                 <MenuItem value={2}>2</MenuItem>
