@@ -225,9 +225,11 @@ export default function(state = initialState, action) {
         currentPage: action.page
       }
     case FILTER_PRODUCTS:
+      console.log([...action.page])
       return {
         ...state,
-        visibleProducts: [...action.page]
+        visibleProducts: [...action.page],
+        numPages: Math.ceil(action.page.length / 5)
       }
 
     case EDIT_REVIEW:

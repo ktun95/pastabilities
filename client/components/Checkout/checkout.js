@@ -89,9 +89,10 @@ class checkout extends Component {
       state,
       zipCode,
       bill,
-      userId
+      userId,
+      cart
     } = this.state
-    console.log('address line one', address1)
+
     const {subTotal, tax, total} = bill
     const orderDate = new Date()
     const status = 'processing'
@@ -102,26 +103,22 @@ class checkout extends Component {
       email,
       firstName,
       lastName,
-      streetLine1: `data`,
+      streetLine1: address1,
       streetLine2: address2,
       city,
       zipCode,
       tax,
-      userId: 1,
-      state
+      userId,
+      state,
+      cart
     })
-    // await postOrder({
-    //   garbo: 'garbo'
-    // })
-
-    console.log('do we hit this')
     //the below is a temporary hack because browser refresh currently kills the redux state cart and it isn't reloaded
     this.setState({paid: true, cart: []})
+    // await this.props.clearCart
     window.localStorage.clear()
   }
   getBill = async bill => {
     await this.setState({bill})
-    console.log(this.state)
   }
   handleNext = () => {
     const {activeStep, ...userInfo} = this.state

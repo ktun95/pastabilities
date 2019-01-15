@@ -11,15 +11,22 @@ const GET_ORDERS_BY_USER = 'GET_ORDERS_BY_USER'
 const GET_ORDERS_BY_STATUS = 'GET_ORDERS_BY_STATUS'
 const GET_ORDER = 'GET_ORDER'
 const UPDATE_STATUS = 'UPDATE_STATUS'
+const ADD_ORDER_PRODUCTS = 'ADD_ORDER_PRODUCTS'
 
 /**
  * ACTION CREATORS
  */
 //clear cart and create order
 //need to add to the cart store
-export const createOrder = order => ({
+const createOrder = order => ({
   type: ADD_ORDER,
   order
+})
+
+const createOrderProducts = (orderId, cart) => ({
+  type: ADD_ORDER_PRODUCTS,
+  orderId,
+  cart
 })
 
 const getOrders = orders => ({
@@ -50,13 +57,16 @@ const updateOrdersByStatus = updatedOrder => ({
 /**
  * THUNK CREATORS
  */
-export const postOrder = cart => async dispatch => {
+export const postOrder = order => async dispatch => {
   try {
-    console.log('postOrder cart', cart)
-    console.log('cart.streetLine1', cart.streetLine1)
-    const res = await axios.post(`/api/orders/checkout`, cart)
-    console.log('cart!!!', cart)
-    return dispatch(createOrder(res.data))
+    console.log('order.cart', order.cart)
+    if (order.userId === 0) order.userId = null
+    const res = await axios.post(`/api/orders/checkout`, order)
+    const response = dispatch(createOrder(res.data))
+    console.log('what is in our cart')
+    console.log('postOrder cart', order.cart)
+    console.log('order_id', response.order.id)
+    dispatch(createOrderProducts(response.order.id, order.cart))
   } catch (error) {
     console.error(error)
   }
@@ -82,7 +92,8 @@ export const fetchOrder = orderId => async dispatch => {
 
 export const fetchOrdersByUser = userId => async dispatch => {
   try {
-    const userOrders = await axios.get(`/api/orders/orderSummary/${userId}`)
+    console.log('I was here')
+    const userOrders = await axios.get(`/api/orders/orderHistory/${userId}`)
     dispatch(getOrdersByUser(userOrders.data))
   } catch (error) {
     console.error(error)
@@ -117,7 +128,8 @@ export const updateOrderStatus = status => {
 const initialState = {
   orders: [],
   userOrders: [],
-  singleOrder: {}
+  singleOrder: {},
+  orderProducts: []
 }
 
 const reducer = (state = initialState, action) => {

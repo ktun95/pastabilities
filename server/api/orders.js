@@ -93,8 +93,6 @@ router.put('/:id', async (req, res, next) => {
 // POST Create Order
 // add admin or user back
 router.post('/checkout', async (req, res, next) => {
-  // const userId = req.user.id
-  console.log('req.body', req.body)
   const {
     email,
     status,
@@ -125,7 +123,16 @@ router.post('/checkout', async (req, res, next) => {
       state,
       zipCode
     })
-    console.log('instance', instance)
+
+    cart.forEach(element => {
+      orderProduct.create({
+        quantity: element.quantity,
+        price: element.price,
+        productId: element.id,
+        orderId: instance.id
+      })
+    })
+
     res.json(instance)
   } catch (err) {
     next(err)
