@@ -2,6 +2,21 @@ import React from 'react'
 import ProductForm from './productForm'
 import {postProduct} from '../store'
 import {connect} from 'react-redux'
+import Paper from '@material-ui/core/Paper'
+import withStyles from '@material-ui/core/styles/withStyles'
+
+const styles = theme => ({
+  root: {
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+    marginLeft: theme.spacing.unit * 2,
+    marginRight: theme.spacing.unit * 2
+  },
+  center: {
+    'text-align': 'center'
+  }
+})
 
 class AddProduct extends React.Component {
   constructor() {
@@ -48,24 +63,21 @@ class AddProduct extends React.Component {
     this.props.history.goBack()
   }
   render() {
+    const {classes} = this.props
     return (
       <div>
-        <button
-          className="back-btn"
-          value="/admin/products"
-          onClick={this.goAddPage}
-        >
+        <button className="back-btn" onClick={this.goAddPage}>
           CANCEL
         </button>
-        <div id="new-item">
-          <h1>ADD A PASTA</h1>
+        <Paper className={classes.root} elevation={1}>
+          <h1 className={classes.center}>ADD A PASTA</h1>
 
           <ProductForm
             state={this.state}
             submitHandler={this.submitHandler}
             updateHandler={this.updateHandler}
           />
-        </div>
+        </Paper>
       </div>
     )
   }
@@ -75,4 +87,4 @@ const mapDispatch = dispatch => ({
   postProduct: product => dispatch(postProduct(product))
 })
 
-export default connect(null, mapDispatch)(AddProduct)
+export default connect(null, mapDispatch)(withStyles(styles)(AddProduct))
