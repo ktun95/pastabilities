@@ -70,6 +70,15 @@ const styles = theme => ({
   button: {
     marginBottom: '10px'
   }
+  //  ul: {
+  //     display: inlineBlock;
+  //     padding-left: 15px;
+  //     padding-right: 15px;
+  // }
+
+  // '#react-paginate li' {
+  //     display: inline-block;
+  // }
 })
 export class AllProducts extends React.Component {
   constructor(props) {
@@ -98,10 +107,10 @@ export class AllProducts extends React.Component {
   handleFilterSelection = data => {
     this.setState({[data.target.name]: data.target.value}, async () => {
       let newVisiableProducts = []
+      console.log('do we hit this', data.target.value)
       if (data.target.value === 'All Pastas') {
-        newVisiableProducts = this.props.products.filter(
-          product => product.name !== ''
-        )
+        console.log('do we hit this')
+        this.props.fetchProducts()
       } else {
         newVisiableProducts = this.props.products.filter(
           product => product.type === data.target.value

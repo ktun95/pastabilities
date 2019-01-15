@@ -199,6 +199,7 @@ export default function(state = initialState, action) {
         currentPage: action.page
       }
     case FILTER_PRODUCTS:
+      console.log([...action.page])
       return {
         ...state,
         visibleProducts: [...action.page],
