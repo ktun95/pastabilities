@@ -28,7 +28,7 @@ export const addWithUser = (product, userId) => async dispatch => {
   //find cart in database associated with userId in redux store
   console.log('addWithUser is firing')
   let cart
-  let isUser = true
+  let isUser = false
   try {
     if (userId) {
       console.log(cart)
@@ -36,6 +36,7 @@ export const addWithUser = (product, userId) => async dispatch => {
       await axios.post(`/api/carts/${cart.data.id}/${product.id}`, {
         quantity: 1
       })
+      isUser = true
     }
     dispatch(addToCart(product, isUser))
   } catch (err) {
@@ -46,13 +47,15 @@ export const addWithUser = (product, userId) => async dispatch => {
 export const setUserCart = (currentCart, userId) => async dispatch => {
   window.localStorage.pastaCart = JSON.stringify({cart: []})
   console.log('attempting to merge carts')
-  console.log('importing MERGE function??', mergeCart)
-  //usercart is user data, wrong API Route used, need2fix
+  //userCart includes products with the INVENTORY quantity, not the quantity in cartProducts; requires fix
   const userCart = await axios.get(`/api/carts/users/${userId}`)
-  dispatch(setCart(mergeCart(currentCart, userCart.data.products)))
+  console.log(userCart.data)
+  const mergedCart = mergeCart(currentCart, userCart.data.products)
+  await dispatch(setCart(mergedCart))
   //still need to change cart in DB
-  console.log('local cart reset', window.localStorage.pastaCart)
 }
+//need a thunk for removing from user cart
+//need a thunk for changing quantity from user cart
 
 /*** INITIAL STATE***/
 const initialState = {
@@ -86,8 +89,9 @@ export default function(state = initialState, action) {
           cart: [...state.cart, {...action.product, quantity: 1}]
         }
       }
-      console.log(state.user)
-      if (!action.role) window.localStorage.pastaCart = JSON.stringify(newState)
+
+      if (!action.isUser)
+        window.localStorage.pastaCart = JSON.stringify(newState)
       return newState
     }
 
@@ -109,7 +113,8 @@ export default function(state = initialState, action) {
           cart: [...state.cart]
         }
       }
-      if (!action.role) window.localStorage.pastaCart = JSON.stringify(newState)
+      if (!action.isUser)
+        window.localStorage.pastaCart = JSON.stringify(newState)
       return newState
     }
 
@@ -122,7 +127,8 @@ export default function(state = initialState, action) {
         ...state,
         cart: [...updatedCart]
       }
-      window.localStorage.pastaCart = JSON.stringify(newState)
+      if (!action.isUser)
+        window.localStorage.pastaCart = JSON.stringify(newState)
       return newState
     }
 

@@ -8,7 +8,7 @@ import {
   destroyProduct,
   updatePage,
   filterProducts,
-  addToCart,
+  addWithUser,
   fetchTypes,
   fetchShapes
 } from '../store'
@@ -162,7 +162,7 @@ export class AllProducts extends React.Component {
   }
 
   render() {
-    const {classes, products, currentPage, numPages} = this.props
+    const {classes, products, currentPage, numPages, userId} = this.props
     const noProducts = !products || products.length === 0
 
     let searchPage = currentPage.filter(
@@ -300,7 +300,9 @@ export class AllProducts extends React.Component {
                           <Button
                             size="small"
                             color="primary"
-                            onClick={() => this.props.addToCart(product)}
+                            onClick={() =>
+                              this.props.addToCart(product, userId)
+                            }
                           >
                             Add to Cart
                           </Button>
@@ -360,6 +362,7 @@ export class AllProducts extends React.Component {
 
 const mapState = ({product, user}) => {
   return {
+    userId: user.id,
     products: product.allProducts,
     isAdmin: user.isAdmin,
     currentPage: product.currentPage,
@@ -389,8 +392,8 @@ const mapDispatchToProps = dispatch => {
     filterProducts: id => {
       dispatch(filterProducts(id))
     },
-    addToCart: product => {
-      dispatch(addToCart(product))
+    addToCart: (product, userId) => {
+      dispatch(addWithUser(product, userId))
     }
   }
 }

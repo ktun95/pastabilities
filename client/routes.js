@@ -25,15 +25,17 @@ class Routes extends Component {
     console.log(this)
     // this.props.loadCart = this.props.loadCart.bind(this)
   }
-  componentDidMount() {
+  async componentDidMount() {
     console.log('component did mount')
-    this.props.loadInitialData()
+    await this.props.loadInitialData()
     //loadCart fires before loadInitialData, we need to reverse this!
     if (!this.props.isLoggedIn)
       this.props.loadCart(this.props.cart, this.props.isLoggedIn)
   }
   componentDidUpdate() {
     // this.props.loadCart(this.props.cart, this.props.isLoggedIn)
+    // logged in => logged out, getGuestCart should fire on update
+    if (!this.props.isLoggedIn) this.props.loadCart()
     console.log('component did update')
   }
 
