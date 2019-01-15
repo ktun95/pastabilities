@@ -48,18 +48,18 @@ export function ProductForm(props) {
   const {classes} = props
   return (
     <form>
-      <TextField
-        id="standard-name"
-        label="Name"
+      <InputLabel htmlFor="name">
+        Name:
+        <span className="warning" hidden={props.state.name !== ''}>
+          Name is required
+        </span>
+      </InputLabel>
+      <Input
+        type="text"
         name="name"
-        className={classes.textField}
         value={props.state.name}
         onChange={props.updateHandler}
-        margin="normal"
       />
-      <span className="warning" hidden={props.state.name !== ''}>
-        Name is required
-      </span>
       <br />
       <FormControl component="fieldset" className={classes.formControl}>
         <FormLabel component="legend">
@@ -194,6 +194,8 @@ export function ProductForm(props) {
           props.state.shape === ''
         }
         onClick={props.submitHandler}
+        variant="contained"
+        color="secondary"
       >
         Submit
       </Button>

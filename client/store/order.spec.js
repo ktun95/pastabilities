@@ -40,14 +40,14 @@ describe('thunk creators', () => {
     {
       id: 2,
       status: 'canceled',
-      orderDate: new Date(),
+      orderDate: '2019-01-14 15:59:30.067-06',
       email: 'test2@user.com',
       userId: 2
     },
     {
       id: 3,
       status: 'processing',
-      orderDate: new Date(),
+      orderDate: '2019-01-14 15:59:30.067-06',
       email: 'test2@user.com',
       userId: 2
     }

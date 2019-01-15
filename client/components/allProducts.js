@@ -8,7 +8,8 @@ import {
   destroyProduct,
   updatePage,
   filterProducts,
-  addToCart
+  addToCart,
+  me
 } from '../store'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
@@ -66,6 +67,9 @@ const styles = theme => ({
   collectionSort: {
     display: 'flex',
     flexDirection: 'column'
+  },
+  button: {
+    marginBottom: '10px'
   }
 })
 export class AllProducts extends React.Component {

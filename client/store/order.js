@@ -17,7 +17,7 @@ const UPDATE_STATUS = 'UPDATE_STATUS'
  */
 //clear cart and create order
 //need to add to the cart store
-const createOrder = order => ({
+export const createOrder = order => ({
   type: ADD_ORDER,
   order
 })
@@ -52,6 +52,7 @@ const updateOrdersByStatus = updatedOrder => ({
  */
 export const postOrder = cart => async dispatch => {
   try {
+    console.log('postOrder')
     const res = await axios.post(`/api/orders/checkout`, cart)
     return dispatch(createOrder(res.data))
   } catch (error) {
