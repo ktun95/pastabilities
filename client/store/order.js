@@ -82,7 +82,7 @@ export const fetchOrder = orderId => async dispatch => {
 
 export const fetchOrdersByUser = userId => async dispatch => {
   try {
-    const userOrders = await axios.get(`/api/orders/orderSummary/${userId}`)
+    const userOrders = await axios.get(`/api/orders/orderHistory/${userId}`)
     dispatch(getOrdersByUser(userOrders.data))
   } catch (error) {
     console.error(error)
