@@ -15,7 +15,9 @@ import {
   Cart,
   AddProductReview,
   EditProductReview,
-  Checkout
+  Checkout,
+  AdminOrders,
+  AdminUsers
 } from './components'
 import {me, getGuestCart, setUserCart} from './store'
 
@@ -40,7 +42,7 @@ class Routes extends Component {
   }
 
   render() {
-    const {isLoggedIn} = this.props
+    const {isLoggedIn, isAdmin} = this.props
 
     return (
       <Switch>
@@ -56,13 +58,7 @@ class Routes extends Component {
           <Switch>
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
-            <Route exact path="/admin/products" component={AdminProducts} />
-            <Route exact path="/admin/products/add" component={AddProduct} />
-            <Route
-              exact
-              path="/admin/products/:productId/edit"
-              component={EditProduct}
-            />
+
             <Route
               exact
               path="/products/:productId/review/"
@@ -73,6 +69,23 @@ class Routes extends Component {
               path="/products/:productId/review/:reviewId"
               component={EditProductReview}
             />
+            {isAdmin && (
+              <Switch>
+                <Route exact path="/admin/products" component={AdminProducts} />
+                <Route
+                  exact
+                  path="/admin/products/add"
+                  component={AddProduct}
+                />
+                <Route
+                  exact
+                  path="/admin/products/:productId/edit"
+                  component={EditProduct}
+                />
+                <Route exact path="/admin/orders" component={AdminOrders} />
+                <Route exact path="/admin/users" component={AdminUsers} />
+              </Switch>
+            )}
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
@@ -85,7 +98,8 @@ const mapState = state => {
   return {
     // Being 'logged in' for our purposes will be defined has having a state.user that has a truthy id.
     // Otherwise, state.user will be an empty object, and state.user.id will be falsey
-    isLoggedIn: !!state.user.id
+    isLoggedIn: !!state.user.id,
+    isAdmin: state.user.isAdmin
   }
 }
 

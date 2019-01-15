@@ -59,14 +59,11 @@ const updateOrdersByStatus = updatedOrder => ({
  */
 export const postOrder = order => async dispatch => {
   try {
-    console.log('postOrder cart', order.cart)
-    console.log('cart.streetLine1', order.streetLine1)
     if (order.userId === 0) order.userId = null
     const res = await axios.post(`/api/orders/checkout`, order)
     const response = dispatch(createOrder(res.data))
-    console.log('response', response)
-    console.log('order_id', response.order.id)
-    // dispatch(createOrderProducts(response.order.id))
+    dispatch(createOrderProducts(response.order.id, order.cart))
+    // dispatch(sendEmail)
   } catch (error) {
     console.error(error)
   }
@@ -92,6 +89,7 @@ export const fetchOrder = orderId => async dispatch => {
 
 export const fetchOrdersByUser = userId => async dispatch => {
   try {
+    console.log('I was here')
     const userOrders = await axios.get(`/api/orders/orderHistory/${userId}`)
     dispatch(getOrdersByUser(userOrders.data))
   } catch (error) {
