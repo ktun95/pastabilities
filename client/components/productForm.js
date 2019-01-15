@@ -14,6 +14,7 @@ import Button from '@material-ui/core/Button'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import InputAdornment from '@material-ui/core/InputAdornment'
+import Select from '@material-ui/core/Select'
 
 //I have just started incorporating the Material.UI code. Holding until after code review
 
@@ -68,8 +69,23 @@ export function ProductForm(props) {
             Pasta type is required
           </span>
         </FormLabel>
+        <Select
+          value={props.state.type}
+          onChange={props.updateHandler}
+          inputProps={{
+            name: 'type',
+            id: 'type'
+          }}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value="semolina">Semolina</MenuItem>
+          <MenuItem value="whole-wheat">Whole Wheat</MenuItem>
+          <MenuItem value="gluten-free">Gluten-free</MenuItem>
+        </Select>
 
-        <RadioGroup
+        {/* <RadioGroup
           aria-label="Type"
           name="type"
           className={classes.group}
@@ -91,7 +107,7 @@ export function ProductForm(props) {
             control={<Radio />}
             label="Gluten-free"
           />
-        </RadioGroup>
+        </RadioGroup> */}
       </FormControl>
       <FormControl component="fieldset" className={classes.formControl}>
         <FormLabel component="legend">
