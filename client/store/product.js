@@ -187,8 +187,7 @@ export default function(state = initialState, action) {
         visibleProducts: action.products,
         numProductPages: action.products.length,
         numPages: Math.ceil(action.products.length / 5),
-        currentPage: action.products.slice(0, state.productsPerPage),
-        types: [...new Set(['whole-wheat', 'gluten-freemem', 'semolina'])]
+        currentPage: action.products.slice(0, state.productsPerPage)
       }
     case GET_PRODUCT:
       return {...state, currentProduct: action.product}
