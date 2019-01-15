@@ -8,7 +8,7 @@ import {
   destroyProduct,
   updatePage,
   filterProducts,
-  addToCart,
+  addWithUser,
   fetchTypes,
   fetchShapes
 } from '../store'
@@ -307,9 +307,9 @@ export class AllProducts extends React.Component {
                           <Button
                             size="small"
                             color="primary"
-                            onClick={() => {
-                              this.props.addToCart(product)
-                            }}
+                            onClick={() =>
+                              this.props.addToCart(product, userId)
+                            }
                           >
                             Add to Cart
                           </Button>
@@ -400,8 +400,8 @@ const mapDispatchToProps = dispatch => {
     filterProducts: id => {
       dispatch(filterProducts(id))
     },
-    addToCart: product => {
-      dispatch(addToCart(product))
+    addToCart: (product, userId) => {
+      dispatch(addWithUser(product, userId))
     }
   }
 }

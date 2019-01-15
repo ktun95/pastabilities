@@ -1,6 +1,7 @@
 import user from '../../store/user'
 
 export const billing = cart => {
+  console.log('from billing in utilities', cart)
   const subTotalCent = cart.reduce((total, curVal) => {
     return total + curVal.price * curVal.quantity
   }, 0)
@@ -27,6 +28,7 @@ export const itemPrice = item => {
 }
 
 export const mergeCart = (localCart, userCart) => {
+  console.log('IS THIS SHIT RUNNING??', localCart, userCart)
   const totalCart = [...localCart, ...userCart]
   const filterCart = totalCart.reduce((accum, currentItem) => {
     const found = accum.find(item => item.id === currentItem.id)
