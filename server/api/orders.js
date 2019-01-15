@@ -94,8 +94,17 @@ router.put('/:id', async (req, res, next) => {
 // add admin or user back
 router.post('/checkout', async (req, res, next) => {
   // const userId = req.user.id
-
-  const {email, status, userId, cart} = req.body
+  console.log('req.body', req.body)
+  const {
+    email,
+    status,
+    userId,
+    cart,
+    streetLine1,
+    city,
+    state,
+    zipCode
+  } = req.body
 
   //from the cart we'll get
   //cart is an array of products
@@ -110,8 +119,13 @@ router.post('/checkout', async (req, res, next) => {
       status,
       email,
       orderDate: new Date(),
-      userId
+      userId,
+      streetLine1,
+      city,
+      state,
+      zipCode
     })
+    console.log('instance', instance)
     res.json(instance)
   } catch (err) {
     next(err)

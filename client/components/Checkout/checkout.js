@@ -79,8 +79,36 @@ class checkout extends Component {
     await this.setState({cart: [...this.props.cart]})
   }
   isPaid = async () => {
+    const {
+      email,
+      firstName,
+      lastName,
+      address1,
+      address2,
+      city,
+      state,
+      zipCode,
+      bill,
+      userId
+    } = this.state
+    const {subTotal, tax, total} = bill
+    const orderDate = new Date()
+    //status, orderDate,
     await createOrder(this.state)
-    await postOrder(this.state)
+    await postOrder({
+      status,
+      orderDate,
+      email,
+      firstName,
+      lastName,
+      address1,
+      address2,
+      city,
+      zipCode,
+      tax,
+      userId
+    })
+
     await addToCart({
       description: 'Yummy Pasta',
       id: 2,
