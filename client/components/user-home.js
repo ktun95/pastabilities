@@ -8,16 +8,14 @@ import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
-import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
-import FormControl from '@material-ui/core/FormControl'
-import Delete from '@material-ui/icons/DeleteRounded'
 import {withStyles} from '@material-ui/core/styles'
 import {fetchOrdersByUser} from '../store'
-import {Typography, Icon} from '@material-ui/core'
-import {billing} from './UtilityFunctions.js/functions'
-import MenuItem from '@material-ui/core/MenuItem'
-import Select from '@material-ui/core/Select'
+import Typography from '@material-ui/core/Typography'
+import ExpansionPanel from '@material-ui/core/ExpansionPanel'
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import {itemPrice} from './UtilityFunctions.js/functions'
 
 const styles = theme => ({
   root: {
@@ -47,16 +45,23 @@ const styles = theme => ({
 })
 
 class UserHome extends Component {
-  componentDidMount() {}
+  componentDidMount() {
+    try {
+      console.log(this.props.userId)
+      this.props.fetchOrdersByUser(this.props.userId)
+    } catch (err) {
+      console.log(err)
+    }
+  }
   render() {
     const {email, classes, userOrders} = this.props
-    console.log(this.props)
+    console.log(userOrders)
     return (
       <React.Fragment>
         <CssBaseline>
           <div className={classes.title}>
             <Typography variant="h3" align="center">
-              Shopping Cart
+              Past Orders
             </Typography>
           </div>
           <div className={classes.main}>
@@ -66,15 +71,46 @@ class UserHome extends Component {
                   <TableRow>
                     <TableCell align="center">Order Number</TableCell>
                     <TableCell align="center">Qrder Status</TableCell>
-                    <TableCell align="center">Order Total</TableCell>
+                    <TableCell align="center">Order Date</TableCell>
+                    <TableCell align="center">Order Details</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableRow>
-                    <TableCell align="center">Order Number</TableCell>
-                    <TableCell align="center">Qrder Status</TableCell>
-                    <TableCell align="center">Order Total</TableCell>
-                  </TableRow>
+                  {userOrders.map(order => (
+                    <TableRow key={order.id}>
+                      <TableCell align="center">{order.id}</TableCell>
+                      <TableCell align="center">{order.status}</TableCell>
+                      <TableCell align="center">
+                        {order.orderDate.slice(0, 10)}
+                      </TableCell>
+                      <ExpansionPanel>
+                        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                          <Typography className={classes.heading}>
+                            Products...
+                          </Typography>
+                        </ExpansionPanelSummary>
+                        <ExpansionPanelDetails>
+                          {order.products.map(product => (
+                            <div key={product.id}>
+                              <p>{product.name}</p>
+                              <p>
+                                {parseFloat(
+                                  itemPrice(product).subTotal / 100
+                                ).toFixed(2)}
+                              </p>
+                              <p>{product.orderproduct.quantity}</p>
+                              <p>
+                                {parseFloat(
+                                  itemPrice(product).total / 100
+                                ).toFixed(2)}
+                              </p>
+                            </div>
+                          ))}
+                        </ExpansionPanelDetails>
+                      </ExpansionPanel>
+                      <ExpansionPanel />
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </Paper>
