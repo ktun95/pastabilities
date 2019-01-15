@@ -4,13 +4,29 @@ const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 module.exports = router
 
-//get all products from 'Product' Table
-router.get('/products', async (req, res, next) => {
+//get all shapes from 'Product' Table
+router.get('/products/categories/shapes', async (req, res, next) => {
   try {
     const products = await Product.findAll({
-      include: [Review]
+      attributes: ['shape'],
+      group: ['shape']
     })
-    res.json(products)
+    const shapeArr = products.map(item => item.shape)
+    res.json(shapeArr)
+  } catch (err) {
+    next(err)
+  }
+})
+
+//get all types from 'Product' Table
+router.get('/products/categories/types', async (req, res, next) => {
+  try {
+    const products = await Product.findAll({
+      attributes: ['type'],
+      group: ['type']
+    })
+    const typeArr = products.map(item => item.type)
+    res.json(typeArr)
   } catch (err) {
     next(err)
   }

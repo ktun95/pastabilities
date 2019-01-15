@@ -8,7 +8,9 @@ import {
   destroyProduct,
   updatePage,
   filterProducts,
-  addToCart
+  addToCart,
+  fetchTypes,
+  fetchShapes
 } from '../store'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
@@ -96,6 +98,8 @@ export class AllProducts extends React.Component {
   }
   componentDidMount() {
     this.props.fetchProducts()
+    this.props.fetchShapes()
+    this.props.fetchTypes()
   }
 
   handleChange = event => {
@@ -193,10 +197,18 @@ export class AllProducts extends React.Component {
                 this.handleFilterSelection(event)
               }}
             >
-              <MenuItem value="All Pastas">All Pastas</MenuItem>
+              {/* <MenuItem value="All Pastas">All Pastas</MenuItem>
               <MenuItem value="whole-wheat">Whole-wheat</MenuItem>
               <MenuItem value="gluten-free">Gluten-free</MenuItem>
-              <MenuItem value="semolina">Semolina</MenuItem>
+              <MenuItem value="semolina">Semolina</MenuItem> */}
+              {this.props.types &&
+                this.props.types.map(type => {
+                  return (
+                    <MenuItem key={type} value={type}>
+                      {type}
+                    </MenuItem>
+                  )
+                })}
             </TextField>
           </div>
 
@@ -343,6 +355,8 @@ const mapState = ({product, user}) => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    fetchShapes: () => dispatch(fetchShapes()),
+    fetchTypes: () => dispatch(fetchTypes()),
     fetchProducts: () => {
       dispatch(fetchProducts())
     },

@@ -14,8 +14,14 @@ import Button from '@material-ui/core/Button'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import InputAdornment from '@material-ui/core/InputAdornment'
-
-//I have just started incorporating the Material.UI code. Holding until after code review
+import Select from '@material-ui/core/Select'
+import {fetchTypes, fetchShapes, newShape, newType} from '../store'
+import {connect} from 'react-redux'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
 
 const styles = theme => ({
   root: {
@@ -44,172 +50,292 @@ const styles = theme => ({
   }
 })
 
-export function ProductForm(props) {
-  const {classes} = props
-  return (
-    <form>
-      <InputLabel htmlFor="name">
-        Name:
-        <span className="warning" hidden={props.state.name !== ''}>
-          Name is required
-        </span>
-      </InputLabel>
-      <Input
-        type="text"
-        name="name"
-        value={props.state.name}
-        onChange={props.updateHandler}
-      />
-      <br />
-      <FormControl component="fieldset" className={classes.formControl}>
-        <FormLabel component="legend">
-          Pasta Type{' '}
-          <span className="warning" hidden={props.state.type !== ''}>
-            Pasta type is required
+class ProductForm extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      openType: false,
+      openShape: false,
+      newType: '',
+      newShape: ''
+    }
+  }
+  componentDidMount() {
+    this.props.fetchShapes()
+    this.props.fetchTypes()
+  }
+  handleClickOpenType = () => {
+    this.setState({openType: true})
+  }
+  handleClickOpenShape = () => {
+    this.setState({openShape: true})
+  }
+
+  handleClose = () => {
+    this.setState({
+      openType: false,
+      openShape: false,
+      newType: '',
+      newShape: ''
+    })
+  }
+  updateHandler = event => {
+    this.setState({[event.target.name]: event.target.value})
+  }
+  submitType = () => {
+    this.props.newType(this.state.newType)
+    this.handleClose()
+  }
+  submitShape = () => {
+    this.props.newShape(this.state.newShape)
+    this.handleClose()
+  }
+  render() {
+    const {classes} = this.props
+    return (
+      <form>
+        <InputLabel htmlFor="name">
+          Name:
+          <span className="warning" hidden={this.props.state.name !== ''}>
+            Name is required
           </span>
-        </FormLabel>
+        </InputLabel>
+        <Input
+          type="text"
+          name="name"
+          value={this.props.state.name}
+          onChange={this.props.updateHandler}
+        />
+        <br />
+        <FormControl component="fieldset" className={classes.formControl}>
+          <FormLabel component="legend">
+            Pasta Type{' '}
+            <span className="warning" hidden={this.props.state.type !== ''}>
+              Pasta type is required
+            </span>
+          </FormLabel>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={this.handleClickOpenType}
+          >
+            Add new type
+          </Button>
+          <Dialog
+            open={this.state.openType}
+            onClose={this.handleClose}
+            aria-labelledby="form-dialog-title"
+          >
+            <DialogTitle id="form-dialog-title">New Type</DialogTitle>
+            <DialogContent>
+              <DialogContentText>Add a new pasta type:</DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="newType"
+                name="newType"
+                type="text"
+                value={this.state.newType}
+                onChange={this.updateHandler}
+                fullWidth
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={this.submitType} color="primary">
+                Add Type
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Select
+            value={this.props.state.type}
+            onChange={this.props.updateHandler}
+            inputProps={{
+              name: 'type',
+              id: 'type'
+            }}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {this.props.types &&
+              this.props.types.map(type => {
+                return (
+                  <MenuItem key={type} value={type}>
+                    {type}
+                  </MenuItem>
+                )
+              })}
+          </Select>
+        </FormControl>
+        <FormControl component="fieldset" className={classes.formControl}>
+          <FormLabel component="legend">
+            Pasta Shape{' '}
+            <span className="warning" hidden={this.props.state.shape !== ''}>
+              Pasta shape is required
+            </span>
+          </FormLabel>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={this.handleClickOpenShape}
+          >
+            Add new shape
+          </Button>
+          <Dialog
+            open={this.state.openShape}
+            onClose={this.handleClose}
+            aria-labelledby="form-dialog-title"
+          >
+            <DialogTitle id="form-dialog-title">New Shape</DialogTitle>
+            <DialogContent>
+              <DialogContentText>Add a new pasta shape:</DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="newShape"
+                name="newShape"
+                type="text"
+                value={this.state.newShape}
+                onChange={this.updateHandler}
+                fullWidth
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={this.submitShape} color="primary">
+                Add Shape
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Select
+            value={this.props.state.shape}
+            onChange={this.props.updateHandler}
+            inputProps={{
+              name: 'shape',
+              id: 'shape'
+            }}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {this.props.shapes &&
+              this.props.shapes.map(shape => {
+                return (
+                  <MenuItem key={shape} value={shape}>
+                    {shape}
+                  </MenuItem>
+                )
+              })}
+          </Select>
+        </FormControl>
 
-        <RadioGroup
-          aria-label="Type"
-          name="type"
-          className={classes.group}
-          value={props.state.type}
-          onChange={props.updateHandler}
-        >
-          <FormControlLabel
-            value="semolina"
-            control={<Radio />}
-            label="Semolina"
-          />
-          <FormControlLabel
-            value="whole-wheat"
-            control={<Radio />}
-            label="Whole Wheat"
-          />
-          <FormControlLabel
-            value="gluten-free"
-            control={<Radio />}
-            label="Gluten-free"
-          />
-        </RadioGroup>
-      </FormControl>
-      <FormControl component="fieldset" className={classes.formControl}>
-        <FormLabel component="legend">
-          Pasta Shape{' '}
-          <span className="warning" hidden={props.state.shape !== ''}>
-            Pasta shape is required
+        <InputLabel htmlFor="description">
+          Description:
+          <span
+            className="warning"
+            hidden={this.props.state.description !== ''}
+          >
+            Field is required
           </span>
-        </FormLabel>
+        </InputLabel>
+        <Input
+          type="text"
+          name="description"
+          value={this.props.state.description}
+          onChange={this.props.updateHandler}
+        />
+        <br />
 
-        <RadioGroup
-          aria-label="Shape"
-          name="shape"
-          className={classes.group}
-          value={props.state.shape}
-          onChange={props.updateHandler}
+        <InputLabel htmlFor="price">
+          Price (in cents):
+          <span className="warning" hidden={this.props.state.price !== ''}>
+            Field is required
+          </span>
+        </InputLabel>
+        <Input
+          type="text"
+          name="price"
+          value={this.props.state.price}
+          onChange={this.props.updateHandler}
+          // startAdornment={<InputAdornment position="start">$</InputAdornment>}
+        />
+
+        <br />
+
+        <InputLabel htmlFor="quantity">
+          Inventory Quantity:
+          <span className="warning" hidden={this.props.state.quantity !== ''}>
+            Field is required
+          </span>
+        </InputLabel>
+        <Input
+          type="text"
+          name="quantity"
+          value={this.props.state.quantity}
+          onChange={this.props.updateHandler}
+        />
+        <br />
+
+        <InputLabel htmlFor="image">
+          Image Url:
+          <span className="warning" hidden={this.props.state.image !== ''}>
+            Field is required
+          </span>
+        </InputLabel>
+
+        <Input
+          type="text"
+          name="image"
+          value={this.props.state.image}
+          onChange={this.props.updateHandler}
+        />
+
+        <Button
+          type="submit"
+          disabled={
+            this.props.state.name === '' ||
+            this.props.state.type === '' ||
+            this.props.state.description === '' ||
+            this.props.state.price === '' ||
+            this.props.state.quantity === '' ||
+            this.props.state.image === '' ||
+            this.props.state.shape === ''
+          }
+          onClick={this.props.submitHandler}
+          variant="contained"
+          color="secondary"
         >
-          <FormControlLabel value="long" control={<Radio />} label="long" />
-          <FormControlLabel value="ribbon" control={<Radio />} label="ribbon" />
-          <FormControlLabel
-            value="tubular"
-            control={<Radio />}
-            label="tubular"
-          />
-          <FormControlLabel value="shaped" control={<Radio />} label="shaped" />
-          <FormControlLabel
-            value="stuffed"
-            control={<Radio />}
-            label="stuffed"
-          />
-        </RadioGroup>
-      </FormControl>
-
-      <InputLabel htmlFor="description">
-        Description:
-        <span className="warning" hidden={props.state.description !== ''}>
-          Field is required
-        </span>
-      </InputLabel>
-      <Input
-        type="text"
-        name="description"
-        value={props.state.description}
-        onChange={props.updateHandler}
-      />
-      <br />
-
-      <InputLabel htmlFor="price">
-        Price (in cents):
-        <span className="warning" hidden={props.state.price !== ''}>
-          Field is required
-        </span>
-      </InputLabel>
-      <Input
-        type="text"
-        name="price"
-        value={props.state.price}
-        onChange={props.updateHandler}
-        // startAdornment={<InputAdornment position="start">$</InputAdornment>}
-      />
-
-      <br />
-
-      <InputLabel htmlFor="quantity">
-        Inventory Quantity:
-        <span className="warning" hidden={props.state.quantity !== ''}>
-          Field is required
-        </span>
-      </InputLabel>
-      <Input
-        type="text"
-        name="quantity"
-        value={props.state.quantity}
-        onChange={props.updateHandler}
-      />
-      <br />
-
-      <InputLabel htmlFor="image">
-        Image Url:
-        <span className="warning" hidden={props.state.image !== ''}>
-          Field is required
-        </span>
-      </InputLabel>
-
-      <Input
-        type="text"
-        name="image"
-        value={props.state.image}
-        onChange={props.updateHandler}
-      />
-
-      <Button
-        type="submit"
-        disabled={
-          props.state.name === '' ||
-          props.state.type === '' ||
-          props.state.description === '' ||
-          props.state.price === '' ||
-          props.state.quantity === '' ||
-          props.state.image === '' ||
-          props.state.shape === ''
-        }
-        onClick={props.submitHandler}
-        variant="contained"
-        color="secondary"
-      >
-        Submit
-      </Button>
-      {props.state.error.toString() === '[object Object]' ? (
-        <div />
-      ) : (
-        <div className="error">{props.state.error.toString()}</div>
-      )}
-    </form>
-  )
+          Submit
+        </Button>
+        {this.props.state.error.toString() === '[object Object]' ? (
+          <div />
+        ) : (
+          <div className="error">{this.props.state.error.toString()}</div>
+        )}
+      </form>
+    )
+  }
 }
 
 ProductForm.propTypes = {
   classes: PropTypes.object.isRequired
 }
+const mapState = ({product}) => {
+  return {
+    shapes: product.shapes,
+    types: product.types
+  }
+}
+const mapDispatch = dispatch => ({
+  fetchShapes: () => dispatch(fetchShapes()),
+  fetchTypes: () => dispatch(fetchTypes()),
+  newShape: shape => dispatch(newShape(shape)),
+  newType: type => dispatch(newType(type))
+})
 
-export default withStyles(styles)(ProductForm)
+export default connect(mapState, mapDispatch)(withStyles(styles)(ProductForm))
