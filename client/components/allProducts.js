@@ -162,7 +162,7 @@ export class AllProducts extends React.Component {
   }
 
   render() {
-    const {classes, products, currentPage, numPages} = this.props
+    const {classes, products, currentPage, numPages, userId} = this.props
     const noProducts = !products || products.length === 0
 
     let searchPage = currentPage.filter(
@@ -307,7 +307,9 @@ export class AllProducts extends React.Component {
                           <Button
                             size="small"
                             color="primary"
-                            onClick={() => this.props.addToCart(product)}
+                            onClick={() => {
+                              this.props.addToCart(product)
+                            }}
                           >
                             Add to Cart
                           </Button>
@@ -369,6 +371,7 @@ const mapState = ({product, user}) => {
   return {
     products: product.allProducts,
     isAdmin: user.isAdmin,
+    userId: user.id,
     currentPage: product.currentPage,
     numPages: product.numPages,
     productsPerPage: product.productsPerPage,
