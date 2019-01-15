@@ -28,6 +28,7 @@ export const itemPrice = item => {
 }
 
 export const mergeCart = (localCart, userCart) => {
+  console.log('IS THIS SHIT RUNNING??', localCart, userCart)
   const totalCart = [...localCart, ...userCart]
   const filterCart = totalCart.reduce((accum, currentItem) => {
     const found = accum.find(item => item.id === currentItem.id)

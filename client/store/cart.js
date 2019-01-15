@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {mergeCart} from '../components'
+import {mergeCart} from '../components/UtilityFunctions.js/functions'
 
 /**ACTION TYPES***/
 const ADD_TO_CART = 'ADD_TO_CART'
@@ -9,7 +9,11 @@ const SET_CART = 'SET_CART'
 const GET_GUEST_CART = 'GET_GUEST_CART'
 
 /*** ACTION CREATORS***/
-export const addToCart = product => ({type: ADD_TO_CART, product})
+export const addToCart = (product, isUser) => ({
+  type: ADD_TO_CART,
+  product,
+  isUser
+})
 export const removeFromCart = product => ({type: REMOVE_FROM_CART, product})
 export const getGuestCart = () => ({type: GET_GUEST_CART})
 export const setCart = cart => ({type: SET_CART, cart})
@@ -24,6 +28,7 @@ export const addWithUser = (product, userId) => async dispatch => {
   //find cart in database associated with userId in redux store
   console.log('addWithUser is firing')
   let cart
+  let isUser = true
   try {
     if (userId) {
       console.log(cart)
@@ -32,15 +37,21 @@ export const addWithUser = (product, userId) => async dispatch => {
         quantity: 1
       })
     }
-    dispatch(addToCart(product))
+    dispatch(addToCart(product, isUser))
   } catch (err) {
     console.error(err)
   }
 }
 //when user logs in, merge redux cart with DB cart
 export const setUserCart = (currentCart, userId) => async dispatch => {
+  window.localStorage.pastaCart = JSON.stringify({cart: []})
+  console.log('attempting to merge carts')
+  console.log('importing MERGE function??', mergeCart)
+  //usercart is user data, wrong API Route used, need2fix
   const userCart = await axios.get(`/api/carts/users/${userId}`)
-  dispatch(setCart(mergeCart(currentCart, userCart)))
+  dispatch(setCart(mergeCart(currentCart, userCart.data.products)))
+  //still need to change cart in DB
+  console.log('local cart reset', window.localStorage.pastaCart)
 }
 
 /*** INITIAL STATE***/
@@ -75,7 +86,8 @@ export default function(state = initialState, action) {
           cart: [...state.cart, {...action.product, quantity: 1}]
         }
       }
-      window.localStorage.pastaCart = JSON.stringify(newState)
+      console.log(state.user)
+      if (!action.role) window.localStorage.pastaCart = JSON.stringify(newState)
       return newState
     }
 
@@ -97,7 +109,7 @@ export default function(state = initialState, action) {
           cart: [...state.cart]
         }
       }
-      window.localStorage.pastaCart = JSON.stringify(newState)
+      if (!action.role) window.localStorage.pastaCart = JSON.stringify(newState)
       return newState
     }
 
@@ -116,9 +128,11 @@ export default function(state = initialState, action) {
 
     case GET_GUEST_CART: {
       if (window.localStorage.pastaCart) {
+        console.log('local pasta cart found')
         const localCart = JSON.parse(window.localStorage.pastaCart)
         if (typeof localCart === 'object') {
-          return {...state, cart: localCart}
+          console.log('pasta cart is an object, return pasta cart')
+          return {...state, cart: localCart.cart}
         } else return {...state}
       }
       return {...state, cart: []}

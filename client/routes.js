@@ -26,8 +26,15 @@ class Routes extends Component {
     // this.props.loadCart = this.props.loadCart.bind(this)
   }
   componentDidMount() {
+    console.log('component did mount')
     this.props.loadInitialData()
-    this.props.loadCart(this.props.cart, this.props.isLoggedIn)
+    //loadCart fires before loadInitialData, we need to reverse this!
+    if (!this.props.isLoggedIn)
+      this.props.loadCart(this.props.cart, this.props.isLoggedIn)
+  }
+  componentDidUpdate() {
+    // this.props.loadCart(this.props.cart, this.props.isLoggedIn)
+    console.log('component did update')
   }
 
   render() {
@@ -85,8 +92,8 @@ const mapDispatch = dispatch => {
     loadInitialData() {
       dispatch(me())
     },
-    loadCart(currentCart, isLoggedIn) {
-      isLoggedIn ? dispatch(setUserCart(currentCart)) : dispatch(getGuestCart())
+    loadCart() {
+      dispatch(getGuestCart())
     }
   }
 }

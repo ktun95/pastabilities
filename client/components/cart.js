@@ -14,7 +14,7 @@ import FormControl from '@material-ui/core/FormControl'
 import Delete from '@material-ui/icons/DeleteRounded'
 import {withStyles} from '@material-ui/core/styles'
 import {fetchProducts, removeFromCart, changeQuantity} from '../store'
-import {Typography} from '@material-ui/core'
+import {Typography, Icon} from '@material-ui/core'
 import {billing} from './UtilityFunctions.js/functions'
 import MenuItem from '@material-ui/core/MenuItem'
 import Select from '@material-ui/core/Select'
@@ -66,7 +66,6 @@ class Cart extends Component {
     const {classes, cart} = this.props
     console.log('from carts component', cart)
     const bill = billing(cart)
-
     return (
       <React.Fragment>
         <CssBaseline>
