@@ -80,6 +80,9 @@ class AdminOrders extends React.Component {
   componentDidMount() {
     this.props.fetchOrders()
   }
+  updateHandler = order => {
+    console.log(order)
+  }
   render() {
     const {classes, allOrders} = this.props
     return (
@@ -98,25 +101,7 @@ class AdminOrders extends React.Component {
               </tr>
               {allOrders &&
                 allOrders.map(order => (
-                  <tr key={order.id}>
-                    <td>{order.id}</td>
-                    <td>{order.orderDate.slice(0, 10)}</td>
-                    <td>
-                      {order.status}
-                      <Select
-                        value={order.status}
-                        // onChange={this.props.updateHandler}
-                        inputProps={{
-                          name: 'status',
-                          id: 'status'
-                        }}
-                      >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
-                      </Select>
-                    </td>
-                  </tr>
+                  <IndividualOrder key={order.id} order={order} />
                 ))}
             </tbody>
           </table>
@@ -151,3 +136,28 @@ const mapDispatchToProps = dispatch => {
 export default connect(mapStateToProps, mapDispatchToProps)(
   withStyles(styles)(AdminOrders)
 )
+
+function IndividualOrder({order}) {
+  return (
+    <tr key={order.id}>
+      <td>{order.id}</td>
+      <td>{order.orderDate.slice(0, 10)}</td>
+      <td>
+        {order.status}
+        <Select
+          value={order.status}
+          onChange={() => this.updateHandler(order)}
+          inputProps={{
+            name: 'status',
+            id: 'status'
+          }}
+        >
+          <MenuItem value="created">Created</MenuItem>
+          <MenuItem value="processing">Processing</MenuItem>
+          <MenuItem value="canceled">Canceled</MenuItem>
+          <MenuItem value="completed">Completed</MenuItem>
+        </Select>
+      </td>
+    </tr>
+  )
+}
