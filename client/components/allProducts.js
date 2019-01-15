@@ -92,16 +92,25 @@ export class AllProducts extends React.Component {
     this.props.updatePage(newPage)
   }
 
-  handleFilterSelection = async data => {
-    const newVisiableProducts = this.props.products.filter(
-      product => product.type === data.target.value
-    )
-    await this.props.filterProducts(newVisiableProducts)
+  handleFilterSelection = data => {
+    this.setState({[data.target.name]: data.target.value}, async () => {
+      let newVisiableProducts = []
+      if (data.target.value === 'All Pastas') {
+        newVisiableProducts = this.props.products.filter(
+          product => product.name !== ''
+        )
+      } else {
+        newVisiableProducts = this.props.products.filter(
+          product => product.type === data.target.value
+        )
+        await this.props.filterProducts(newVisiableProducts)
 
-    const indexStart = 0
-    const indexEnd = indexStart + this.props.productsPerPage
-    const newPage = this.props.visibleProducts.slice(indexStart, indexEnd)
-    this.props.updatePage(newPage)
+        const indexStart = 0
+        const indexEnd = indexStart + this.props.productsPerPage
+        const newPage = this.props.visibleProducts.slice(indexStart, indexEnd)
+        this.props.updatePage(newPage)
+      }
+    })
   }
 
   handleSortSelection = data => {
@@ -131,21 +140,7 @@ export class AllProducts extends React.Component {
   }
 
   render() {
-    const {
-      classes,
-      products,
-      currentPage,
-      numPages,
-      visibleProducts
-    } = this.props
-    const sortBy = [
-      {id: 1, value: 'Name'},
-      {id: 2, value: 'Description'},
-      {id: 3, value: 'Price'},
-      {id: 4, value: 'Type'},
-      {id: 5, value: 'Shape'}
-    ]
-
+    const {classes, products, currentPage, numPages} = this.props
     const noProducts = !products || products.length === 0
 
     let searchPage = currentPage.filter(
@@ -185,22 +180,6 @@ export class AllProducts extends React.Component {
               <MenuItem value="whole-wheat">Whole-wheat</MenuItem>
               <MenuItem value="gluten-free">Gluten-free</MenuItem>
               <MenuItem value="semolina">Semolina</MenuItem>
-            </TextField>
-            <TextField
-              select
-              label="Sort By"
-              value={sortBy[0].value}
-              variant="filled"
-              className={classes.textField}
-              onChange={this.handleFilterSelection}
-            >
-              {sortBy.map(type => {
-                return (
-                  <option key={type.id} value={type.value}>
-                    {type.value}
-                  </option>
-                )
-              })}
             </TextField>
           </div>
 
@@ -305,7 +284,7 @@ export class AllProducts extends React.Component {
                     </Grid>
                   ))}
                 </Grid>
-                <div id="react-paginate">
+                <div id="react-paginate" className={classes.productFilter}>
                   <ReactPaginate
                     previousLabel="Prev"
                     nextLabel="Next"
