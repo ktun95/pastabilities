@@ -56,8 +56,6 @@ router.get('/:orderId', async (req, res, next) => {
 //get all orders for a single user -- eager load products
 router.get('/orderHistory/:userId', async (req, res, next) => {
   const userId = req.params.userId
-  console.log('do we hit this')
-  console.log(req.params)
   try {
     const orders = await Order.findAll({
       where: {
@@ -95,8 +93,6 @@ router.put('/:id', async (req, res, next) => {
 // POST Create Order
 // add admin or user back
 router.post('/checkout', async (req, res, next) => {
-  // const userId = req.user.id
-  console.log('req.body', req.body)
   const {
     email,
     status,
@@ -127,7 +123,16 @@ router.post('/checkout', async (req, res, next) => {
       state,
       zipCode
     })
-    console.log('instance', instance)
+
+    cart.forEach(element => {
+      orderProduct.create({
+        quantity: element.quantity,
+        price: element.price,
+        productId: element.id,
+        orderId: instance.id
+      })
+    })
+
     res.json(instance)
   } catch (err) {
     next(err)

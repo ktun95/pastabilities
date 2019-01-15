@@ -118,7 +118,7 @@ export class AllProducts extends React.Component {
     this.setState({[data.target.name]: data.target.value}, async () => {
       let newVisiableProducts = []
       console.log('do we hit this', data.target.value)
-      if (data.target.value === 'All Pastas') {
+      if (data.target.value === 'All-Pastas') {
         console.log('do we hit this')
         this.props.fetchProducts()
       } else {
@@ -198,6 +198,9 @@ export class AllProducts extends React.Component {
                 this.handleFilterSelection(event)
               }}
             >
+              <MenuItem key="All-Pastas" value="All-Pastas">
+                All-Pastas
+              </MenuItem>
               {this.props.types.map(type => {
                 return (
                   <MenuItem key={type} value={type}>
@@ -216,8 +219,12 @@ export class AllProducts extends React.Component {
               className={classes.textField}
               onChange={event => {
                 this.handleFilterSelection(event)
+                //need to create a selector for shapes
               }}
             >
+              <MenuItem key="All-Pastas" value="All-Pastas">
+                All-Pastas
+              </MenuItem>
               {this.props.shapes &&
                 this.props.shapes.map(shape => {
                   return (
@@ -369,7 +376,8 @@ const mapState = ({product, user}) => {
     numPages: product.numPages,
     productsPerPage: product.productsPerPage,
     visibleProducts: product.visibleProducts,
-    types: product.types
+    types: product.types,
+    shapes: product.shapes
   }
 }
 
