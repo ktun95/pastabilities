@@ -115,7 +115,7 @@ class checkout extends Component {
     //the below is a temporary hack because browser refresh currently kills the redux state cart and it isn't reloaded
     this.setState({paid: true, cart: []})
     // await this.props.clearCart
-    window.localStorage.clear()
+    window.localStorage.pastaCart = JSON.stringify({cart: []})
   }
   getBill = async bill => {
     await this.setState({bill})
