@@ -69,14 +69,19 @@ const styles = theme => ({
   },
   button: {
     marginBottom: '10px'
-  }
-  //  ul: {
-  //     display: inlineBlock;
+  },
+  breakMe: {},
+  pagination: {},
+  pagesPagination: {},
+  active: {}
+
+  //   #react-paginate ul {
+  //     display: inline-block;
   //     padding-left: 15px;
   //     padding-right: 15px;
   // }
 
-  // '#react-paginate li' {
+  // #react-paginate li {
   //     display: inline-block;
   // }
 })
@@ -296,20 +301,20 @@ export class AllProducts extends React.Component {
                     </Grid>
                   ))}
                 </Grid>
-                <div id="react-paginate" className={classes.productFilter}>
+                <div id="react-paginate" className={classes.reactPaginate}>
                   {numPages > 1 ? (
                     <ReactPaginate
                       previousLabel="Prev"
                       nextLabel="Next"
                       breakLabel="..."
-                      breakClassName="break-me"
+                      breakClassName={classes.breakMe}
                       pageCount={numPages}
                       marginPagesDisplayed={2}
                       pageRangeDisplayed={5}
                       onPageChange={this.handlePaginateClick}
-                      containerClassName="pagination"
-                      subContainerClassName="pages pagination"
-                      activeClassName="active"
+                      containerClassName={classes.pagination}
+                      subContainerClassName={classes.pagesPagination}
+                      activeClassName={classes.active}
                     />
                   ) : (
                     ''
