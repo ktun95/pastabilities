@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
-import {auth} from '../store'
+import {auth, setUserCart} from '../store'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -40,65 +40,94 @@ const styles = theme => ({
 /**
  * COMPONENT
  */
-const AuthForm = props => {
-  const {name, displayName, handleSubmit, error, classes} = props
+class AuthForm extends React.Component {
+  constructor() {
+    super()
+  }
 
-  return (
-    <Card>
-      <form onSubmit={handleSubmit} name={name}>
-        <CardContent>
-          <TextField
-            id="email"
-            label="Email"
-            name="email"
-            className={classes.textField}
-            margin="normal"
-          />
-          <TextField
-            id="password"
-            label="Password"
-            name="password"
-            className={classes.textField}
-            margin="normal"
-            type="password"
-          />
-        </CardContent>
-        <CardActions>
-          <Button variant="contained" color="primary" type="submit" name={name}>
-            {displayName}
-          </Button>
+  componentDidUpdate() {
+    console.log('authform component updated!', this.props.userId)
+    if (this.props.userId) {
+      console.log("we cookin' with fire")
+      this.props.setUserCart(this.props.state.cart.cart, this.props.userId)
+    }
+  }
 
-          <a href="/auth/google">
-            <Button color="primary">{displayName} with Google</Button>
-          </a>
+  render() {
+    const {name, displayName, handleSubmit, error, classes} = this.props
 
-          <a href="/auth/facebook">
-            <Button color="primary">{displayName} with Facebook</Button>
-          </a>
-        </CardActions>
-        <CardActions>
-          {displayName === 'Login' ? (
-            <Link to="/signup">
-              <Button size="small" color="secondary">
-                SIGN UP
-              </Button>
-            </Link>
-          ) : (
-            <Link to="/login">
-              <Button size="small" color="secondary">
-                LOGIN
-              </Button>
-            </Link>
-          )}
-        </CardActions>
-        {error &&
-          error.response && (
-            <div className="error"> {error.response.data} </div>
-          )}
-        <br />
-      </form>
-    </Card>
-  )
+    return (
+      <Card>
+        <form
+          onSubmit={async evt => {
+            await handleSubmit(evt)
+            {
+              console.log('from authform', this.props)
+            }
+            //set user cart is dispatching before handlesubmit puts user on state
+            //what if log in fails?
+          }}
+          name={name}
+        >
+          <CardContent>
+            <TextField
+              id="email"
+              label="Email"
+              name="email"
+              className={classes.textField}
+              margin="normal"
+            />
+            <TextField
+              id="password"
+              label="Password"
+              name="password"
+              className={classes.textField}
+              margin="normal"
+              type="password"
+            />
+          </CardContent>
+          <CardActions>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              name={name}
+            >
+              {displayName}
+            </Button>
+
+            <a href="/auth/google">
+              <Button color="primary">{displayName} with Google</Button>
+            </a>
+
+            <a href="/auth/facebook">
+              <Button color="primary">{displayName} with Facebook</Button>
+            </a>
+          </CardActions>
+          <CardActions>
+            {displayName === 'Login' ? (
+              <Link to="/signup">
+                <Button size="small" color="secondary">
+                  SIGN UP
+                </Button>
+              </Link>
+            ) : (
+              <Link to="/login">
+                <Button size="small" color="secondary">
+                  LOGIN
+                </Button>
+              </Link>
+            )}
+          </CardActions>
+          {error &&
+            error.response && (
+              <div className="error"> {error.response.data} </div>
+            )}
+          <br />
+        </form>
+      </Card>
+    )
+  }
 }
 
 /**
@@ -112,7 +141,9 @@ const mapLogin = state => {
   return {
     name: 'login',
     displayName: 'Login',
-    error: state.user.error
+    error: state.user.error,
+    state,
+    userId: state.user.id
   }
 }
 
@@ -120,7 +151,9 @@ const mapSignup = state => {
   return {
     name: 'signup',
     displayName: 'Sign Up',
-    error: state.user.error
+    error: state.user.error,
+    state,
+    userId: state.user.id
   }
 }
 
@@ -132,6 +165,9 @@ const mapDispatch = dispatch => {
       const email = evt.target.email.value
       const password = evt.target.password.value
       dispatch(auth(email, password, formName))
+    },
+    setUserCart: (currentCart, userId) => {
+      dispatch(setUserCart(currentCart, userId))
     }
   }
 }
