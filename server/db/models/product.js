@@ -41,16 +41,18 @@ const Product = db.define('product', {
     }
   },
   type: {
-    type: Sequelize.ENUM,
-    values: ['gluten-free', 'whole-wheat', 'semolina'],
+    // type: Sequelize.ENUM,
+    // values: ['gluten-free', 'whole-wheat', 'semolina'],
+    type: Sequelize.STRING,
     allowNull: false,
     validate: {
       notEmpty: true
     }
   },
   shape: {
-    type: Sequelize.ENUM,
-    values: ['long', 'ribbon', 'tubular', 'shaped', 'stuffed'],
+    // type: Sequelize.ENUM,
+    // values: ['long', 'ribbon', 'tubular', 'shaped', 'stuffed'],
+    type: Sequelize.STRING,
     allowNull: false,
     validate: {
       notEmpty: true
