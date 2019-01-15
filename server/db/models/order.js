@@ -25,8 +25,8 @@ const Order = db.define('order', {
     type: Sequelize.STRING
   },
   streetLine1: {
-    type: Sequelize.STRING,
-    allowNull: false
+    type: Sequelize.STRING
+    // allowNull: false
     // validate: {
     //   notEmpty: true
     // }

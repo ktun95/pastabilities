@@ -83,14 +83,15 @@ class checkout extends Component {
       email,
       firstName,
       lastName,
-      streetLine1: address1,
-      streetLine2: address2,
+      address1,
+      address2,
       city,
       state,
       zipCode,
       bill,
       userId
     } = this.state
+    console.log('address line one', address1)
     const {subTotal, tax, total} = bill
     const orderDate = new Date()
     const status = 'processing'
@@ -101,12 +102,12 @@ class checkout extends Component {
       email,
       firstName,
       lastName,
-      address1,
-      address2,
+      streetLine1: `data`,
+      streetLine2: address2,
       city,
       zipCode,
       tax,
-      userId,
+      userId: 1,
       state
     })
     // await postOrder({
