@@ -115,6 +115,7 @@ form button:disabled:hover {
   margin-left: 20px;
   padding: 10px;
   font-size: 0.75em;
+  border-radius: 4px;
 }
 
 .back-btn:hover {
