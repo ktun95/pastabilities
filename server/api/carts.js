@@ -61,7 +61,6 @@ router.post('/users/:userId', async (req, res, next) => {
         where: {userId},
         include: [Product]
       })
-      console.log(instance)
       res.json(instance)
     } catch (err) {
       next(err)

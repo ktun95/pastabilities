@@ -190,7 +190,7 @@ const dummyOrders = [
     email: 'Test@user.com'
   },
   {
-    status: 'cancelled',
+    status: 'canceled',
     orderDate: new Date(),
     email: 'Test2@user.com'
   },
@@ -306,13 +306,15 @@ async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
-  const [product, user, review, order, orderproduct, cart] = await Promise.all([
+  const [product, user, review, order, cart] = await Promise.all([
     Product.bulkCreate(pastaProduct, {returning: true}),
     User.bulkCreate(dummyUsers, {individualHooks: true, returning: true}),
     Review.bulkCreate(dummyReviews, {returning: true}),
     Order.bulkCreate(dummyOrders, {returning: true}),
+    Cart.bulkCreate(dummyCarts, {returning: true})
+  ])
+  const [orderproduct, cartproduct] = await Promise.all([
     orderProduct.bulkCreate(dummyOrderProducts, {returning: true}),
-    Cart.bulkCreate(dummyCarts, {returning: true}),
     cartProduct.bulkCreate(dummyCartProducts, {returning: true})
   ])
   const [pasta1, pasta2, pasta3, pasta4, pasta5, pasta6] = product
@@ -345,6 +347,7 @@ async function seed() {
 
   await cart1.setUser(user1)
   await cart2.setUser(user2)
+  await cart3.setUser(user3)
 }
 
 // We've separated the `seed` function from the `runSeed` function.

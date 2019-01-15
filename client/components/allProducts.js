@@ -6,7 +6,8 @@ import {
   fetchProduct,
   destroyProduct,
   updatePage,
-  filterProducts
+  filterProducts,
+  addToCart
 } from '../store'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
@@ -65,7 +66,6 @@ export class AllProducts extends React.Component {
     const indexStart = data.selected * this.props.productsPerPage
     const indexEnd = indexStart + this.props.productsPerPage
     const newPage = this.props.visibleProducts.slice(indexStart, indexEnd)
-    console.log('newpage<>', newPage)
     this.props.updatePage(newPage)
   }
 
@@ -85,7 +85,6 @@ export class AllProducts extends React.Component {
     const sortedProducts = this.props.visibleProducts.sort(
       compareValues(data.target.value)
     )
-    console.log(sortedProducts)
   }
 
   compareValues(key, order = 'asc') {
@@ -234,7 +233,11 @@ export class AllProducts extends React.Component {
                             View
                           </Button>
                         </Link>
-                        <Button size="small" color="primary">
+                        <Button
+                          size="small"
+                          color="primary"
+                          onClick={() => this.props.addToCart(product)}
+                        >
                           Add to Cart
                         </Button>
                       </CardActions>
@@ -314,6 +317,9 @@ const mapDispatchToProps = dispatch => {
     },
     filterProducts: id => {
       dispatch(filterProducts(id))
+    },
+    addToCart: product => {
+      dispatch(addToCart(product))
     }
   }
 }
