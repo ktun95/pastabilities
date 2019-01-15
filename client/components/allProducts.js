@@ -92,6 +92,7 @@ export class AllProducts extends React.Component {
     super(props)
     this.state = {
       types: 'All Pastas',
+      shapes: 'All Pastas',
       sortBy: 'Name',
       search: ''
     }
@@ -189,7 +190,7 @@ export class AllProducts extends React.Component {
             <TextField
               select
               name="types"
-              label="Filter By"
+              label="Filter By Type"
               variant="filled"
               value={this.state.types}
               className={classes.textField}
@@ -197,15 +198,31 @@ export class AllProducts extends React.Component {
                 this.handleFilterSelection(event)
               }}
             >
-              {/* <MenuItem value="All Pastas">All Pastas</MenuItem>
-              <MenuItem value="whole-wheat">Whole-wheat</MenuItem>
-              <MenuItem value="gluten-free">Gluten-free</MenuItem>
-              <MenuItem value="semolina">Semolina</MenuItem> */}
-              {this.props.types &&
-                this.props.types.map(type => {
+              {this.props.types.map(type => {
+                return (
+                  <MenuItem key={type} value={type}>
+                    {type}
+                  </MenuItem>
+                )
+              })}
+            </TextField>
+
+            <TextField
+              select
+              name="shapes"
+              label="Filter By Shapes"
+              variant="filled"
+              value={this.state.shapes}
+              className={classes.textField}
+              onChange={event => {
+                this.handleFilterSelection(event)
+              }}
+            >
+              {this.props.shapes &&
+                this.props.shapes.map(shape => {
                   return (
-                    <MenuItem key={type} value={type}>
-                      {type}
+                    <MenuItem key={shape} value={shape}>
+                      {shape}
                     </MenuItem>
                   )
                 })}
