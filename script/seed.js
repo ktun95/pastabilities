@@ -142,6 +142,156 @@ const pastaProduct = [
       'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
     type: 'whole-wheat',
     shape: 'long'
+  },
+  {
+    name: 'Pasta6',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Pasta7',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Pasta8',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Pasta9',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Pasta10',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Pasta11',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Pasta12',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Pasta13',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Pasta14',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Pasta15',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Pasta16',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Pasta17',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Pasta18',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Pasta19',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
+  },
+  {
+    name: 'Pasta20',
+    description: "You'll never remember it",
+    price: 100,
+    quantity: 1,
+    image:
+      'https://media.eataly.com/media/catalog/product/cache/21/small_image/303x/9df78eab33525d08d6e5fb8d27136e95/5/0/501151-A_1.jpg',
+    type: 'whole-wheat',
+    shape: 'long'
   }
 ]
 

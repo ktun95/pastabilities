@@ -8,7 +8,9 @@ import {
   destroyProduct,
   updatePage,
   filterProducts,
-  addToCart
+  addToCart,
+  fetchTypes,
+  fetchShapes
 } from '../store'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
@@ -69,19 +71,36 @@ const styles = theme => ({
   },
   button: {
     marginBottom: '10px'
-  }
+  },
+  breakMe: {},
+  pagination: {},
+  pagesPagination: {},
+  active: {}
+
+  //   #react-paginate ul {
+  //     display: inline-block;
+  //     padding-left: 15px;
+  //     padding-right: 15px;
+  // }
+
+  // #react-paginate li {
+  //     display: inline-block;
+  // }
 })
 export class AllProducts extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       types: 'All Pastas',
+      shapes: 'All Pastas',
       sortBy: 'Name',
       search: ''
     }
   }
   componentDidMount() {
     this.props.fetchProducts()
+    this.props.fetchShapes()
+    this.props.fetchTypes()
   }
 
   handleChange = event => {
@@ -98,10 +117,10 @@ export class AllProducts extends React.Component {
   handleFilterSelection = data => {
     this.setState({[data.target.name]: data.target.value}, async () => {
       let newVisiableProducts = []
+      console.log('do we hit this', data.target.value)
       if (data.target.value === 'All Pastas') {
-        newVisiableProducts = this.props.products.filter(
-          product => product.name !== ''
-        )
+        console.log('do we hit this')
+        this.props.fetchProducts()
       } else {
         newVisiableProducts = this.props.products.filter(
           product => product.type === data.target.value
@@ -171,7 +190,7 @@ export class AllProducts extends React.Component {
             <TextField
               select
               name="types"
-              label="Filter By"
+              label="Filter By Type"
               variant="filled"
               value={this.state.types}
               className={classes.textField}
@@ -179,10 +198,34 @@ export class AllProducts extends React.Component {
                 this.handleFilterSelection(event)
               }}
             >
-              <MenuItem value="All Pastas">All Pastas</MenuItem>
-              <MenuItem value="whole-wheat">Whole-wheat</MenuItem>
-              <MenuItem value="gluten-free">Gluten-free</MenuItem>
-              <MenuItem value="semolina">Semolina</MenuItem>
+              {this.props.types.map(type => {
+                return (
+                  <MenuItem key={type} value={type}>
+                    {type}
+                  </MenuItem>
+                )
+              })}
+            </TextField>
+
+            <TextField
+              select
+              name="shapes"
+              label="Filter By Shapes"
+              variant="filled"
+              value={this.state.shapes}
+              className={classes.textField}
+              onChange={event => {
+                this.handleFilterSelection(event)
+              }}
+            >
+              {this.props.shapes &&
+                this.props.shapes.map(shape => {
+                  return (
+                    <MenuItem key={shape} value={shape}>
+                      {shape}
+                    </MenuItem>
+                  )
+                })}
             </TextField>
           </div>
 
@@ -289,20 +332,24 @@ export class AllProducts extends React.Component {
                     </Grid>
                   ))}
                 </Grid>
-                <div id="react-paginate" className={classes.productFilter}>
-                  <ReactPaginate
-                    previousLabel="Prev"
-                    nextLabel="Next"
-                    breakLabel="..."
-                    breakClassName="break-me"
-                    pageCount={numPages}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={this.handlePaginateClick}
-                    containerClassName="pagination"
-                    subContainerClassName="pages pagination"
-                    activeClassName="active"
-                  />
+                <div id="react-paginate" className={classes.reactPaginate}>
+                  {numPages > 1 ? (
+                    <ReactPaginate
+                      previousLabel="Prev"
+                      nextLabel="Next"
+                      breakLabel="..."
+                      breakClassName={classes.breakMe}
+                      pageCount={numPages}
+                      marginPagesDisplayed={2}
+                      pageRangeDisplayed={5}
+                      onPageChange={this.handlePaginateClick}
+                      containerClassName={classes.pagination}
+                      subContainerClassName={classes.pagesPagination}
+                      activeClassName={classes.active}
+                    />
+                  ) : (
+                    ''
+                  )}
                 </div>
               </div>
             )}
@@ -328,6 +375,8 @@ const mapState = ({product, user}) => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    fetchShapes: () => dispatch(fetchShapes()),
+    fetchTypes: () => dispatch(fetchTypes()),
     fetchProducts: () => {
       dispatch(fetchProducts())
     },
