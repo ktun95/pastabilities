@@ -25,7 +25,6 @@ export const me = () => async dispatch => {
   try {
     const res = await axios.get('/auth/me')
     dispatch(getUser(res.data || defaultUser))
-    window.localStorage.pastaCart = []
   } catch (err) {
     console.error(err)
   }
@@ -35,6 +34,7 @@ export const auth = (email, password, method) => async dispatch => {
   let res
   try {
     res = await axios.post(`/auth/${method}`, {email, password})
+    // window.localStorage.pastaCart = JSON.stringify({cart: []})
   } catch (authError) {
     return dispatch(getUser({error: authError}))
   }

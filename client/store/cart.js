@@ -22,17 +22,19 @@ export const changeQuantity = (product, quantity) => ({
 /*** THUNK CREATORS***/
 export const addWithUser = (product, userId) => async dispatch => {
   //find cart in database associated with userId in redux store
+  console.log('addWithUser is firing')
   let cart
   try {
     if (userId) {
+      console.log(cart)
       cart = await axios.post(`/api/carts/users/${userId}`)
+      await axios.post(`/api/carts/${cart.data.id}/${product.id}`, {
+        quantity: 1
+      })
     }
-    await axios.post(`/api/carts/${cart.data.id}/${product.id}`, {
-      quantity: 1
-    })
     dispatch(addToCart(product))
   } catch (err) {
-    // console.error(err)
+    console.error(err)
   }
 }
 //when user logs in, merge redux cart with DB cart
@@ -113,8 +115,13 @@ export default function(state = initialState, action) {
     }
 
     case GET_GUEST_CART: {
-      if (window.localStorage.pastaCart)
-        return JSON.parse(window.localStorage.pastaCart)
+      if (window.localStorage.pastaCart) {
+        const localCart = JSON.parse(window.localStorage.pastaCart)
+        if (typeof localCart === 'object') {
+          return {...state, cart: localCart}
+        } else return {...state}
+      }
+      return {...state, cart: []}
     }
 
     case SET_CART: {

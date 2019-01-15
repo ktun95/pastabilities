@@ -1,6 +1,7 @@
 import user from '../../store/user'
 
 export const billing = cart => {
+  console.log('from billing in utilities', cart)
   const subTotalCent = cart.reduce((total, curVal) => {
     return total + curVal.price * curVal.quantity
   }, 0)
