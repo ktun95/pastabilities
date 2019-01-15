@@ -17,11 +17,17 @@ import {
   EditProductReview,
   Checkout
 } from './components'
-import {me, getGuestCart} from './store'
+import {me, getGuestCart, setUserCart} from './store'
 
 class Routes extends Component {
+  constructor() {
+    super()
+    console.log(this)
+    // this.props.loadCart = this.props.loadCart.bind(this)
+  }
   componentDidMount() {
     this.props.loadInitialData()
+    this.props.loadCart(this.props.cart, this.props.isLoggedIn)
   }
 
   render() {
@@ -78,7 +84,9 @@ const mapDispatch = dispatch => {
   return {
     loadInitialData() {
       dispatch(me())
-      dispatch(getGuestCart())
+    },
+    loadCart(currentCart, isLoggedIn) {
+      isLoggedIn ? dispatch(setUserCart(currentCart)) : dispatch(getGuestCart())
     }
   }
 }

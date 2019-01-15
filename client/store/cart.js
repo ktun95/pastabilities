@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {mergeCart} from '../components'
 
 /**ACTION TYPES***/
 const ADD_TO_CART = 'ADD_TO_CART'
@@ -11,6 +12,7 @@ const GET_GUEST_CART = 'GET_GUEST_CART'
 export const addToCart = product => ({type: ADD_TO_CART, product})
 export const removeFromCart = product => ({type: REMOVE_FROM_CART, product})
 export const getGuestCart = () => ({type: GET_GUEST_CART})
+export const setCart = cart => ({type: SET_CART, cart})
 export const changeQuantity = (product, quantity) => ({
   type: CHANGE_QUANTITY,
   product,
@@ -19,13 +21,11 @@ export const changeQuantity = (product, quantity) => ({
 
 /*** THUNK CREATORS***/
 export const addWithUser = (product, userId) => async dispatch => {
-  console.log('HELLO IS FIRING?')
   //find cart in database associated with userId in redux store
   let cart
   try {
     if (userId) {
       cart = await axios.post(`/api/carts/users/${userId}`)
-      console.log(cart)
     }
     await axios.post(`/api/carts/${cart.data.id}/${product.id}`, {
       quantity: 1
@@ -38,7 +38,7 @@ export const addWithUser = (product, userId) => async dispatch => {
 //when user logs in, merge redux cart with DB cart
 export const setUserCart = (currentCart, userId) => async dispatch => {
   const userCart = await axios.get(`/api/carts/users/${userId}`)
-  console.log(setUserCart)
+  dispatch(setCart(mergeCart(currentCart, userCart)))
 }
 
 /*** INITIAL STATE***/
@@ -115,6 +115,13 @@ export default function(state = initialState, action) {
     case GET_GUEST_CART: {
       if (window.localStorage.pastaCart)
         return JSON.parse(window.localStorage.pastaCart)
+    }
+
+    case SET_CART: {
+      return {
+        ...state,
+        cart: action.cart
+      }
     }
 
     default:

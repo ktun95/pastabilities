@@ -25,6 +25,7 @@ export const me = () => async dispatch => {
   try {
     const res = await axios.get('/auth/me')
     dispatch(getUser(res.data || defaultUser))
+    window.localStorage.pastaCart = []
   } catch (err) {
     console.error(err)
   }
