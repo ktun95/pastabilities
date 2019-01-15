@@ -54,6 +54,9 @@ const styles = () => ({
   collectionSort: {
     display: 'flex',
     flexDirection: 'column'
+  },
+  button: {
+    marginBottom: '10px'
   }
 })
 export class AllProducts extends React.Component {
@@ -170,7 +173,7 @@ export class AllProducts extends React.Component {
             <Button
               variant="contained"
               className={classes.button}
-              color="primary"
+              color="secondary"
             >
               ADD NEW PASTA
             </Button>

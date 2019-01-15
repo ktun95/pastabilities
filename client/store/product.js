@@ -93,6 +93,8 @@ export const destroyProduct = productId => async dispatch => {
   try {
     await axios.delete(`/api/products/${productId}`)
     dispatch(deleteProduct(productId))
+    const {data} = await axios.get('/api/products')
+    dispatch(getProducts(data))
   } catch (err) {
     console.error(err)
   }
@@ -176,12 +178,11 @@ export default function(state = initialState, action) {
         currentProduct: {...action.product}
       }
     case DELETE_PRODUCT:
-      console.log(state.allProducts)
       return {
+        ...state,
         allProducts: state.allProducts.filter(
           product => product.id !== +action.productId
-        ),
-        currentProduct: {}
+        )
       }
     case ADD_REVIEW:
       return {

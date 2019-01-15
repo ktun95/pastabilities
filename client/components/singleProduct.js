@@ -84,7 +84,12 @@ class singleProduct extends Component {
             ) : (
               <div />
             )}
-            <p>{currentProduct.description}</p>
+            <p>Description: {currentProduct.description}</p>
+            <p>
+              Type: {currentProduct.type}
+              <br />
+              Shape: {currentProduct.shape}
+            </p>
           </div>
 
           <div className="product-price">

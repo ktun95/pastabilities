@@ -2,6 +2,22 @@ import React from 'react'
 import ProductForm from './productForm'
 import {putProduct, fetchProduct} from '../store'
 import {connect} from 'react-redux'
+import Paper from '@material-ui/core/Paper'
+import withStyles from '@material-ui/core/styles/withStyles'
+import Button from '@material-ui/core/Button'
+
+const styles = theme => ({
+  root: {
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+    marginLeft: theme.spacing.unit * 2,
+    marginRight: theme.spacing.unit * 2
+  },
+  center: {
+    'text-align': 'center'
+  }
+})
 
 class EditProduct extends React.Component {
   constructor() {
@@ -27,7 +43,6 @@ class EditProduct extends React.Component {
     // await this.setState(thisProduct)
     await this.props.fetchProduct(productId)
     // const {selectedProduct} = this.props
-    console.log(this.props)
     this.setState(this.props.currentProduct)
   }
   updateHandler(event) {
@@ -59,25 +74,21 @@ class EditProduct extends React.Component {
     this.props.history.goBack()
   }
   render() {
+    const {classes} = this.props
     return (
       <div>
-        <button
-          type="button"
-          className="back-btn"
-          value="/products/admin"
-          onClick={this.goAddPage}
-        >
+        <button type="button" className="back-btn" onClick={this.goAddPage}>
           CANCEL
         </button>
-        <div id="new-item">
-          <h1>EDIT PASTA</h1>
+        <Paper className={classes.root} elevation={1}>
+          <h1 className={classes.center}>EDIT PASTA</h1>
 
           <ProductForm
             state={this.state}
             submitHandler={this.submitHandler}
             updateHandler={this.updateHandler}
           />
-        </div>
+        </Paper>
       </div>
     )
   }
@@ -94,4 +105,4 @@ const mapDispatch = dispatch => ({
   fetchProduct: product => dispatch(fetchProduct(product))
 })
 
-export default connect(mapState, mapDispatch)(EditProduct)
+export default connect(mapState, mapDispatch)(withStyles(styles)(EditProduct))
