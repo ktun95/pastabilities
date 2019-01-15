@@ -525,16 +525,7 @@ router.post('/checkout', async (req, res, next) => {
                                                                   <tr>
                                                                       <td class="esd-container-frame" width="530" valign="top" align="center">
                                                                           <table width="100%" cellspacing="0" cellpadding="0">
-                                                                              <tbody>
-                                                                                  <tr>
-                                                                                      <td class="esd-block-text es-p25t" align="center">
-                                                                                          <h2 style="color: #ffffff; font-size: 24px;">Get 25% off your next order.</h2>
-                                                                                      </td>
-                                                                                  </tr>
-                                                                                  <tr>
-                                                                                      <td class="esd-block-button es-p30t es-p15b es-p10r es-p10l" align="center"> <span class="es-button-border"> <a href="https://viewstripo.email/" class="es-button" target="_blank">Awesome</a> </span> </td>
-                                                                                  </tr>
-                                                                              </tbody>
+
                                                                           </table>
                                                                       </td>
                                                                   </tr>
