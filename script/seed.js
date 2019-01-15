@@ -187,17 +187,29 @@ const dummyOrders = [
   {
     status: 'completed',
     orderDate: new Date(),
-    email: 'Test@user.com'
+    email: 'Test@user.com',
+    streetLine1: '123 test address',
+    city: 'test city',
+    state: 'IL',
+    zipCode: '60606'
   },
   {
     status: 'canceled',
     orderDate: new Date(),
-    email: 'Test2@user.com'
+    email: 'Test2@user.com',
+    streetLine1: '123 test address',
+    city: 'test city',
+    state: 'IL',
+    zipCode: '60606'
   },
   {
     status: 'processing',
     orderDate: new Date(),
-    email: 'Test3@user.com'
+    email: 'Test3@user.com',
+    streetLine1: '123 test address',
+    city: 'test city',
+    state: 'IL',
+    zipCode: '60606'
   }
 ]
 
