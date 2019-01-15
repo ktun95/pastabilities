@@ -59,14 +59,11 @@ const updateOrdersByStatus = updatedOrder => ({
  */
 export const postOrder = order => async dispatch => {
   try {
-    console.log('order.cart', order.cart)
     if (order.userId === 0) order.userId = null
     const res = await axios.post(`/api/orders/checkout`, order)
     const response = dispatch(createOrder(res.data))
-    console.log('what is in our cart')
-    console.log('postOrder cart', order.cart)
-    console.log('order_id', response.order.id)
     dispatch(createOrderProducts(response.order.id, order.cart))
+    // dispatch(sendEmail)
   } catch (error) {
     console.error(error)
   }
