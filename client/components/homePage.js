@@ -52,6 +52,7 @@ const styles = theme => ({
 
 const MainFeatures = props => {
   const {classes} = props
+
   return (
     <React.Fragment>
       <div className={classes.main}>
