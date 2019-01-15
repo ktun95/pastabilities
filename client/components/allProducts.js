@@ -219,8 +219,12 @@ export class AllProducts extends React.Component {
               className={classes.textField}
               onChange={event => {
                 this.handleFilterSelection(event)
+                //need to create a selector for shapes
               }}
             >
+              <MenuItem key="All-Pastas" value="All-Pastas">
+                All-Pastas
+              </MenuItem>
               {this.props.shapes &&
                 this.props.shapes.map(shape => {
                   return (
@@ -369,7 +373,8 @@ const mapState = ({product, user}) => {
     numPages: product.numPages,
     productsPerPage: product.productsPerPage,
     visibleProducts: product.visibleProducts,
-    types: product.types
+    types: product.types,
+    shapes: product.shapes
   }
 }
 
