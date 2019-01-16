@@ -26,12 +26,10 @@ export const changeQuantity = (product, quantity) => ({
 /*** THUNK CREATORS***/
 export const addWithUser = (product, userId) => async dispatch => {
   //find cart in database associated with userId in redux store
-  console.log('addWithUser is firing')
   let cart
   let isUser = false
   try {
     if (userId) {
-      console.log(cart)
       cart = await axios.post(`/api/carts/users/${userId}`)
       await axios.post(`/api/carts/${cart.data.id}/${product.id}`, {
         quantity: 1
@@ -46,16 +44,16 @@ export const addWithUser = (product, userId) => async dispatch => {
 //when user logs in, merge redux cart with DB cart
 export const setUserCart = (currentCart, userId) => async dispatch => {
   window.localStorage.pastaCart = JSON.stringify({cart: []})
-  console.log('attempting to merge carts')
-  //userCart includes products with the INVENTORY quantity, not the quantity in cartProducts; requires fix
   const userCart = await axios.get(`/api/carts/users/${userId}`)
-  console.log(userCart.data)
   const fixedQuantities = userCart.data.products.map((item, i) => {
     return {...item, quantity: userCart.data.products[i].cartproduct.quantity}
   })
-  console.log('are the quantities fixed?', fixedQuantities)
-  const mergedCart = mergeCart(currentCart, userCart.data.products)
+  currentCart.forEach(async item => {
+    await axios.post(`/${currentCart.id}/${item.id}`)
+  })
+  const mergedCart = mergeCart(currentCart, fixedQuantities)
   await dispatch(setCart(mergedCart))
+
   //still need to change cart in DB
 }
 //need a thunk for removing from user cart
