@@ -13,7 +13,7 @@ import Review from './reviewForm'
 import StripeBtn from './stripe'
 import ConfirmationPage from './confirmationPage'
 import {billing} from '../UtilityFunctions.js/functions'
-import {postOrder, addToCart} from '../../store'
+import {postOrder, addToCart, clearCart} from '../../store'
 
 const steps = ['Shipping address', 'Review your order']
 
@@ -76,9 +76,13 @@ class checkout extends Component {
     const localCart = JSON.parse(window.localStorage.pastaCart)
     // we're currently just loading up the redux cart!
     // await this.setState({cart: [...localCart.cart]})
-    await this.setState({cart: [...this.props.cart]})
+    await this.setState({
+      cart: [...this.props.cart]
+      // userId: this.props.user.id
+    })
   }
   isPaid = async () => {
+    //try catch
     const {
       email,
       firstName,
@@ -89,7 +93,7 @@ class checkout extends Component {
       state,
       zipCode,
       bill,
-      userId,
+      // userId,
       cart
     } = this.state
 
@@ -97,7 +101,7 @@ class checkout extends Component {
     const orderDate = new Date()
     const status = 'processing'
 
-    await this.props.postOrder({
+    const orderId = await this.props.postOrder({
       status,
       orderDate,
       email,
@@ -108,12 +112,18 @@ class checkout extends Component {
       city,
       zipCode,
       tax,
-      userId,
+      userId: this.props.userId,
       state,
-      cart
+      cart,
+      subTotal,
+      total
     })
     //the below is a temporary hack because browser refresh currently kills the redux state cart and it isn't reloaded
     this.setState({paid: true, cart: []})
+    console.log('this.props', this.props)
+    console.log('this.state', this.state)
+    console.log('orderId', orderId)
+    this.props.clearCart()
     // await this.props.clearCart
     window.localStorage.pastaCart = JSON.stringify({cart: []})
   }
@@ -151,7 +161,7 @@ class checkout extends Component {
   }
 
   render() {
-    const {classes, cart} = this.props
+    const {classes, cart, order} = this.props
     const bill = parseFloat(billing(cart).total * 100).toFixed(2)
     const {activeStep} = this.state
 
@@ -222,13 +232,18 @@ class checkout extends Component {
 const mapStateToProps = state => {
   return {
     cart: state.cart.cart,
-    allProducts: state.product.allProducts
+    allProducts: state.product.allProducts,
+    singleOrderId: state.order.singleOrder,
+    userId: state.user.id
   }
 }
 const mapDispatchToProps = dispatch => {
   return {
     postOrder: order => {
       dispatch(postOrder(order))
+    },
+    clearCart: () => {
+      dispatch(clearCart())
     }
   }
 }

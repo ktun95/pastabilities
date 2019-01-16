@@ -209,7 +209,8 @@ export class AllProducts extends React.Component {
                 )
               })}
             </TextField>
-
+            {/*
+  doesn't work correctly
             <TextField
               select
               name="shapes"
@@ -233,7 +234,7 @@ export class AllProducts extends React.Component {
                     </MenuItem>
                   )
                 })}
-            </TextField>
+            </TextField> */}
           </div>
 
           {this.props.isAdmin ? (

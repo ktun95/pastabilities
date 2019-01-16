@@ -104,7 +104,7 @@ router.put('/:id', isAdmin, async (req, res, next) => {
 // POST Create Order
 // add admin or user back
 router.post('/checkout', async (req, res, next) => {
-  const {
+  let {
     email,
     status,
     userId,
@@ -113,7 +113,11 @@ router.post('/checkout', async (req, res, next) => {
     city,
     state,
     zipCode,
-    streetLine2
+    streetLine2,
+    subTotal,
+    tax,
+    total,
+    orderDate
   } = req.body
 
   // if (isAdmin || req.user.id === userId) {
@@ -121,7 +125,7 @@ router.post('/checkout', async (req, res, next) => {
     const instance = await Order.create({
       status,
       email,
-      orderDate: new Date(),
+      orderDate,
       userId,
       streetLine1,
       city,
@@ -139,15 +143,18 @@ router.post('/checkout', async (req, res, next) => {
       })
     })
 
-    const orderQuantity = 5
-    const subTotal = 100.0
-    const salesTax = 7.0
-    const total = subTotal + salesTax
-    const deliveryDate = 'January 16, 2019'
+    let orderQuantity = 0
+    cart.forEach(element => {
+      orderQuantity += element.quantity
+    })
 
+    const salesTax = tax
+    const deliveryDate = 'January 16, 2019'
+    if (email === null) email = `celipas@gmail.com`
+    console.log('email ------ ', email)
     var mailOptions = {
       from: 'pastabilities4life@gmail.com',
-      to: 'celipas@gmail.com',
+      to: `${email}`,
       subject: `Your Pastabailties order ${instance.id}`,
       html: `<body>
       <div class="es-wrapper-color">
@@ -583,39 +590,6 @@ router.post('/checkout', async (req, res, next) => {
                                   </tr>
                               </tbody>
                           </table>
-                          <table class="esd-footer-popover es-content" cellspacing="0" cellpadding="0" align="center">
-                              <tbody>
-                                  <tr>
-                                      <td class="esd-stripe" align="center">
-                                          <table class="es-content-body" style="background-color: transparent;" width="600" cellspacing="0" cellpadding="0" align="center">
-                                              <tbody>
-                                                  <tr>
-                                                      <td class="esd-structure es-p30t es-p30b es-p20r es-p20l" align="left">
-                                                          <table width="100%" cellspacing="0" cellpadding="0">
-                                                              <tbody>
-                                                                  <tr>
-                                                                      <td class="esd-container-frame" width="560" valign="top" align="center">
-                                                                          <table width="100%" cellspacing="0" cellpadding="0">
-                                                                              <tbody>
-                                                                                  <tr>
-                                                                                      <td class="esd-block-image es-infoblock" align="center">
-                                                                                          <a target="_blank" href="http://learn.fullstackacademy.com"> <img src="https://tlr.stripocdn.email/content/guids/CABINET_9df86e5b6c53dd0319931e2447ed854b/images/64951510234941531.png" alt="" width="125"> </a>
-                                                                                      </td>
-                                                                                  </tr>
-                                                                              </tbody>
-                                                                          </table>
-                                                                      </td>
-                                                                  </tr>
-                                                              </tbody>
-                                                          </table>
-                                                      </td>
-                                                  </tr>
-                                              </tbody>
-                                          </table>
-                                      </td>
-                                  </tr>
-                              </tbody>
-                          </table>
                       </td>
                   </tr>
               </tbody>
@@ -633,6 +607,26 @@ router.post('/checkout', async (req, res, next) => {
         console.log('Email sent: ' + info.response)
       }
     })
+
+    var deliveryEmail = {
+      from: 'pastabilities4life@gmail.com',
+      to: `${email}`,
+      subject: `Your Pastabailties order ${instance.id} has been shipped!`,
+      text: `Your order has been shipped - expect your pasta to arrive in 3-5 business days`
+    }
+
+    //how do we do this?
+
+    setInterval(
+      transporter.sendMail(deliveryEmail, function(error, info) {
+        if (error) {
+          console.log(error)
+        } else {
+          console.log('Email sent: ' + info.response)
+        }
+      }),
+      120000
+    )
 
     res.json(instance)
   } catch (err) {

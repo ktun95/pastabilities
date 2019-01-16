@@ -7,6 +7,7 @@ const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
 const CHANGE_QUANTITY = 'CHANGE_QUANTITY'
 const SET_CART = 'SET_CART'
 const GET_GUEST_CART = 'GET_GUEST_CART'
+const CLEAR_CART = 'CLEAR_CART'
 
 /*** ACTION CREATORS***/
 export const addToCart = (product, isUser) => ({
@@ -21,6 +22,11 @@ export const changeQuantity = (product, quantity) => ({
   type: CHANGE_QUANTITY,
   product,
   quantity
+})
+
+export const clearCart = cart => ({
+  type: CLEAR_CART,
+  cart
 })
 
 /*** THUNK CREATORS***/
@@ -41,6 +47,13 @@ export const addWithUser = (product, userId) => async dispatch => {
     console.error(err)
   }
 }
+
+export function convertCartToOrder(cart) {
+  return async dispatch => {
+    dispatch(clearCart(cart))
+  }
+}
+
 //when user logs in, merge redux cart with DB cart
 export const setUserCart = (currentCart, userId) => async dispatch => {
   window.localStorage.pastaCart = JSON.stringify({cart: []})
@@ -68,8 +81,12 @@ const initialState = {
 /**
  * REDUCER
  */
+// eslint-disable-next-line complexity
 export default function(state = initialState, action) {
   switch (action.type) {
+    case CLEAR_CART: {
+      return {...state, cart: []}
+    }
     case ADD_TO_CART: {
       let foundIdx
       let newState
@@ -152,7 +169,6 @@ export default function(state = initialState, action) {
         cart: action.cart
       }
     }
-
     default:
       return state
   }

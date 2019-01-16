@@ -64,6 +64,7 @@ export const postOrder = order => async dispatch => {
     const response = dispatch(createOrder(res.data))
     dispatch(createOrderProducts(response.order.id, order.cart))
     // dispatch(sendEmail)
+    // return response.order.id
   } catch (error) {
     console.error(error)
   }
