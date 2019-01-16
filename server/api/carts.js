@@ -38,9 +38,16 @@ router.get('/users/:userId', async (req, res, next) => {
     try {
       const singleCart = await Cart.findOne({
         where: {
-          userId,
-          include: [Product]
-        }
+          userId
+        },
+        required: false,
+        include: [
+          {
+            model: Product,
+            through: {model: cartProduct},
+            include: [{all: true}]
+          }
+        ]
       })
 
       res.json(singleCart)
@@ -63,6 +70,7 @@ router.post('/users/:userId', async (req, res, next) => {
       })
       res.json(instance)
     } catch (err) {
+      console.error(err)
       next(err)
     }
   }

@@ -50,6 +50,10 @@ export const setUserCart = (currentCart, userId) => async dispatch => {
   //userCart includes products with the INVENTORY quantity, not the quantity in cartProducts; requires fix
   const userCart = await axios.get(`/api/carts/users/${userId}`)
   console.log(userCart.data)
+  const fixedQuantities = userCart.data.products.map((item, i) => {
+    return {...item, quantity: userCart.data.products[i].cartproduct.quantity}
+  })
+  console.log('are the quantities fixed?', fixedQuantities)
   const mergedCart = mergeCart(currentCart, userCart.data.products)
   await dispatch(setCart(mergedCart))
   //still need to change cart in DB
