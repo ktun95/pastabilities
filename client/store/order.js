@@ -114,7 +114,7 @@ export const fetchOrdersByStatus = status => async dispatch => {
 export const updateOrderStatus = updatedOrder => {
   return async dispatch => {
     const res = await axios.put(`/api/orders/${updatedOrder.id}`, updatedOrder)
-    if (res.data === 1) dispatch(updateOrdersByStatus(updatedOrder))
+    dispatch(updateOrdersByStatus(updatedOrder))
   }
 }
 

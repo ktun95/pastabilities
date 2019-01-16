@@ -47,7 +47,9 @@ const styles = theme => ({
     margin: '10px',
     height: '100%',
     padding: '10px',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    width: '200px',
+    alignContent: 'flex-end'
   },
   cardMedia: {
     paddingTop: '70%'
@@ -76,15 +78,34 @@ const styles = theme => ({
 class AdminOrders extends React.Component {
   constructor() {
     super()
+    this.state = {
+      status: 'all'
+    }
   }
   componentDidMount() {
     this.props.fetchOrders()
   }
-  updateHandler = order => {
-    console.log(order)
+  updateHandler = event => {
+    const updatedOrder = {
+      ...event.target.value[0],
+      status: event.target.value[1]
+    }
+    this.props.updateOrderStatus(updatedOrder)
+  }
+  updateShowHandler = event => {
+    console.log(event.target.value)
+    this.setState({status: event.target.value})
   }
   render() {
     const {classes, allOrders} = this.props
+    let filteredOrders
+    {
+      allOrders && this.state.status !== 'all'
+        ? (filteredOrders = allOrders.filter(
+            order => order.status === this.state.status
+          ))
+        : (filteredOrders = allOrders)
+    }
     return (
       <Paper className={classes.paper}>
         <Grid container className={classes.container} spacing={16}>
@@ -92,16 +113,42 @@ class AdminOrders extends React.Component {
             All Orders
           </Typography>
           <hr />
+
           <table className={classes.table}>
             <tbody>
+              <tr>
+                <td colSpan="3" />
+                <td align="center">
+                  Display:&nbsp;
+                  <Select
+                    value={this.state.status}
+                    onChange={this.updateShowHandler}
+                    inputProps={{
+                      name: 'showStatus',
+                      id: 'showStatus'
+                    }}
+                  >
+                    <MenuItem value="all">All</MenuItem>
+                    <MenuItem value="created">Created</MenuItem>
+                    <MenuItem value="processing">Processing</MenuItem>
+                    <MenuItem value="canceled">Canceled</MenuItem>
+                    <MenuItem value="completed">Completed</MenuItem>
+                  </Select>
+                </td>
+              </tr>
               <tr className={classes.tableHeader}>
                 <td>Order Id</td>
                 <td>Order Date</td>
                 <td>Status</td>
+                <td align="center">Change Status</td>
               </tr>
-              {allOrders &&
-                allOrders.map(order => (
-                  <IndividualOrder key={order.id} order={order} />
+              {filteredOrders &&
+                filteredOrders.map(order => (
+                  <IndividualOrder
+                    key={order.id}
+                    order={order}
+                    updateHandler={this.updateHandler}
+                  />
                 ))}
             </tbody>
           </table>
@@ -130,32 +177,32 @@ const mapStateToProps = ({order}) => ({
 const mapDispatchToProps = dispatch => {
   return {
     fetchOrders: () => dispatch(fetchOrders()),
-    updateOrderStatus: updatedOrder => dispatch(updateOrderStatus())
+    updateOrderStatus: updatedOrder => dispatch(updateOrderStatus(updatedOrder))
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(
   withStyles(styles)(AdminOrders)
 )
 
-function IndividualOrder({order}) {
+function IndividualOrder({order, updateHandler}) {
   return (
     <tr key={order.id}>
       <td>{order.id}</td>
       <td>{order.orderDate.slice(0, 10)}</td>
-      <td>
-        {order.status}
+      <td>{order.status}</td>
+      <td align="center">
         <Select
           value={order.status}
-          onChange={() => this.updateHandler(order)}
+          onChange={updateHandler}
           inputProps={{
             name: 'status',
             id: 'status'
           }}
         >
-          <MenuItem value="created">Created</MenuItem>
-          <MenuItem value="processing">Processing</MenuItem>
-          <MenuItem value="canceled">Canceled</MenuItem>
-          <MenuItem value="completed">Completed</MenuItem>
+          <MenuItem value={[order, 'created']}>Created</MenuItem>
+          <MenuItem value={[order, 'processing']}>Processing</MenuItem>
+          <MenuItem value={[order, 'canceled']}>Canceled</MenuItem>
+          <MenuItem value={[order, 'completed']}>Completed</MenuItem>
         </Select>
       </td>
     </tr>
