@@ -35,7 +35,7 @@ const isUser = (req, res, next) => {
 
 //get all orders from 'Order' Table -- eager load products
 //admin only
-router.get('/', async (req, res, next) => {
+router.get('/', isAdmin, async (req, res, next) => {
   try {
     const orders = await Order.findAll({
       include: [Product],

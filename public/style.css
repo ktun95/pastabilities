@@ -197,3 +197,8 @@ form button:disabled:hover {
 #react-paginate li {
   display: inline-block;
 }
+
+.tdbox {
+  border: 1px solid black;
+  vertical-align: top;
+}

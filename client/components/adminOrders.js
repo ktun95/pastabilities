@@ -1,6 +1,5 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import Card from '@material-ui/core/Card'
@@ -99,7 +98,6 @@ class AdminOrders extends React.Component {
     this.props.updateOrderStatus(updatedOrder)
   }
   updateShowHandler = event => {
-    console.log(event.target.value)
     this.setState({status: event.target.value})
   }
   render() {
@@ -116,7 +114,7 @@ class AdminOrders extends React.Component {
       <Paper className={classes.paper}>
         <Grid container className={classes.container} spacing={16}>
           <Typography variant="h3" align="center">
-            All Orders
+            Modify Orders
           </Typography>
           <hr />
 
@@ -145,7 +143,8 @@ class AdminOrders extends React.Component {
               <tr className={classes.tableHeader}>
                 <td>Order Id</td>
                 <td>Order Date</td>
-                <td colSpan="2">Status</td>
+                <td>Status</td>
+                <td>Products</td>
               </tr>
               {filteredOrders &&
                 filteredOrders.map(order => (
@@ -160,19 +159,6 @@ class AdminOrders extends React.Component {
         </Grid>
       </Paper>
     )
-  }
-}
-const mapState = ({product, user}) => {
-  return {
-    products: product.allProducts,
-    isAdmin: user.isAdmin,
-    userId: user.id,
-    currentPage: product.currentPage,
-    numPages: product.numPages,
-    productsPerPage: product.productsPerPage,
-    visibleProducts: product.visibleProducts,
-    types: product.types,
-    shapes: product.shapes
   }
 }
 
@@ -207,26 +193,47 @@ class IndividualOrder extends React.Component {
   render() {
     const {order, updateHandler} = this.props
     return (
-      <tr key={order.id}>
-        <td>{order.id}</td>
-        <td> {order.orderDate.slice(0, 10)}</td>
+      <React.Fragment>
+        <tr>
+          <td className="tdbox" />
+          <td colSpan="3" className="tdbox" />
+        </tr>
+        <tr key={order.id} className="tdbox">
+          <td>{order.id}</td>
+          <td> {order.orderDate.slice(0, 10)}</td>
 
-        <td colSpan="2">
-          <Select
-            value={this.state.status}
-            onChange={this.littleUpdate}
-            inputProps={{
-              name: 'status',
-              id: 'status'
-            }}
-          >
-            <MenuItem value="created">Created</MenuItem>
-            <MenuItem value="processing">Processing</MenuItem>
-            <MenuItem value="canceled">Canceled</MenuItem>
-            <MenuItem value="completed">Completed</MenuItem>
-          </Select>
-        </td>
-      </tr>
+          <td>
+            <Select
+              value={this.state.status}
+              onChange={this.littleUpdate}
+              inputProps={{
+                name: 'status',
+                id: 'status'
+              }}
+            >
+              <MenuItem value="created">Created</MenuItem>
+              <MenuItem value="processing">Processing</MenuItem>
+              <MenuItem value="canceled">Canceled</MenuItem>
+              <MenuItem value="completed">Completed</MenuItem>
+            </Select>
+          </td>
+          <td>
+            {order.products.map(product => {
+              return (
+                <div key={product.id}>
+                  <p>
+                    Product: {product.name}
+                    <br />
+                    Quantity: {product.orderproduct.quantity}
+                    <br />
+                    Price: ${(product.orderproduct.price / 100).toFixed(2)}
+                  </p>
+                </div>
+              )
+            })}
+          </td>
+        </tr>
+      </React.Fragment>
     )
   }
 }
