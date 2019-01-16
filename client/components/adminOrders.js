@@ -48,7 +48,7 @@ const styles = theme => ({
     height: '100%',
     padding: '10px',
     flexDirection: 'row',
-    width: '200px',
+    width: '100%',
     alignContent: 'flex-end'
   },
   cardMedia: {
@@ -72,7 +72,8 @@ const styles = theme => ({
     fontWeight: 'bold'
   },
   table: {
-    marginLeft: '10px'
+    marginLeft: '10px',
+    border: '1px'
   }
 })
 class AdminOrders extends React.Component {
@@ -85,10 +86,15 @@ class AdminOrders extends React.Component {
   componentDidMount() {
     this.props.fetchOrders()
   }
-  updateHandler = event => {
+  updateHandler = (order, status) => {
+    // const updatedOrder = {
+    //   ...event.target.value[0],
+    //   status: event.target.value[1]
+    // }
     const updatedOrder = {
-      ...event.target.value[0],
-      status: event.target.value[1]
+      ...order,
+      status,
+      updatedAt: new Date()
     }
     this.props.updateOrderStatus(updatedOrder)
   }
@@ -139,8 +145,7 @@ class AdminOrders extends React.Component {
               <tr className={classes.tableHeader}>
                 <td>Order Id</td>
                 <td>Order Date</td>
-                <td>Status</td>
-                <td align="center">Change Status</td>
+                <td colSpan="2">Status</td>
               </tr>
               {filteredOrders &&
                 filteredOrders.map(order => (
@@ -184,27 +189,44 @@ export default connect(mapStateToProps, mapDispatchToProps)(
   withStyles(styles)(AdminOrders)
 )
 
-function IndividualOrder({order, updateHandler}) {
-  return (
-    <tr key={order.id}>
-      <td>{order.id}</td>
-      <td>{order.orderDate.slice(0, 10)}</td>
-      <td>{order.status}</td>
-      <td align="center">
-        <Select
-          value={order.status}
-          onChange={updateHandler}
-          inputProps={{
-            name: 'status',
-            id: 'status'
-          }}
-        >
-          <MenuItem value={[order, 'created']}>Created</MenuItem>
-          <MenuItem value={[order, 'processing']}>Processing</MenuItem>
-          <MenuItem value={[order, 'canceled']}>Canceled</MenuItem>
-          <MenuItem value={[order, 'completed']}>Completed</MenuItem>
-        </Select>
-      </td>
-    </tr>
-  )
+class IndividualOrder extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      order: {},
+      status: ''
+    }
+  }
+  littleUpdate = async event => {
+    await this.setState({status: event.target.value})
+    this.props.updateHandler(this.state.order, this.state.status)
+  }
+  componentDidMount() {
+    this.setState({order: this.props.order, status: this.props.order.status})
+  }
+  render() {
+    const {order, updateHandler} = this.props
+    return (
+      <tr key={order.id}>
+        <td>{order.id}</td>
+        <td> {order.orderDate.slice(0, 10)}</td>
+
+        <td colSpan="2">
+          <Select
+            value={this.state.status}
+            onChange={this.littleUpdate}
+            inputProps={{
+              name: 'status',
+              id: 'status'
+            }}
+          >
+            <MenuItem value="created">Created</MenuItem>
+            <MenuItem value="processing">Processing</MenuItem>
+            <MenuItem value="canceled">Canceled</MenuItem>
+            <MenuItem value="completed">Completed</MenuItem>
+          </Select>
+        </td>
+      </tr>
+    )
+  }
 }
