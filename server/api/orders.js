@@ -113,7 +113,11 @@ router.post('/checkout', async (req, res, next) => {
     city,
     state,
     zipCode,
-    streetLine2
+    streetLine2,
+    subTotal,
+    tax,
+    total,
+    orderDate
   } = req.body
 
   // if (isAdmin || req.user.id === userId) {
@@ -121,7 +125,7 @@ router.post('/checkout', async (req, res, next) => {
     const instance = await Order.create({
       status,
       email,
-      orderDate: new Date(),
+      orderDate,
       userId,
       streetLine1,
       city,
@@ -139,15 +143,17 @@ router.post('/checkout', async (req, res, next) => {
       })
     })
 
-    const orderQuantity = 5
-    const subTotal = 100.0
-    const salesTax = 7.0
-    const total = subTotal + salesTax
+    let orderQuantity = 0
+    cart.forEach(element => {
+      orderQuantity += element.quantity
+    })
+
+    const salesTax = tax
     const deliveryDate = 'January 16, 2019'
 
     var mailOptions = {
       from: 'pastabilities4life@gmail.com',
-      to: 'celipas@gmail.com',
+      to: `${email}`,
       subject: `Your Pastabailties order ${instance.id}`,
       html: `<body>
       <div class="es-wrapper-color">
@@ -567,39 +573,6 @@ router.post('/checkout', async (req, res, next) => {
                                                                                   <tr>
                                                                                       <td class="esd-block-text es-m-txt-c es-p5b" esdev-links-color="#777777" align="left">
                                                                                           <p style="color: #777777;">If you didn't create an account using this email address, please ignore this email or&nbsp;<u><a target="_blank" style="color: #777777;" href="http://learn.fullstackacademy.com">unsubscribe</a></u>.<br></p>
-                                                                                      </td>
-                                                                                  </tr>
-                                                                              </tbody>
-                                                                          </table>
-                                                                      </td>
-                                                                  </tr>
-                                                              </tbody>
-                                                          </table>
-                                                      </td>
-                                                  </tr>
-                                              </tbody>
-                                          </table>
-                                      </td>
-                                  </tr>
-                              </tbody>
-                          </table>
-                          <table class="esd-footer-popover es-content" cellspacing="0" cellpadding="0" align="center">
-                              <tbody>
-                                  <tr>
-                                      <td class="esd-stripe" align="center">
-                                          <table class="es-content-body" style="background-color: transparent;" width="600" cellspacing="0" cellpadding="0" align="center">
-                                              <tbody>
-                                                  <tr>
-                                                      <td class="esd-structure es-p30t es-p30b es-p20r es-p20l" align="left">
-                                                          <table width="100%" cellspacing="0" cellpadding="0">
-                                                              <tbody>
-                                                                  <tr>
-                                                                      <td class="esd-container-frame" width="560" valign="top" align="center">
-                                                                          <table width="100%" cellspacing="0" cellpadding="0">
-                                                                              <tbody>
-                                                                                  <tr>
-                                                                                      <td class="esd-block-image es-infoblock" align="center">
-                                                                                          <a target="_blank" href="http://learn.fullstackacademy.com"> <img src="https://tlr.stripocdn.email/content/guids/CABINET_9df86e5b6c53dd0319931e2447ed854b/images/64951510234941531.png" alt="" width="125"> </a>
                                                                                       </td>
                                                                                   </tr>
                                                                               </tbody>

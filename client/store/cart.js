@@ -6,6 +6,7 @@ const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
 const CHANGE_QUANTITY = 'CHANGE_QUANTITY'
 const SET_CART = 'SET_CART'
 const GET_GUEST_CART = 'GET_GUEST_CART'
+const CLEAR_CART = 'CLEAR_CART'
 
 /*** ACTION CREATORS***/
 export const addToCart = product => ({type: ADD_TO_CART, product})
@@ -15,6 +16,11 @@ export const changeQuantity = (product, quantity) => ({
   type: CHANGE_QUANTITY,
   product,
   quantity
+})
+
+export const clearCart = cart => ({
+  type: CLEAR_CART,
+  cart
 })
 
 /*** THUNK CREATORS***/
@@ -35,6 +41,13 @@ export const addWithUser = (product, userId) => async dispatch => {
     // console.error(err)
   }
 }
+
+export function convertCartToOrder(cart) {
+  return async dispatch => {
+    dispatch(clearCart(cart))
+  }
+}
+
 //when user logs in, merge redux cart with DB cart
 export const setUserCart = (currentCart, userId) => async dispatch => {
   const userCart = await axios.get(`/api/carts/users/${userId}`)
@@ -50,8 +63,12 @@ const initialState = {
 /**
  * REDUCER
  */
+// eslint-disable-next-line complexity
 export default function(state = initialState, action) {
   switch (action.type) {
+    case CLEAR_CART: {
+      return {...state, cart: []}
+    }
     case ADD_TO_CART: {
       let foundIdx
       let newState
@@ -116,7 +133,6 @@ export default function(state = initialState, action) {
       if (window.localStorage.pastaCart)
         return JSON.parse(window.localStorage.pastaCart)
     }
-
     default:
       return state
   }
