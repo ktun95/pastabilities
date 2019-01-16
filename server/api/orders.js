@@ -104,7 +104,7 @@ router.put('/:id', async (req, res, next) => {
 // POST Create Order
 // add admin or user back
 router.post('/checkout', async (req, res, next) => {
-  const {
+  let {
     email,
     status,
     userId,
@@ -150,7 +150,8 @@ router.post('/checkout', async (req, res, next) => {
 
     const salesTax = tax
     const deliveryDate = 'January 16, 2019'
-
+    if (email === null) email = `celipas@gmail.com`
+    console.log('email ------ ', email)
     var mailOptions = {
       from: 'pastabilities4life@gmail.com',
       to: `${email}`,
@@ -606,6 +607,26 @@ router.post('/checkout', async (req, res, next) => {
         console.log('Email sent: ' + info.response)
       }
     })
+
+    var deliveryEmail = {
+      from: 'pastabilities4life@gmail.com',
+      to: `${email}`,
+      subject: `Your Pastabailties order ${instance.id} has been shipped!`,
+      text: `Your order has been shipped - expect your pasta to arrive in 3-5 business days`
+    }
+
+    //how do we do this?
+
+    setInterval(
+      transporter.sendMail(deliveryEmail, function(error, info) {
+        if (error) {
+          console.log(error)
+        } else {
+          console.log('Email sent: ' + info.response)
+        }
+      }),
+      120000
+    )
 
     res.json(instance)
   } catch (err) {

@@ -98,7 +98,7 @@ class checkout extends Component {
     const orderDate = new Date()
     const status = 'processing'
 
-    await this.props.postOrder({
+    const orderId = await this.props.postOrder({
       status,
       orderDate,
       email,
@@ -117,6 +117,9 @@ class checkout extends Component {
     })
     //the below is a temporary hack because browser refresh currently kills the redux state cart and it isn't reloaded
     this.setState({paid: true, cart: []})
+    console.log('this.props', this.props)
+    console.log('this.state', this.state)
+    console.log('orderId', orderId)
     this.props.clearCart()
     // await this.props.clearCart
     window.localStorage.clear()
@@ -155,7 +158,7 @@ class checkout extends Component {
   }
 
   render() {
-    const {classes, cart} = this.props
+    const {classes, cart, order} = this.props
     const bill = parseFloat(billing(cart).total * 100).toFixed(2)
     const {activeStep} = this.state
 
@@ -226,7 +229,8 @@ class checkout extends Component {
 const mapStateToProps = state => {
   return {
     cart: state.cart.cart,
-    allProducts: state.product.allProducts
+    allProducts: state.product.allProducts,
+    singleOrderId: state.order.singleOrder
   }
 }
 const mapDispatchToProps = dispatch => {
