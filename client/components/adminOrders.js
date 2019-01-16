@@ -72,6 +72,7 @@ const styles = theme => ({
   },
   table: {
     marginLeft: '10px',
+    marginRight: '10px',
     border: '1px'
   }
 })
@@ -121,7 +122,7 @@ class AdminOrders extends React.Component {
           <table className={classes.table}>
             <tbody>
               <tr>
-                <td colSpan="3" />
+                <td colSpan="4" />
                 <td align="center">
                   Display:&nbsp;
                   <Select
@@ -144,6 +145,7 @@ class AdminOrders extends React.Component {
                 <td>Order Id</td>
                 <td>Order Date</td>
                 <td>Status</td>
+                <td>Destination</td>
                 <td>Products</td>
               </tr>
               {filteredOrders &&
@@ -195,8 +197,7 @@ class IndividualOrder extends React.Component {
     return (
       <React.Fragment>
         <tr>
-          <td className="tdbox" />
-          <td colSpan="3" className="tdbox" />
+          <td colSpan="5" className="tdbox" />
         </tr>
         <tr key={order.id} className="tdbox">
           <td>{order.id}</td>
@@ -216,6 +217,16 @@ class IndividualOrder extends React.Component {
               <MenuItem value="canceled">Canceled</MenuItem>
               <MenuItem value="completed">Completed</MenuItem>
             </Select>
+          </td>
+          <td>
+            {order.firstName} {order.lastName}
+            <br />
+            {order.streetLine1}
+            <br />
+            {order.streetLine2}
+            <br />
+            {order.city},
+            {order.state} {order.zipCode}
           </td>
           <td>
             {order.products.map(product => {
