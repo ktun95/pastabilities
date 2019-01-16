@@ -22,23 +22,19 @@ import {
 import {me, getGuestCart, setUserCart} from './store'
 
 class Routes extends Component {
-  constructor() {
-    super()
-    console.log(this)
-    // this.props.loadCart = this.props.loadCart.bind(this)
-  }
   async componentDidMount() {
-    console.log('component did mount')
-    await this.props.loadInitialData()
-    //loadCart fires before loadInitialData, we need to reverse this!
-    if (!this.props.isLoggedIn)
-      this.props.loadCart(this.props.cart, this.props.isLoggedIn)
+    this.props.loadInitialData()
+    setTimeout(() => {
+      if (!this.props.isLoggedIn) {
+        this.props.loadCart()
+      } else {
+        this.props.setUserCart([], this.props.userId)
+      }
+    }, 200)
   }
+
   componentDidUpdate() {
-    // this.props.loadCart(this.props.cart, this.props.isLoggedIn)
-    // logged in => logged out, getGuestCart should fire on update
     if (!this.props.isLoggedIn) this.props.loadCart()
-    console.log('component did update')
   }
 
   render() {
@@ -99,7 +95,8 @@ const mapState = state => {
     // Being 'logged in' for our purposes will be defined has having a state.user that has a truthy id.
     // Otherwise, state.user will be an empty object, and state.user.id will be falsey
     isLoggedIn: !!state.user.id,
-    isAdmin: state.user.isAdmin
+    isAdmin: state.user.isAdmin,
+    userId: state.user.id
   }
 }
 
@@ -107,9 +104,13 @@ const mapDispatch = dispatch => {
   return {
     loadInitialData() {
       dispatch(me())
+      return true
     },
     loadCart() {
       dispatch(getGuestCart())
+    },
+    setUserCart(currentCart, userId) {
+      dispatch(setUserCart(currentCart, userId))
     }
   }
 }
