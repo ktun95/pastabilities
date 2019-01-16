@@ -72,6 +72,7 @@ const styles = theme => ({
   },
   table: {
     marginLeft: '10px',
+    marginRight: '10px',
     border: '1px'
   }
 })
@@ -144,6 +145,7 @@ class AdminUsers extends React.Component {
                 <td>Email</td>
                 <td>Name</td>
                 <td>Is Admin?</td>
+                <td align="right">Delete</td>
               </tr>
               {filteredUsers &&
                 filteredUsers.map(user => (
@@ -151,6 +153,7 @@ class AdminUsers extends React.Component {
                     key={user.id}
                     user={user}
                     updateHandler={this.updateHandler}
+                    destroyUser={this.props.destroyUser}
                   />
                 ))}
             </tbody>
@@ -191,12 +194,12 @@ class IndividualUser extends React.Component {
     this.setState({user: this.props.user, isAdmin: this.props.user.isAdmin})
   }
   render() {
-    const {user} = this.props
+    const {user, destroyUser} = this.props
     return (
       <React.Fragment>
         <tr>
           <td className="tdbox" />
-          <td colSpan="3" className="tdbox" />
+          <td colSpan="4" className="tdbox" />
         </tr>
         <tr key={user.id} className="tdbox">
           <td>{user.id}</td>
@@ -216,6 +219,15 @@ class IndividualUser extends React.Component {
               <MenuItem value={false}>Non-Admin</MenuItem>
               <MenuItem value={true}>Admin</MenuItem>
             </Select>
+          </td>
+          <td align="right">
+            <button
+              className="delete-btn"
+              value={user}
+              onClick={() => destroyUser(user)}
+            >
+              X
+            </button>
           </td>
         </tr>
       </React.Fragment>
