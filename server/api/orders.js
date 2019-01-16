@@ -35,7 +35,7 @@ const isUser = (req, res, next) => {
 
 //get all orders from 'Order' Table -- eager load products
 //admin only
-router.get('/', async (req, res, next) => {
+router.get('/', isAdmin, async (req, res, next) => {
   try {
     const orders = await Order.findAll({
       include: [Product],
@@ -82,7 +82,7 @@ router.get('/orderHistory/:userId', async (req, res, next) => {
 
 // PUT Update Order Status -- admin only
 //add back is admin
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', isAdmin, async (req, res, next) => {
   try {
     const orderId = +req.params.id
     const {status} = req.body

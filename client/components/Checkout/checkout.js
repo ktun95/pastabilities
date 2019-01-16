@@ -122,7 +122,7 @@ class checkout extends Component {
     console.log('orderId', orderId)
     this.props.clearCart()
     // await this.props.clearCart
-    window.localStorage.clear()
+    window.localStorage.pastaCart = JSON.stringify({cart: []})
   }
   getBill = async bill => {
     await this.setState({bill})

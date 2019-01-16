@@ -38,9 +38,9 @@ router.get('/users/:userId', async (req, res, next) => {
     try {
       const singleCart = await Cart.findOne({
         where: {
-          userId
-        },
-        include: [Product]
+          userId,
+          include: [Product]
+        }
       })
 
       res.json(singleCart)

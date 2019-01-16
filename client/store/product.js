@@ -195,6 +195,7 @@ export default function(state = initialState, action) {
       return {...state, allProducts: [...state.allProducts, action.product]}
     case EDIT_PRODUCT:
       return {
+        ...state,
         allProducts: state.allProducts.map(product => {
           if (product.id !== +action.product.id) {
             return product

@@ -48,16 +48,6 @@ class singleProduct extends Component {
                   Edit Product
                 </Button>
               </Link>
-              {/* <Button
-                  size="small"
-                  color="secondary"
-                  value={product.id}
-                  onClick={() => {
-                    this.props.destroyProduct(currentProduct.id)
-                  }}
-                >
-                  Delete
-                </Button> */}
             </React.Fragment>
           ) : (
             <div />
@@ -84,7 +74,7 @@ class singleProduct extends Component {
             ) : (
               <div />
             )}
-            <p>Description: {currentProduct.description}</p>
+            <p>{currentProduct.description}</p>
             <p>
               Type: {currentProduct.type}
               <br />
@@ -93,7 +83,7 @@ class singleProduct extends Component {
           </div>
 
           <div className="product-price">
-            <span>${(currentProduct.price / 100).toFixed(2)}</span>&nbsp;&nbsp;
+            <span>${(currentProduct.price / 100).toFixed(2)}</span>
             {currentProduct.quantity > 0 ? (
               <Button
                 size="small"
@@ -103,7 +93,7 @@ class singleProduct extends Component {
                 Add to Cart
               </Button>
             ) : (
-              <span>Currently Unavailable</span>
+              <span>&nbsp;&nbsp;Currently Unavailable</span>
             )}
           </div>
           <Grid

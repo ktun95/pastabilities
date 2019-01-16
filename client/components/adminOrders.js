@@ -1,6 +1,5 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import Card from '@material-ui/core/Card'
@@ -10,7 +9,9 @@ import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import {withStyles} from '@material-ui/core/styles'
-import {fetchOrders} from '../store'
+import {fetchOrders, updateOrderStatus} from '../store'
+import MenuItem from '@material-ui/core/MenuItem'
+import Select from '@material-ui/core/Select'
 
 const styles = theme => ({
   productFilter: {
@@ -45,7 +46,9 @@ const styles = theme => ({
     margin: '10px',
     height: '100%',
     padding: '10px',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    width: '100%',
+    alignContent: 'flex-end'
   },
   cardMedia: {
     paddingTop: '70%'
@@ -63,49 +66,99 @@ const styles = theme => ({
   },
   paper: {
     marginTop: '10px'
+  },
+  tableHeader: {
+    fontWeight: 'bold'
+  },
+  table: {
+    marginLeft: '10px',
+    border: '1px'
   }
 })
 class AdminOrders extends React.Component {
   constructor() {
     super()
+    this.state = {
+      status: 'all'
+    }
   }
   componentDidMount() {
     this.props.fetchOrders()
   }
+  updateHandler = (order, status) => {
+    // const updatedOrder = {
+    //   ...event.target.value[0],
+    //   status: event.target.value[1]
+    // }
+    const updatedOrder = {
+      ...order,
+      status,
+      updatedAt: new Date()
+    }
+    this.props.updateOrderStatus(updatedOrder)
+  }
+  updateShowHandler = event => {
+    this.setState({status: event.target.value})
+  }
   render() {
     const {classes, allOrders} = this.props
+    let filteredOrders
+    {
+      allOrders && this.state.status !== 'all'
+        ? (filteredOrders = allOrders.filter(
+            order => order.status === this.state.status
+          ))
+        : (filteredOrders = allOrders)
+    }
     return (
       <Paper className={classes.paper}>
         <Grid container className={classes.container} spacing={16}>
-          <Paper>
-            <Typography variant="h3" align="center">
-              All Orders
-            </Typography>
-          </Paper>
-          {allOrders &&
-            allOrders.map(order => (
-              <Card key={order.id}>
-                <div>Order Id: {order.id}</div>
-                <div>Order Date: {order.orderDate}</div>
-                <div>Status: {order.status}</div>
-              </Card>
-            ))}
+          <Typography variant="h3" align="center">
+            Modify Orders
+          </Typography>
+          <hr />
+
+          <table className={classes.table}>
+            <tbody>
+              <tr>
+                <td colSpan="3" />
+                <td align="center">
+                  Display:&nbsp;
+                  <Select
+                    value={this.state.status}
+                    onChange={this.updateShowHandler}
+                    inputProps={{
+                      name: 'showStatus',
+                      id: 'showStatus'
+                    }}
+                  >
+                    <MenuItem value="all">All</MenuItem>
+                    <MenuItem value="created">Created</MenuItem>
+                    <MenuItem value="processing">Processing</MenuItem>
+                    <MenuItem value="canceled">Canceled</MenuItem>
+                    <MenuItem value="completed">Completed</MenuItem>
+                  </Select>
+                </td>
+              </tr>
+              <tr className={classes.tableHeader}>
+                <td>Order Id</td>
+                <td>Order Date</td>
+                <td>Status</td>
+                <td>Products</td>
+              </tr>
+              {filteredOrders &&
+                filteredOrders.map(order => (
+                  <IndividualOrder
+                    key={order.id}
+                    order={order}
+                    updateHandler={this.updateHandler}
+                  />
+                ))}
+            </tbody>
+          </table>
         </Grid>
       </Paper>
     )
-  }
-}
-const mapState = ({product, user}) => {
-  return {
-    products: product.allProducts,
-    isAdmin: user.isAdmin,
-    userId: user.id,
-    currentPage: product.currentPage,
-    numPages: product.numPages,
-    productsPerPage: product.productsPerPage,
-    visibleProducts: product.visibleProducts,
-    types: product.types,
-    shapes: product.shapes
   }
 }
 
@@ -114,9 +167,73 @@ const mapStateToProps = ({order}) => ({
 })
 const mapDispatchToProps = dispatch => {
   return {
-    fetchOrders: () => dispatch(fetchOrders())
+    fetchOrders: () => dispatch(fetchOrders()),
+    updateOrderStatus: updatedOrder => dispatch(updateOrderStatus(updatedOrder))
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(
   withStyles(styles)(AdminOrders)
 )
+
+class IndividualOrder extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      order: {},
+      status: ''
+    }
+  }
+  littleUpdate = async event => {
+    await this.setState({status: event.target.value})
+    this.props.updateHandler(this.state.order, this.state.status)
+  }
+  componentDidMount() {
+    this.setState({order: this.props.order, status: this.props.order.status})
+  }
+  render() {
+    const {order, updateHandler} = this.props
+    return (
+      <React.Fragment>
+        <tr>
+          <td className="tdbox" />
+          <td colSpan="3" className="tdbox" />
+        </tr>
+        <tr key={order.id} className="tdbox">
+          <td>{order.id}</td>
+          <td> {order.orderDate.slice(0, 10)}</td>
+
+          <td>
+            <Select
+              value={this.state.status}
+              onChange={this.littleUpdate}
+              inputProps={{
+                name: 'status',
+                id: 'status'
+              }}
+            >
+              <MenuItem value="created">Created</MenuItem>
+              <MenuItem value="processing">Processing</MenuItem>
+              <MenuItem value="canceled">Canceled</MenuItem>
+              <MenuItem value="completed">Completed</MenuItem>
+            </Select>
+          </td>
+          <td>
+            {order.products.map(product => {
+              return (
+                <div key={product.id}>
+                  <p>
+                    Product: {product.name}
+                    <br />
+                    Quantity: {product.orderproduct.quantity}
+                    <br />
+                    Price: ${(product.orderproduct.price / 100).toFixed(2)}
+                  </p>
+                </div>
+              )
+            })}
+          </td>
+        </tr>
+      </React.Fragment>
+    )
+  }
+}

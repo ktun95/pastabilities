@@ -112,10 +112,10 @@ export const fetchOrdersByStatus = status => async dispatch => {
   }
 }
 
-export const updateOrderStatus = status => {
+export const updateOrderStatus = updatedOrder => {
   return async dispatch => {
-    const res = await axios.put(`/api/orders/status/${status.id}`, status)
-    dispatch(updateOrdersByStatus(res.data))
+    const res = await axios.put(`/api/orders/${updatedOrder.id}`, updatedOrder)
+    dispatch(updateOrdersByStatus(updatedOrder))
   }
 }
 

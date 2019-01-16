@@ -64,8 +64,8 @@ class Cart extends Component {
 
   render() {
     const {classes, cart} = this.props
+    console.log('from carts component', cart)
     const bill = billing(cart)
-
     return (
       <React.Fragment>
         <CssBaseline>

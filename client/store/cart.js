@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {mergeCart} from '../components/UtilityFunctions.js/functions'
 
 /**ACTION TYPES***/
 const ADD_TO_CART = 'ADD_TO_CART'
@@ -9,9 +10,14 @@ const GET_GUEST_CART = 'GET_GUEST_CART'
 const CLEAR_CART = 'CLEAR_CART'
 
 /*** ACTION CREATORS***/
-export const addToCart = product => ({type: ADD_TO_CART, product})
+export const addToCart = (product, isUser) => ({
+  type: ADD_TO_CART,
+  product,
+  isUser
+})
 export const removeFromCart = product => ({type: REMOVE_FROM_CART, product})
 export const getGuestCart = () => ({type: GET_GUEST_CART})
+export const setCart = cart => ({type: SET_CART, cart})
 export const changeQuantity = (product, quantity) => ({
   type: CHANGE_QUANTITY,
   product,
@@ -25,20 +31,22 @@ export const clearCart = cart => ({
 
 /*** THUNK CREATORS***/
 export const addWithUser = (product, userId) => async dispatch => {
-  console.log('HELLO IS FIRING?')
   //find cart in database associated with userId in redux store
+  console.log('addWithUser is firing')
   let cart
+  let isUser = false
   try {
     if (userId) {
-      cart = await axios.post(`/api/carts/users/${userId}`)
       console.log(cart)
+      cart = await axios.post(`/api/carts/users/${userId}`)
+      await axios.post(`/api/carts/${cart.data.id}/${product.id}`, {
+        quantity: 1
+      })
+      isUser = true
     }
-    await axios.post(`/api/carts/${cart.data.id}/${product.id}`, {
-      quantity: 1
-    })
-    dispatch(addToCart(product))
+    dispatch(addToCart(product, isUser))
   } catch (err) {
-    // console.error(err)
+    console.error(err)
   }
 }
 
@@ -50,9 +58,17 @@ export function convertCartToOrder(cart) {
 
 //when user logs in, merge redux cart with DB cart
 export const setUserCart = (currentCart, userId) => async dispatch => {
+  window.localStorage.pastaCart = JSON.stringify({cart: []})
+  console.log('attempting to merge carts')
+  //userCart includes products with the INVENTORY quantity, not the quantity in cartProducts; requires fix
   const userCart = await axios.get(`/api/carts/users/${userId}`)
-  console.log(setUserCart)
+  console.log(userCart.data)
+  const mergedCart = mergeCart(currentCart, userCart.data.products)
+  await dispatch(setCart(mergedCart))
+  //still need to change cart in DB
 }
+//need a thunk for removing from user cart
+//need a thunk for changing quantity from user cart
 
 /*** INITIAL STATE***/
 const initialState = {
@@ -90,7 +106,9 @@ export default function(state = initialState, action) {
           cart: [...state.cart, {...action.product, quantity: 1}]
         }
       }
-      window.localStorage.pastaCart = JSON.stringify(newState)
+
+      if (!action.isUser)
+        window.localStorage.pastaCart = JSON.stringify(newState)
       return newState
     }
 
@@ -112,7 +130,8 @@ export default function(state = initialState, action) {
           cart: [...state.cart]
         }
       }
-      window.localStorage.pastaCart = JSON.stringify(newState)
+      if (!action.isUser)
+        window.localStorage.pastaCart = JSON.stringify(newState)
       return newState
     }
 
@@ -125,13 +144,28 @@ export default function(state = initialState, action) {
         ...state,
         cart: [...updatedCart]
       }
-      window.localStorage.pastaCart = JSON.stringify(newState)
+      if (!action.isUser)
+        window.localStorage.pastaCart = JSON.stringify(newState)
       return newState
     }
 
     case GET_GUEST_CART: {
-      if (window.localStorage.pastaCart)
-        return JSON.parse(window.localStorage.pastaCart)
+      if (window.localStorage.pastaCart) {
+        console.log('local pasta cart found')
+        const localCart = JSON.parse(window.localStorage.pastaCart)
+        if (typeof localCart === 'object') {
+          console.log('pasta cart is an object, return pasta cart')
+          return {...state, cart: localCart.cart}
+        } else return {...state}
+      }
+      return {...state, cart: []}
+    }
+
+    case SET_CART: {
+      return {
+        ...state,
+        cart: action.cart
+      }
     }
     default:
       return state

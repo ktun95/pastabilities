@@ -47,6 +47,7 @@ class Navbar extends React.Component {
   }
   goAddPage = address => {
     this.props.history.push(address)
+    this.handleClose()
   }
   render() {
     const {handleClick, isLoggedIn, isAdmin, classes} = this.props
