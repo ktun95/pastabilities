@@ -58,6 +58,7 @@ class Cart extends Component {
 
   handleChange = (event, product) => {
     this.setState({[event.target.name]: event.target.value}, () => {
+      console.log('qty', this.state.qty)
       this.props.changeQty(product, this.state.qty)
     })
   }
@@ -107,6 +108,7 @@ class Cart extends Component {
                           <TableCell align="right">
                             <FormControl>
                               <Select
+                                name="qty"
                                 value={product.quantity}
                                 onChange={event =>
                                   this.handleChange(event, product)
