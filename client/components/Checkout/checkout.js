@@ -76,7 +76,10 @@ class checkout extends Component {
     const localCart = JSON.parse(window.localStorage.pastaCart)
     // we're currently just loading up the redux cart!
     // await this.setState({cart: [...localCart.cart]})
-    await this.setState({cart: [...this.props.cart]})
+    await this.setState({
+      cart: [...this.props.cart]
+      // userId: this.props.user.id
+    })
   }
   isPaid = async () => {
     //try catch
@@ -90,7 +93,7 @@ class checkout extends Component {
       state,
       zipCode,
       bill,
-      userId,
+      // userId,
       cart
     } = this.state
 
@@ -109,7 +112,7 @@ class checkout extends Component {
       city,
       zipCode,
       tax,
-      userId,
+      userId: this.props.userId,
       state,
       cart,
       subTotal,
@@ -230,7 +233,8 @@ const mapStateToProps = state => {
   return {
     cart: state.cart.cart,
     allProducts: state.product.allProducts,
-    singleOrderId: state.order.singleOrder
+    singleOrderId: state.order.singleOrder,
+    userId: state.user.id
   }
 }
 const mapDispatchToProps = dispatch => {
