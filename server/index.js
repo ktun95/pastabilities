@@ -110,6 +110,7 @@ const syncDb = () => db.sync()
 
 async function bootApp() {
   console.log('booting app')
+  
   await sessionStore.sync()
   console.log('session.store synchronized')
   await syncDb()
