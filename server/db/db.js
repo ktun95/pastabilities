@@ -13,7 +13,6 @@ const db = new Sequelize(
   }
 )
 
-console.log(db)
 module.exports = db
 
 // This is a global Mocha hook used for resource cleanup.
