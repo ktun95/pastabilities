@@ -7,6 +7,7 @@
   },
   "main": "index.js",
   "scripts": {
+    "build": "webpack -p --config ./webpack.prod.config.js --progress",
     "build-client": "webpack",
     "build-client-watch": "webpack -w",
     "deploy": "script/deploy",
@@ -15,7 +16,7 @@
     "lint-fix": "npm run lint -- --fix",
     "precommit": "lint-staged",
     "prettify": "prettier --write \"**/*.{js,jsx,json,css,scss,md}\"",
-    "postinstall": "webpack -p --config ./webpack.prod.config.js --progress",
+    "postinstall": "touch secrets.js",
     "seed": "node script/seed.js",
     "start": "node server",
     "start-dev": "NODE_ENV='development' npm run build-client-watch && NODE_ENV='development' npm run start-server",
