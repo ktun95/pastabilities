@@ -109,14 +109,9 @@ const startListening = () => {
 const syncDb = () => db.sync()
 
 async function bootApp() {
-  console.log('booting app')
-  // debugger
   await syncDb()
-  console.log('database synchronized')
-  // await sessionStore.sync()
-  // console.log('session.store synchronized')
+  await sessionStore.sync()
   await createApp()
-  console.log('app created')
   await startListening()
 }
 // This evaluates as true when this file is run directly from the command line,
