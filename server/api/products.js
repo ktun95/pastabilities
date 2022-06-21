@@ -150,7 +150,7 @@ router.put('/:id', isAdmin, async (req, res, next) => {
   try {
     const productId = req.params.id
     Product.update(req.body, {where: {id: productId}})
-    const updatedProduct = await Product.findById(productId)
+    const updatedProduct = await Product.findByPk(productId)
     res.json(updatedProduct.dataValues)
   } catch (err) {
     next(err)
