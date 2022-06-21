@@ -1,5 +1,5 @@
 const db = require('./db')
-const ProductModel = require('./db').Product
+const ProductModel = require('./models').Product
 
 const names = ['Chris', 'Duc', 'Greg', 'Kevin', 'Grace', 'Tortellini']
 
