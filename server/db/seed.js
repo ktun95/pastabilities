@@ -42,7 +42,7 @@ function generateProducts(pastaNameArray) {
     const product = new Product({
       name: n,
       description: defaultDescription,
-      price: 5.99,
+      price: 599,
       quantity: 50,
       image: '/images/pasta2.jpg',
       type: pastaTypes[i % pastaTypes.length],
